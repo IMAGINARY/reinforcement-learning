@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <script src="https://unpkg.com/konva@4.0.0/konva.min.js"></script>
+    <title>RL exhibit - prototype</title>
+    <link rel="stylesheet" href="css/style.min.css">
+  </head>
+  <body>
+    <div id="container">
+      <div id="canvas"></div>
+      <nav>
+        <button class="button" onclick="machine.run(100)">run 100 episodes!</button>
+        <button class="button" onclick="machine.auto_step();draw_map(map, machine.state);">auto step!</button>
+        <button class="button" onclick="machine.greedy_step();draw_map(map, machine.state);">greedy step!</button>
+      </nav>
+    </div>
+    <script src="js/rl.js"></script>
+    <script src="js/view.js"></script>
+    <script src="js/controls.js"></script>
+  </body>
+</html>
