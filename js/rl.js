@@ -60,32 +60,12 @@ class RL_machine {
   run(episodes, max_steps_per_episode=10000){
     for (var i = 0; i < episodes; i++) {
       for (var j = 0; j < max_steps_per_episode; j++) {
-        if (this.auto_step() == 2) {
+        if (this.auto_step() != 1) {
           break;
         }
       }
       this.new_episode();
     }
-  }
-  current_solution(max_steps_per_episode=10000){
-    let temp_state = this.start_state;
-    let score = 0;
-    let states = [temp_state];
-    let actions = [];
-    let scores = [];
-    for (var j = 0; j < max_steps_per_episode; j++) {
-      let ac = argMax(this.q_table[temp_state]);
-      temp_state = this.transactions(temp_state, ac);
-      let sc = this.rewards[temp_state];
-      score += sc;
-      actions.push(ac);
-      scores.push(sc);
-      states.push(temp_state);
-      if (this.end_states.indexOf(temp_state) >= 0 || score < this.end_score){
-        return {actions: actions, scores: scores, states: states}
-      }
-    }
-    return {actions: actions, scores: scores, states: states}
   }
 }
 
@@ -202,14 +182,6 @@ class Maze {
     return rewards;
   }
 }
-
-var map = [
-  [0, 0, 4, 2, 0, 0, 0, 0],
-  [0, 0, 4, 4, 4, 4, 0, 0],
-  [4, 0, 0, 0, 0, 4, 0, 4],
-  [0, 0, 4, 0, 0, 0, 0, 0],
-  [1, 0, 4, 0, 4, 0, 0, 4]
-];
 
 const reward = {[tile.regular]:-1,[tile.dangerous]:-1000,[tile.end]:1000,[tile.start]:-1};
 var maze = new Maze(map, reward);

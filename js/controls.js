@@ -27,10 +27,12 @@ function key_callback(e) {
             tmp = dir_to_action(dir.DOWN);
             break;
   }
+  var ret = 1;
   if (tmp != undefined){
-    machine.step(tmp)
+    agent.do_action(tmp, true);
+    ret = machine.step(tmp);
   }
-  draw_map(map, machine.state);
+  update_agent(machine.state, true);
 }
 document.addEventListener('keydown', key_callback);
 
