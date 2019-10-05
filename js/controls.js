@@ -1,8 +1,7 @@
 function dir_to_action(dir){
-  let actions = [...Array(machine.q_table[machine.state].length).keys()].map((a) => maze.get_direction(machine.state,a));
-  var action = actions.indexOf(dir);
-  if (action>-1){
-    return action;
+  let actions = [...Object.keys(machine.q_table[machine.state])];
+  if (actions.indexOf(dir) > -1){
+    return dir;
   }
   return undefined;
 }

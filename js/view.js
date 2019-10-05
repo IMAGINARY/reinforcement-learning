@@ -83,11 +83,10 @@ function draw_agent(state) {
       map_layer.draw();
     },
     do_action(action, animate=false){
-      let d = maze.get_direction(machine.state, action);
       var y = this.y;
       var x = this.x;
       var fun;
-      switch (d) {
+      switch (action) {
         case dir.UP:
           y--;
           fun = function () {return [this.x,this.y-1]}.bind(this);
