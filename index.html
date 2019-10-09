@@ -3,11 +3,15 @@
   <head>
     <meta charset="utf-8">
     <script src="https://unpkg.com/konva@4.0.0/konva.min.js"></script>
+    <script src='https://unpkg.com/vue/dist/vue.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/vue-konva@2.0.11/umd/vue-konva.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>
+
     <title>RL exhibit - prototype</title>
     <link rel="stylesheet" href="css/style.min.css">
   </head>
   <body>
-    <div id="container">
+    <div id="container" style="opacity:0">
       <div id="canvas"></div>
       <nav>
         <button class="button" onclick="machine.run(100)">run 100 episodes!</button>
@@ -15,6 +19,35 @@
         <button class="button" onclick="machine.greedy_step();update_agent(machine.state, true);">greedy step!</button>
       </nav>
     </div>
+    <div id="app" style="position:absolute; top:0px;">
+      <v-stage ref="stage" :config="stage_config">
+        <v-layer ref="local_layer" :config="local_layer">
+          <v-group ref="map_group" :config="map_config">
+            <!-- <v-group ref="grid_group">
+              <v-line v-for="y in maze.height+1" :config="get_grid_line_config(y-1, true)"></v-line>
+              <v-line v-for="x in maze.width+1" :config="get_grid_line_config(x-1)"></v-line>
+            </v-group> -->
+            <v-rect v-for="(t_type, idx) in maze.map.flat()" :config="get_tile_config(idx, t_type, true)"></v-rect>
+            <v-regular-polygon :config="get_agent_config()"></v-regular-polygon>
+          </v-group>
+        </v-layer>
+        <v-layer ref="map_layer">
+          <v-group ref="mini_map_group" :config="mini_map_config">
+            <!-- <v-group ref="grid_group">
+              <v-line v-for="y in maze.height+1" :config="get_grid_line_config(y-1, true)"></v-line>
+              <v-line v-for="x in maze.width+1" :config="get_grid_line_config(x-1)"></v-line>
+            </v-group> -->
+            <v-rect v-for="(t_type, idx) in maze.map.flat()" :config="get_tile_config(idx, t_type)"></v-rect>
+            <v-regular-polygon :config="get_agent_config()"></v-regular-polygon>
+          </v-group>
+        </v-layer>
+      </v-stage>
+    </div>
+    <nav>
+      <button class="button" onclick="machine.run(100)">run 100 episodes!</button>
+      <button class="button" onclick="machine.auto_step();update_agent(machine.state, true);">auto step!</button>
+      <button class="button" onclick="machine.greedy_step();update_agent(machine.state, true);">greedy step!</button>
+    </nav>
     <script>
     var map = [
       [0, 0, 4, 2, 0, 0, 0, 0],
@@ -25,7 +58,8 @@
     ];
     </script>
     <script src="js/rl.js"></script>
-    <script src="js/view.js"></script>
     <script src="js/controls.js"></script>
+    <script src="js/view.js"></script>
+    
   </body>
 </html>

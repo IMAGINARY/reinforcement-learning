@@ -20,6 +20,7 @@ class RL_machine {
     this.episode = 0;
     this.epsilon = epsilon;
     this.score = 0;
+    this.running = false;
   }
   reset_machine(){
     this.q_table = this.q_table.map((c) => c.map((a) => a.fill(0)));
@@ -58,6 +59,7 @@ class RL_machine {
     return new_state;
   }
   run(episodes, max_steps_per_episode=10000){
+    this.running = true;
     for (var i = 0; i < episodes; i++) {
       for (var j = 0; j < max_steps_per_episode; j++) {
         if (this.auto_step() != 1) {
@@ -66,6 +68,7 @@ class RL_machine {
       }
       this.new_episode();
     }
+    this.running = false;
   }
 }
 

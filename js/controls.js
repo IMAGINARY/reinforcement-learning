@@ -32,6 +32,7 @@ function key_callback(e) {
     ret = machine.step(tmp);
   }
   update_agent(machine.state, true);
+  // show_q_table();
 }
 document.addEventListener('keydown', key_callback);
 
