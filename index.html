@@ -11,14 +11,6 @@
     <link rel="stylesheet" href="css/style.min.css">
   </head>
   <body>
-    <div id="container" style="opacity:0">
-      <div id="canvas"></div>
-      <nav>
-        <button class="button" onclick="machine.run(100)">run 100 episodes!</button>
-        <button class="button" onclick="machine.auto_step();update_agent(machine.state, true);">auto step!</button>
-        <button class="button" onclick="machine.greedy_step();update_agent(machine.state, true);">greedy step!</button>
-      </nav>
-    </div>
     <div id="app" style="position:absolute; top:0px;">
       <v-stage ref="stage" :config="stage_config">
         <v-layer ref="local_layer" :config="local_layer">
@@ -27,7 +19,7 @@
               <v-line v-for="y in maze.height+1" :config="get_grid_line_config(y-1, true)"></v-line>
               <v-line v-for="x in maze.width+1" :config="get_grid_line_config(x-1)"></v-line>
             </v-group> -->
-            <v-rect v-for="(t_type, idx) in maze.map.flat()" :config="get_tile_config(idx, t_type, true)"></v-rect>
+            <v-rect v-for="(t_type, idx) in maze.map.flat()" :config="get_tile_config(idx, t_type, true)" :key="idx"></v-rect>
             <v-regular-polygon :config="get_agent_config()"></v-regular-polygon>
           </v-group>
         </v-layer>
@@ -37,7 +29,7 @@
               <v-line v-for="y in maze.height+1" :config="get_grid_line_config(y-1, true)"></v-line>
               <v-line v-for="x in maze.width+1" :config="get_grid_line_config(x-1)"></v-line>
             </v-group> -->
-            <v-rect v-for="(t_type, idx) in maze.map.flat()" :config="get_tile_config(idx, t_type)"></v-rect>
+            <v-rect v-for="(t_type, idx) in maze.map.flat()" :config="get_tile_config(idx, t_type)" :key="idx"></v-rect>
             <v-regular-polygon :config="get_agent_config()"></v-regular-polygon>
           </v-group>
         </v-layer>
@@ -45,8 +37,8 @@
     </div>
     <nav>
       <button class="button" onclick="machine.run(100)">run 100 episodes!</button>
-      <button class="button" onclick="machine.auto_step();update_agent(machine.state, true);">auto step!</button>
-      <button class="button" onclick="machine.greedy_step();update_agent(machine.state, true);">greedy step!</button>
+      <button class="button" onclick="machine.auto_step();">auto step!</button>
+      <button class="button" onclick="machine.greedy_step();">greedy step!</button>
     </nav>
     <script>
     var map = [
@@ -60,6 +52,6 @@
     <script src="js/rl.js"></script>
     <script src="js/controls.js"></script>
     <script src="js/view.js"></script>
-    
+
   </body>
 </html>

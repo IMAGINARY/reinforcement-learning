@@ -28,25 +28,8 @@ function key_callback(e) {
   }
   var ret = 1;
   if (tmp != undefined){
-    agent.do_action(tmp, true);
     ret = machine.step(tmp);
   }
-  update_agent(machine.state, true);
   // show_q_table();
 }
 document.addEventListener('keydown', key_callback);
-
-function show_solution() {
-  var sol = machine.current_solution();
-  animate = true;
-  show_path(sol.states, 0);
-}
-
-function show_path(path, i){
-  if (path.length == i) {
-    animate = false;
-    return
-  }
-  agent.set_state(path[i]);
-  window.setTimeout(function(){ show_path(path, ++i) }, 1000);
-}
