@@ -289,6 +289,13 @@ app = new Vue({
             opacity: 1,
             ...over,
           }
+        case tile.wall:
+          return {
+            ...layout,
+            fill: '#000000',
+            opacity: 1,
+            ...over,
+          }
       }
     }
   },

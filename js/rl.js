@@ -87,9 +87,10 @@ function choose(array) {
 // ------------------ maze stuff --------------------------------------------
 const tile = {
   regular: 0,
-  start: 1,
-  end: 2,
+  wall: 1,
+  start: 2,
   dangerous: 4,
+  end: 8,
 };
 
 const dir = {
@@ -124,22 +125,29 @@ class Maze {
   get_actions() {
     var actions = [];
     for (let idy=0; idy<this.map.length; idy++){
-      var y_actions = [];
-      if (idy != 0){
-        y_actions.push(dir.UP);
-      }
-      if (idy != this.map.length-1){
-        y_actions.push(dir.DOWN);
-      }
       for (let idx=0; idx<this.map[0].length; idx++){
-        var x_actions = [];
+        var action = [];
+        if (idy != 0){
+          if(this.map[idy-1][idx] != tile.wall){
+            action.push(dir.UP);
+          }
+        }
+        if (idy != this.map.length-1){
+          if(this.map[idy+1][idx] != tile.wall){
+            action.push(dir.DOWN);
+          }
+        }
         if (idx != 0){
-          x_actions.push(dir.LEFT);
+          if(this.map[idy][idx-1] != tile.wall){
+            action.push(dir.LEFT);
+          }
         }
         if (idx != this.map[0].length-1){
-          x_actions.push(dir.RIGHT);
+          if(this.map[idy][idx+1] != tile.wall){
+            action.push(dir.RIGHT);
+          }
         }
-        actions.push([...y_actions,...x_actions]);
+        actions.push(action);
       }
     }
     return actions;
