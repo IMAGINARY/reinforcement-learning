@@ -1,3 +1,58 @@
+Vue.component('line-chart', {
+  extends: VueChartJs.Line,
+  mixins: [VueChartJs.mixins.reactiveProp],
+  props: ['options'],
+  // mixins: [VueChartJs.mixins.reactiveData],
+  // props: ['options','labels', 'datasets'],
+  // watch: {
+  //   'labels': function(new_val) {
+  //     this.chartData = {
+  //       'labels': new_val,
+  //       'datasets': this.datasets};
+  //   },
+  //   'datasets': {
+  //     deep:true,
+  //     handler: function(new_val) {
+  //       this.chartData = {
+  //         'labels': this.labels,
+  //         'datasets': new_val};
+  //     }
+  //   }
+  // },
+  mounted () {
+    this.renderChart(this.chartData, this.options);
+  },
+
+})
+
+Array.prototype.simpleSMA=function(N) {
+return this.map(
+  function(el,index, _arr) {
+      return _arr.filter(
+      function(x2,i2) {
+        return i2 <= index && i2 > index - N;
+        })
+      .reduce(
+      function(last, current,index, arr){
+        return (current/arr.length + last);
+      },0);
+      });
+};
+
+Array.prototype.max=function() {
+return this.map(
+  function(el,index, _arr) {
+      return _arr.filter(
+      function(x2,i2) {
+        return i2 <= index;
+        })
+      .reduce(
+      function(last, current){
+        return last > current ? last:current;
+      },-1000000000);
+      });
+};
+
 app = new Vue({
   el: '#app',
   data: {
@@ -7,6 +62,9 @@ app = new Vue({
     maze: maze,
     state: {x:0,y:0},
     state_tween: new TimelineLite(),
+    score: machine.score,
+    score_history: machine.score_history,
+    labels: [],
   },
   created() {
     // Resize handler
@@ -21,11 +79,52 @@ app = new Vue({
       set: function(ne) { this._state=ne; $this.handleState(this._state); }
     });
     machine.state = s;
+    // Score wrapper
+    var s = machine.score;
+    var $this = this;
+    this.score = s;
+    Object.defineProperty(machine, 'score', {
+      get: function() { return this._score },
+      set: function(ne) { this._score=ne; $this.score=ne}
+    });
+    machine.score = s;
+    // Score history wrapper
+    var s = machine.score_history;
+    var $this = this;
+    this.score_history = s;
+    Object.defineProperty(machine, 'score_history', {
+      get: function() { return this._score_history },
+      set: function(ne) { this._score_history=ne; $this.score_history=ne}
+    });
+    machine.score_history = s;
   },
   destroyed() {
     window.removeEventListener('resize', this.handleResize)
   },
   computed: {
+    datacollection: function () {
+      return {
+        labels: Array.from(Array(this.score_history.length).keys()),
+        datasets: [
+          {
+            label: 'Data One',
+            backgroundColor: 'rgb(0,0,0,0)',
+            data: this.score_history.simpleSMA(Math.round(50)),
+            fill: false,
+            borderColor: 'rgb(255, 159, 64)',
+            pointRadius: 1,
+          },
+          {
+            label: 'Data One',
+            backgroundColor: 'rgb(0,0,0,0)',
+            data: this.score_history.max(),
+            fill: false,
+            borderColor: 'rgb(64, 159, 255)',
+            pointRadius: 1,
+          },
+        ]
+      }
+    },
     stage_config: function () {
       return {
         width: this.width,
@@ -34,13 +133,11 @@ app = new Vue({
     },
     mini_map_config: function () {
       return {
-        // x: this.stage_config.width * 0.5 - (Math.round(maze.width * this.base_size)/2),
-        // y: this.stage_config.height * 0.5 - (Math.round(maze.height * this.base_size)/2),
-        x:this.width-(Math.round(maze.width * this.base_size)*0.2)-30,
-        y:30,
+        x:this.width/2-(this.base_size*(this.maze.width)/2),
+        y:this.height/2-(this.base_size*(this.maze.height)/2),
         scale:{
-          x: 0.2,
-          y: 0.2
+          x: 1,
+          y: 1
         }
       }
     },
@@ -75,10 +172,12 @@ app = new Vue({
           x: -this.base_size / 2,
           y: -this.base_size / 2
         },
+        x: this.base_size*this.state.x,
+        y: this.base_size*this.state.y,
       }
     },
     base_size: function () {
-        return Math.min(this.stage_config.height * 0.9 / this.maze.height,  this.stage_config.width * 0.6 / this.maze.width);
+        return Math.min(this.stage_config.height * 0.8 / this.maze.height,  this.stage_config.width * 0.5 / this.maze.width);
     },
     strokeW: function () {
       return this.base_size / 50;
@@ -117,13 +216,6 @@ app = new Vue({
         points: points,
         stroke: '#ddd',
         strokeWidth: this.strokeW,
-      }
-    },
-    get_agent_config: function () {
-      return{
-        ...this.agent_config,
-        x: this.base_size*this.state.x,
-        y: this.base_size*this.state.y,
       }
     },
     get_tile_type: function (state){

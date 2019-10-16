@@ -6,23 +6,21 @@
     <script src='https://unpkg.com/vue/dist/vue.js'></script>
     <script src='https://cdn.jsdelivr.net/npm/vue-konva@2.0.11/umd/vue-konva.min.js'></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+    <script src="https://unpkg.com/vue-chartjs@3.4.2/dist/vue-chartjs.js"></script>
 
     <title>RL exhibit - prototype</title>
     <link rel="stylesheet" href="css/style.min.css">
   </head>
   <body>
-    <div id="app" style="position:absolute; top:0px;">
+    <div id="app">
       <v-stage ref="stage" :config="stage_config">
-        <v-layer ref="local_layer" :config="local_layer">
+        <!-- <v-layer ref="local_layer" :config="local_layer">
           <v-group ref="map_group" :config="map_config">
-            <!-- <v-group ref="grid_group">
-              <v-line v-for="y in maze.height+1" :config="get_grid_line_config(y-1, true)"></v-line>
-              <v-line v-for="x in maze.width+1" :config="get_grid_line_config(x-1)"></v-line>
-            </v-group> -->
             <v-rect v-for="(t_type, idx) in maze.map.flat()" :config="get_tile_config(idx, t_type, true)" :key="idx"></v-rect>
-            <v-regular-polygon :config="get_agent_config()"></v-regular-polygon>
+            <v-regular-polygon :config="agent_config"></v-regular-polygon>
           </v-group>
-        </v-layer>
+        </v-layer> -->
         <v-layer ref="map_layer">
           <v-group ref="mini_map_group" :config="mini_map_config">
             <!-- <v-group ref="grid_group">
@@ -30,13 +28,14 @@
               <v-line v-for="x in maze.width+1" :config="get_grid_line_config(x-1)"></v-line>
             </v-group> -->
             <v-rect v-for="(t_type, idx) in maze.map.flat()" :config="get_tile_config(idx, t_type)" :key="idx"></v-rect>
-            <v-regular-polygon :config="get_agent_config()"></v-regular-polygon>
+            <v-regular-polygon :config="agent_config"></v-regular-polygon>
           </v-group>
         </v-layer>
       </v-stage>
+      <line-chart css-classes="plot" :chart-data="datacollection" :options="{responsive: true, maintainAspectRatio: false,scales: {xAxes: [{ticks:{maxTicksLimit:11}}]},legend: {display: false}}"></line-chart>
     </div>
     <nav>
-      <button class="button" onclick="machine.run(100)">run 100 episodes!</button>
+      <button class="button" onclick="machine.run(1)">run 100 episodes!</button>
       <button class="button" onclick="machine.auto_step();">auto step!</button>
       <button class="button" onclick="machine.greedy_step();">greedy step!</button>
     </nav>
@@ -52,6 +51,5 @@
     <script src="js/rl.js"></script>
     <script src="js/controls.js"></script>
     <script src="js/view.js"></script>
-
   </body>
 </html>

@@ -1,1 +1,1 @@
-*{margin:0;padding:0}#container{height:100vh;position:relative}#canvas{height:100%}nav{position:absolute;top:10px;left:10px}
+*{margin:0;padding:0}#container{height:100vh;position:relative}#canvas{height:100%}nav{position:absolute;top:10px;left:10px}.absolute{position:absolute;top:0;left:0}.plot{position:absolute;top:2vh;right:2vw;width:20vw;height:10vw}

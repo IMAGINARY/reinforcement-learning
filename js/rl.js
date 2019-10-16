@@ -21,6 +21,7 @@ class RL_machine {
     this.epsilon = epsilon;
     this.score = 0;
     this.running = false;
+    this.score_history = [];
   }
   reset_machine(){
     this.q_table = this.q_table.map((c) => c.map((a) => a.fill(0)));
@@ -31,6 +32,7 @@ class RL_machine {
     // add_new_episode_callback
     this.episode++;
     this.state = this.start_state;
+    this.score_history.push(this.score);
     this.score = 0;
   }
   auto_step(){
@@ -66,7 +68,7 @@ class RL_machine {
           break;
         }
       }
-      this.new_episode();
+      // this.new_episode();
     }
     this.running = false;
   }
@@ -170,7 +172,7 @@ class Maze {
 const reward = {[tile.regular]:-1,[tile.dangerous]:-1000,[tile.end]:1000,[tile.start]:-1};
 var maze = new Maze(map, reward);
 
-var learning_rate = 1;
-var discount_factor = 1;
+var learning_rate = 0.75;
+var discount_factor = 0.8;
 
-var machine = new RL_machine(maze.actions, maze.transactions, maze.rewards,  maze.start_state, maze.end_states, -999, learning_rate, discount_factor, 0.5);
+var machine = new RL_machine(maze.actions, maze.transactions, maze.rewards,  maze.start_state, maze.end_states, -999, learning_rate, discount_factor, 0.2);

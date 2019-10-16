@@ -17,3 +17,16 @@ nav{
   top: 10px;
   left: 10px;
 }
+.absolute{
+  position: absolute;
+  top:0;
+  left:0;
+}
+
+.plot{
+  position: absolute;
+  top: 2vh;
+  right: 2vw;
+  width: 20vw;
+  height: 10vw;
+}
