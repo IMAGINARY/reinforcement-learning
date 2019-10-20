@@ -8,25 +8,29 @@ class RL_machine {
               learning_rate,
               discount_factor,
               epsilon=0) {
-    this.q_table = actions_per_state.map((c) => c.reduce((o,n) => {o[n]=0; return o},{}));
+    this.actions_per_state = actions_per_state;
     this.transactions = transactions;
     this.rewards = rewards;
     this.lr = learning_rate;
     this.df = discount_factor;
-    this.state = start_state;
     this.start_state = start_state;
     this.end_score = end_score;
     this.end_states = end_states;
-    this.episode = 0;
     this.epsilon = epsilon;
+    this.q_table = this.actions_per_state.map((c) => c.reduce((o,n) => {o[n]=0; return o},{}));
+    this.reset_machine();
+  }
+  reset_machine(){
+    for (var q in this.q_table){
+      for (var key in this.q_table[q]){
+        this.q_table[q][key] = 0;
+      }
+    }
+    this.episode = 0;
+    this.state = this.start_state;
     this.score = 0;
     this.running = false;
     this.score_history = [];
-  }
-  reset_machine(){
-    this.q_table = this.q_table.map((c) => c.map((a) => a.fill(0)));
-    this.episode = 0;
-    this.state = this.start_state;
   }
   new_episode(){
     // add_new_episode_callback
@@ -127,6 +131,10 @@ class Maze {
     for (let idy=0; idy<this.map.length; idy++){
       for (let idx=0; idx<this.map[0].length; idx++){
         var action = [];
+        if (this.map[idy][idx] == tile.wall){
+          actions.push(action);
+          continue;
+        }
         if (idy != 0){
           if(this.map[idy-1][idx] != tile.wall){
             action.push(dir.UP);
@@ -177,7 +185,7 @@ class Maze {
   }
 }
 
-const reward = {[tile.regular]:-1,[tile.dangerous]:-1000,[tile.end]:1000,[tile.start]:-1};
+const reward = {[tile.regular]:-1,[tile.dangerous]:-100,[tile.end]:1000,[tile.start]:-1};
 var maze = new Maze(map, reward);
 
 var learning_rate = 0.75;
