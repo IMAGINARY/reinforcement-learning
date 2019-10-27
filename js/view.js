@@ -25,7 +25,7 @@ Vue.component('line-chart', {
 
 })
 
-var palette = ['#00429d', '#06449d', '#0d469d', '#12489d', '#164a9d', '#1a4c9c', '#1d4e9c', '#20509c', '#23529c', '#26549c', '#28569b', '#2b589b', '#2d5a9b', '#305c9b', '#325e9a', '#34609a', '#37629a', '#39649a', '#3b6699', '#3d6899', '#3f6999', '#416b98', '#436d98', '#456f97', '#477197', '#497397', '#4b7596', '#4d7796', '#4f7995', '#517b95', '#537d94', '#557f94', '#578193', '#598392', '#5b8592', '#5d8791', '#5f8991', '#618a90', '#638c8f', '#658e8f', '#67908e', '#69928d', '#6b948d', '#6d968c', '#6f988b', '#719a8b', '#739c8a', '#759e89', '#77a088', '#79a287', '#7ba386', '#7da586', '#80a785', '#82a984', '#84ab83', '#86ad82', '#88af81', '#8ab180', '#8cb37f', '#8fb57e', '#91b77d', '#93b87c', '#95ba7a', '#97bc79', '#9abe78', '#9cc077', '#9ec276', '#a1c474', '#a3c673', '#a5c872', '#a8c970', '#aacb6f', '#accd6e', '#afcf6c', '#b1d16b', '#b4d369', '#b6d568', '#b8d766', '#bbd864', '#bdda63', '#c0dc61', '#c2de5f', '#c5e05d', '#c8e25b', '#cae459', '#cde657', '#cfe755', '#d2e953', '#d5eb50', '#d7ed4e', '#daef4b', '#ddf049', '#dff246', '#e2f443', '#e5f640', '#e8f83c', '#ebfa39', '#edfb35', '#f0fd31', '#f3ff2c']
+var palette = ['#d2000d', '#d30512', '#d40a17', '#d50f1c', '#d61420', '#d71a25', '#d71f2a', '#d8242f', '#d92934', '#da2e39', '#db333d', '#dc3842', '#dd3d47', '#de424c', '#df4751', '#e04d56', '#e0525a', '#e1575f', '#e25c64', '#e36169', '#e4666e', '#e56b73', '#e67077', '#e7757c', '#e87a81', '#e98086', '#e9858b', '#ea8a90', '#eb8f95', '#ec9499', '#ed999e', '#ee9ea3', '#efa3a8', '#f0a8ad', '#f1adb2', '#f2b3b6', '#f2b8bb', '#f3bdc0', '#f4c2c5', '#f5c7ca', '#f6cccf', '#f7d1d3', '#f8d6d8', '#f9dbdd', '#fae0e2', '#fbe6e7', '#fbebec', '#fcf0f0', '#fdf5f5', '#fefafa', '#ffffff', '#fafcfa', '#f5f9f5', '#f0f6f0', '#ebf3ec', '#e6f1e7', '#e1eee2', '#dcebdd', '#d7e8d8', '#d3e5d3', '#cee2cf', '#c9dfca', '#c4dcc5', '#bfd9c0', '#bad6bb', '#b5d4b6', '#b0d1b2', '#abcead', '#a6cba8', '#a1c8a3', '#9cc59e', '#97c299', '#92bf95', '#8dbc90', '#88b98b', '#84b786', '#7fb481', '#7ab17c', '#75ae77', '#70ab73', '#6ba86e', '#66a569', '#61a264', '#5c9f5f', '#579c5a', '#529a56', '#4d9751', '#48944c', '#439147', '#3e8e42', '#398b3d', '#348839', '#308534', '#2b822f', '#267f2a', '#217d25', '#1c7a20', '#17771c', '#127417', '#0d7112', '#086e0d']
 
 Array.prototype.simpleSMA = function(N) {
   return this.map(
@@ -348,13 +348,13 @@ app = new Vue({
         fontSize: this.base_size/7,
         fontFamily: 'Calibri',
         fill: 'black',
-        text: +val[key].toFixed(2)+'',
-        width: this.base_size-5,
-        height: this.base_size-5,
+        text: +val[key].toPrecision(3)+'',
+        width: this.base_size-20,
+        height: this.base_size-34,
         ...off,
         offset: {
-          x: (this.base_size-5)/2,
-          y: (this.base_size-5)/2,
+          x: (this.base_size-20)/2,
+          y: (this.base_size-34)/2,
         }
       }
     },
@@ -375,21 +375,33 @@ app = new Vue({
           break;
       }
       var $this = this;
-      var norma_value = (value-this.extreme_q_values.min)/((this.extreme_q_values.max-this.extreme_q_values.min)||1);
+      var norma_value = value>0?(value+1000)/(2000):(value+30)/60;
       return {
         sceneFunc: function(context, shape) {
           context.beginPath();
-          context.moveTo(0, 0);
-          context.lineTo($this.base_size / 2, $this.base_size / 2);
-          context.lineTo($this.base_size / 2, -$this.base_size / 2);
-          context.lineTo(0, 0);
+          var width = $this.base_size / 5;
+          var arrow_w = $this.base_size / 2;
+          var stumpf = $this.base_size / 6;
+          var arrow_l = $this.base_size / 5;
+          context.moveTo($this.base_size/2-stumpf-arrow_l, width/2);
+          context.lineTo($this.base_size/2-stumpf, width/2);
+          context.lineTo($this.base_size/2-stumpf, arrow_w/2);
+          context.lineTo($this.base_size/2-2, 0);
+          context.lineTo($this.base_size/2-stumpf, -arrow_w/2);
+          context.lineTo($this.base_size/2-stumpf, -width/2);
+          context.lineTo($this.base_size/2-stumpf-arrow_l, -width/2);
+          context.lineTo($this.base_size/2-stumpf-arrow_l, width/2);
+          // context.moveTo(0, 0);
+          // context.lineTo($this.base_size / 2, $this.base_size / 2);
+          // context.lineTo($this.base_size / 2, -$this.base_size / 2);
+          // context.lineTo(0, 0);
           context.closePath();
           // (!) Konva specific method, it is very important
           context.fillStrokeShape(shape);
         },
-        fill: palette[Math.round(norma_value*99)],
+        fill: palette[Math.round(norma_value*100)],
         stroke: 'black',
-        strokeWidth: 0,
+        strokeWidth: 1,
         rotation: rot,
       }
     },
@@ -478,6 +490,6 @@ app = new Vue({
 
 function render_latex() {
   // (1-lr) * Q[state, action] + lr * (reward + gamma * np.max(Q[new_state, :])
-  katex.render(`Q(s,a)\\leftarrow${(1-machine.lr).toFixed(2)}Q(s,a)+${machine.lr.toFixed(2)}(reward + ${machine.df.toFixed(2)} * \\max_a(Q(s', a))`, document.getElementById('test'),{displayMode: true,});
+  katex.render(`Q(s,a)\\leftarrow${(1-machine.lr).toFixed(2)}Q(s,a)+${machine.lr.toFixed(2)}(reward + ${machine.df.toFixed(2)}\\max_{a'}(Q(s_{new}, a'))`, document.getElementById('formula'),{displayMode: true,});
 }
 render_latex();

@@ -15,7 +15,6 @@
 
     <!-- The loading of KaTeX is deferred to speed up page rendering -->
     <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
-
     <title>RL exhibit - prototype</title>
     <link rel="stylesheet" href="css/style.min.css">
   </head>
@@ -53,7 +52,7 @@
         <vue-slider v-model="epsilon" :drag-on-click="true" v-bind="slider_config"></vue-slider>
         <h1>Current Score</h1>
         <h2>{{score}}</h2>
-        <div id="test" style="position: absolute;bottom: 10vh;width:90vw"></div>
+        <div id="formula"></div>
       </div>
     </div>
     <nav>
@@ -65,11 +64,15 @@
     </nav>
     <script>
     var map = [
-      [0, 0, 1, 8, 0, 0, 0, 0],
-      [0, 0, 1, 1, 1, 1, 0, 0],
-      [1, 0, 0, 0, 0, 1, 0, 1],
-      [0, 0, 1, 0, 0, 0, 0, 0],
-      [2, 0, 1, 0, 1, 0, 0, 1]
+      [0, 0, 1, 8, 0, 0, 0, 0, 0, 0],
+      [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
+      [1, 0, 0, 0, 0, 1, 0, 1, 0, 1],
+      [0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
+      [0, 1, 1, 1, 1, 1, 0, 1, 0, 0],
+      [0, 0, 0, 0, 0, 1, 1, 1, 0, 0],
+      [1, 0, 1, 0, 0, 0, 0, 1, 1, 0],
+      [0, 0, 1, 1, 1, 0, 0, 0, 0, 0],
+      [2, 0, 0, 0, 1, 0, 1, 0, 0, 1]
     ];
     </script>
     <script src="js/rl.js"></script>
