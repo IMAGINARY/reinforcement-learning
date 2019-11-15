@@ -21,28 +21,23 @@
   <body>
     <div id="app">
       <v-stage ref="stage" :config="stage_config">
-        <!-- <v-layer ref="local_layer" :config="local_layer">
-          <v-group ref="map_group" :config="map_config">
-            <v-rect v-for="(t_type, idx) in maze.map.flat()" :config="get_tile_config(idx, t_type, true)" :key="idx"></v-rect>
-            <v-regular-polygon :config="agent_config"></v-regular-polygon>
-          </v-group>
-        </v-layer> -->
         <v-layer ref="map_layer">
           <v-group ref="mini_map_group" :config="mini_map_config">
-            <!-- <v-group ref="grid_group">
-              <v-line v-for="y in maze.height+1" :config="get_grid_line_config(y-1, true)"></v-line>
-              <v-line v-for="x in maze.width+1" :config="get_grid_line_config(x-1)"></v-line>
-            </v-group> -->
-            <v-rect v-for="(t_type, idx) in maze.map.flat()" :config="get_tile_config(idx, t_type)" :key="idx" ></v-rect>
+            <v-group v-for="(t_type, idx) in maze.map.flat()" :config="get_field_config(idx)">
+              <v-rect :config="get_tile_config(idx, t_type)"></v-rect>
+              <v-image :config="energy_config" v-if="t_type==tile"></v-image>
+            </v-group>
             <v-group v-for="(action,idx) in q_table" :config="get_field_config(idx)">
               <v-shape v-for="(value, key) in action" :config="get_triangle_config(value, key)"></v-shape>
               <v-text v-for="i in 4" :config="get_q_text_config(action,i)"></v-text>
             </v-group>
-            <v-regular-polygon :config="agent_config"></v-regular-polygon>
+            <v-image :config="robot_config"></v-image>
           </v-group>
         </v-layer>
       </v-stage>
+
       <line-chart css-classes="plot" :chart-data="datacollection" :options="plot_options"></line-chart>
+
       <div class="sliders">
         <h1>Learning Rate {{learning_rate}}</h1>
         <vue-slider v-model="learning_rate" :drag-on-click="true" v-bind="slider_config"></vue-slider>

@@ -82,7 +82,9 @@ app = new Vue({
       duration: 0,
       interval: 0.01,
       tooltip: 'none'
-    }
+    },
+    robot_image: null,
+    energy_image: null,
   },
   created() {
     // Resize handler
@@ -130,6 +132,21 @@ app = new Vue({
       }
     });
     machine.score_history = s;
+
+    const robot_image = new window.Image();
+    robot_image.src = "img/robot.png";
+    // robot_image.src = "https://konvajs.org/assets/yoda.jpg";
+    robot_image.onload = () => {
+      // set image only when it is loaded
+      this.robot_image = robot_image;
+    };
+    const energy_image = new window.Image();
+    energy_image.src = "img/station.png";
+    // energy_image.src = "https://konvajs.org/assets/yoda.jpg";
+    energy_image.onload = () => {
+      // set image only when it is loaded
+      this.energy_image = energy_image;
+    };
   },
   destroyed() {
     window.removeEventListener('resize', this.handleResize)
@@ -225,6 +242,26 @@ app = new Vue({
         },
         x: this.base_size * this.state.x,
         y: this.base_size * this.state.y,
+      }
+    },
+    robot_config: function() {
+      return {
+        height: this.base_size,
+        width: this.base_size,
+        x: this.base_size * this.state.x,
+        y: this.base_size * this.state.y,
+        image: this.robot_image,
+      }
+    },
+    energy_config: function() {
+      return {
+        height: this.base_size,
+        width: this.base_size,
+        offset: {
+          x: this.base_size/2,
+          y: this.base_size/2
+        },
+        image: this.energy_image,
       }
     },
     base_size: function() {
@@ -427,12 +464,14 @@ app = new Vue({
         }
       }
       const layout = {
-        x: this.base_size * pos.x,
-        y: this.base_size * pos.y,
         width: this.base_size,
         height: this.base_size,
         stroke: '#ddd',
         strokeWidth: this.strokeW,
+        offset: {
+          x: this.base_size/2,
+          y: this.base_size/2,
+        }
       };
       switch (t_type) {
         case tile.regular:
