@@ -3,6 +3,8 @@
   padding: 0;
 }
 body{
+  margin: 0;
+  padding: 0;
   // background-color: ;
   font-family: sans-serif;
 }
@@ -13,11 +15,13 @@ body{
 #canvas{
   height: 100%;
 }
+
 nav{
   position: absolute;
   top: 10px;
   left: 10px;
 }
+
 .absolute{
   position: absolute;
   top:0;
@@ -34,13 +38,37 @@ nav{
 
 .sliders{
   position: absolute;
-  top: 7vh;
+  top: 20vh;
   left: 2vw;
   width: 20vw;
 }
 
 #formula{
   position: absolute;
-  top: -5vh;
+  top: 71.5vh;
   width: 90vw;
+}
+
+.score{
+  position: absolute;
+  top: 7vh;
+  left: 2vw;
+  width: 20vw;
+}
+
+.lightbox{
+  padding: 2em;
+  position: absolute;
+  top:0;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100%);
+  z-index: 10;
+  width: 50%;
+  height: 40%;
+  background-color: #BBB;
+  transition: all 1s;
+  &.active{
+    top:50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
 }

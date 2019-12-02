@@ -16,47 +16,45 @@
     <!-- The loading of KaTeX is deferred to speed up page rendering -->
     <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
     <title>RL exhibit - prototype</title>
+    <link rel="stylesheet" href="https://gitcdn.xyz/cdn/jzilg/embellish.css/fff9961c5fec2d1c8ff53c87b12e18d5c8db7761/embellish.min.css">
     <link rel="stylesheet" href="css/style.min.css">
+
   </head>
   <body>
+
     <div id="app">
-      <v-stage ref="stage" :config="stage_config">
-        <v-layer ref="map_layer">
-          <v-group ref="mini_map_group" :config="mini_map_config">
-            <v-group v-for="(t_type, idx) in maze.map.flat()" :config="get_field_config(idx)">
-              <v-rect :config="get_tile_config(idx, t_type)"></v-rect>
-              <v-image :config="energy_config" v-if="t_type==tile"></v-image>
-            </v-group>
-            <v-group v-for="(action,idx) in q_table" :config="get_field_config(idx)">
-              <v-shape v-for="(value, key) in action" :config="get_triangle_config(value, key)"></v-shape>
-              <v-text v-for="i in 4" :config="get_q_text_config(action,i)"></v-text>
-            </v-group>
-            <v-image :config="robot_config"></v-image>
-          </v-group>
-        </v-layer>
+      <light-box :content="lightText" :options="lightOptions" :active="lightpopup"></light-box>
+      <v-stage ref="stage" :config="stage_config" v-show="isActive('global')">
+        <rl-map :machine="machine" :maze="maze" :config="map_config"></rl-map>
       </v-stage>
 
-      <line-chart css-classes="plot" :chart-data="datacollection" :options="plot_options"></line-chart>
+      <v-stage ref="stage" :config="stage_config" v-show="isActive('local')">
+        <rl-local :machine="machine" :maze="maze" :config="map_config"></rl-local>
+      </v-stage>
 
-      <div class="sliders">
-        <h1>Learning Rate {{learning_rate}}</h1>
-        <vue-slider v-model="learning_rate" :drag-on-click="true" v-bind="slider_config"></vue-slider>
-        <h1>Discount Factor {{discount_factor}}</h1>
-        <vue-slider v-model="discount_factor" :drag-on-click="true" v-bind="slider_config"></vue-slider>
-        <h1>Epsilon {{epsilon}}</h1>
-        <vue-slider v-model="epsilon" :drag-on-click="true" v-bind="slider_config"></vue-slider>
-        <h1>Current Score</h1>
-        <h2>{{score}}</h2>
+      <line-chart css-classes="plot" :chart-data="datacollection" :options="plot_options"  v-show="isActive('plot')"></line-chart>
+
+      <div class="sliders" v-show="isActive('sliders')">
+        <h1>Learning Rate {{machine.learning_rate}}</h1>
+        <vue-slider v-model="machine.learning_rate" :drag-on-click="true" v-bind="slider_config"></vue-slider>
+        <h1>Discount Factor {{machine.discount_factor}}</h1>
+        <vue-slider v-model="machine.discount_factor" :drag-on-click="true" v-bind="slider_config"></vue-slider>
+        <h1>Epsilon {{machine.epsilon}}</h1>
+        <vue-slider v-model="machine.epsilon" :drag-on-click="true" v-bind="slider_config"></vue-slider>
         <div id="formula"></div>
       </div>
+
+      <div class="score" v-show="isActive('score')">
+        <h1>Current Score</h1>
+        <h2>{{machine.score}}</h2>
+      </div>
+
+      <nav class="navi" v-show="isActive('navi')">
+        <button v-for="(item, key) in navigation" v-on:click="item">{{ key }}</button>
+      </nav>
     </div>
-    <nav>
-      <button class="button" onclick="machine.run(1)">run 1 episode!</button>
-      <button class="button" onclick="machine.run(100)">run 100 episodes!</button>
-      <button class="button" onclick="machine.auto_step();">auto step!</button>
-      <button class="button" onclick="machine.greedy_step();">greedy step!</button>
-      <button class="button" onclick="machine.reset_machine()">reset machine</button>
-    </nav>
+
+
     <script>
     var map = [
       [0, 0, 1, 8, 0, 0, 0, 0, 0, 0],

@@ -27,7 +27,7 @@ function key_callback(e) {
             break;
   }
   var ret = 1;
-  if (tmp != undefined){
+  if (tmp != undefined && document.querySelector(".lightbox.active") == null){
     ret = machine.step(tmp);
   }
   // show_q_table();

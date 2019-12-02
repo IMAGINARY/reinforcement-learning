@@ -4,6 +4,7 @@ class RL_machine {
               rewards,
               start_state,
               end_states,
+              start_score,
               end_score,
               learning_rate,
               discount_factor,
@@ -14,6 +15,7 @@ class RL_machine {
     this.lr = learning_rate;
     this.df = discount_factor;
     this.start_state = start_state;
+    this.start_score = start_score;
     this.end_score = end_score;
     this.end_states = end_states;
     this.epsilon = epsilon;
@@ -27,17 +29,17 @@ class RL_machine {
       }
     }
     this.episode = 0;
-    this.state = this.start_state;
-    this.score = 0;
     this.running = false;
     this.score_history = [];
+    this.state = this.start_state;
+    this.score = this.start_score;
   }
   new_episode(){
     // add_new_episode_callback
     this.episode++;
-    this.state = this.start_state;
     this.score_history.push(this.score);
-    this.score = 0;
+    this.state = this.start_state;
+    this.score = this.start_score;
   }
   auto_step(){
     if (Math.random() < this.epsilon){
@@ -52,7 +54,23 @@ class RL_machine {
   step(action){
     this.state = this.update_q_table(this.state, action);
     // add_new_step_callback
-    if (this.end_states.indexOf(this.state) >= 0 || this.score < this.end_score){
+    if (this.end_states.indexOf(this.state) >= 0) {
+      var succ_event = new CustomEvent("episode",{
+        detail: "success"
+      });
+      if (!this.running) {
+        window.dispatchEvent(succ_event);
+      }
+      this.new_episode();
+      return 2
+    }
+    if (this.score <= this.end_score){
+      var fail_event = new CustomEvent("episode",{
+        detail: "failed"
+      });
+      if (!this.running) {
+        window.dispatchEvent(fail_event);
+      }
       this.new_episode();
       return 2
     }
@@ -191,4 +209,4 @@ var maze = new Maze(map, reward);
 var learning_rate = 0.75;
 var discount_factor = 0.8;
 
-var machine = new RL_machine(maze.actions, maze.transactions, maze.rewards,  maze.start_state, maze.end_states, -999, learning_rate, discount_factor, 0.2);
+var machine = new RL_machine(maze.actions, maze.transactions, maze.rewards,  maze.start_state, maze.end_states, 50, 0, learning_rate, discount_factor, 0.2);
