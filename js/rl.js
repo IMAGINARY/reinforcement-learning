@@ -21,6 +21,10 @@ class RL_machine {
     this.epsilon = epsilon;
     this.q_table = this.actions_per_state.map((c) => c.reduce((o,n) => {o[n]=0; return o},{}));
     this.reset_machine();
+    this.callback = null;
+  }
+  setCallback(cb){
+    this.callback = cb;
   }
   reset_machine(){
     for (var q in this.q_table){
@@ -34,12 +38,19 @@ class RL_machine {
     this.state = this.start_state;
     this.score = this.start_score;
   }
-  new_episode(){
+  new_episode(reason = "failed"){
+    const reset = () => {
+      this.episode++;
+      this.score_history.push(this.score);
+      this.state = this.start_state;
+      this.score = this.start_score;
+    }
     // add_new_episode_callback
-    this.episode++;
-    this.score_history.push(this.score);
-    this.state = this.start_state;
-    this.score = this.start_score;
+    if (!this.running && this.callback) {
+      this.callback(reason).then((p) => reset());
+    } else {
+      reset();
+    }
   }
   auto_step(){
     if (Math.random() < this.epsilon){
@@ -55,23 +66,11 @@ class RL_machine {
     this.state = this.update_q_table(this.state, action);
     // add_new_step_callback
     if (this.end_states.indexOf(this.state) >= 0) {
-      var succ_event = new CustomEvent("episode",{
-        detail: "success"
-      });
-      if (!this.running) {
-        window.dispatchEvent(succ_event);
-      }
-      this.new_episode();
+      this.new_episode("success");
       return 2
     }
     if (this.score <= this.end_score){
-      var fail_event = new CustomEvent("episode",{
-        detail: "failed"
-      });
-      if (!this.running) {
-        window.dispatchEvent(fail_event);
-      }
-      this.new_episode();
+      this.new_episode("failed");
       return 2
     }
     return 1

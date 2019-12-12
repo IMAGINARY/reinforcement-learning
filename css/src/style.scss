@@ -1,3 +1,4 @@
+// compileCompressed
 *{
   margin: 0;
   padding: 0;
@@ -22,10 +23,21 @@ nav{
   left: 10px;
 }
 
+button{
+  margin: 0.3em;
+}
+
 .absolute{
   position: absolute;
   top:0;
   left:0;
+}
+
+.stage{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .plot{
@@ -63,12 +75,12 @@ nav{
   left: 50%;
   transform: translateX(-50%) translateY(-100%);
   z-index: 10;
-  width: 50%;
-  height: 40%;
+  max-width: 50%;
   background-color: #BBB;
   transition: all 1s;
+
   &.active{
-    top:50%;
+    top:20%;
     transform: translateX(-50%) translateY(-50%);
   }
 }

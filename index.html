@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <script src="https://unpkg.com/konva@4.0.0/konva.min.js"></script>
-    <script src='https://unpkg.com/vue/dist/vue.js'></script>
+    <script src='https://unpkg.com/vue/dist/vue.min.js'></script>
     <script src='https://cdn.jsdelivr.net/npm/vue-konva@2.0.11/umd/vue-konva.min.js'></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
@@ -23,14 +23,9 @@
   <body>
 
     <div id="app">
-      <light-box :content="lightText" :options="lightOptions" :active="lightpopup"></light-box>
-      <v-stage ref="stage" :config="stage_config" v-show="isActive('global')">
-        <rl-map :machine="machine" :maze="maze" :config="map_config"></rl-map>
-      </v-stage>
+      <rl-local class="stage" :machine="machine" :maze="maze" :config="stage_config" v-show="isActive('local')"></rl-local>
 
-      <v-stage ref="stage" :config="stage_config" v-show="isActive('local')">
-        <rl-local :machine="machine" :maze="maze" :config="map_config"></rl-local>
-      </v-stage>
+      <rl-map class="stage" :machine="machine" :maze="maze" :config="stage_config"  v-show="isActive('global')"></rl-map>
 
       <line-chart css-classes="plot" :chart-data="datacollection" :options="plot_options"  v-show="isActive('plot')"></line-chart>
 
@@ -45,13 +40,11 @@
       </div>
 
       <div class="score" v-show="isActive('score')">
-        <h1>Current Score</h1>
+        <h1>Current Energy</h1>
         <h2>{{machine.score}}</h2>
       </div>
 
-      <nav class="navi" v-show="isActive('navi')">
-        <button v-for="(item, key) in navigation" v-on:click="item">{{ key }}</button>
-      </nav>
+      <navi-gation :options="navigation" v-show="isActive('navi')"></navi-gation>
     </div>
 
 
