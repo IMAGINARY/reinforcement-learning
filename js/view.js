@@ -45,6 +45,8 @@ Vue.component('line-chart', {
 // --------------------------------- Map --------------------------------------
 // ----------------------------------------------------------------------------
 
+const TileStrokeColor = "#DDDDDD";
+
 var MapBase = Vue.component('MapBase', {
   props: ['machine', 'maze', 'config'],
   data: function () {
@@ -128,7 +130,7 @@ var MapBase = Vue.component('MapBase', {
       return {
         width: this.base_size,
         height: this.base_size,
-        stroke: '#ddd',
+        stroke: TileStrokeColor,
         strokeWidth: this.strokeW,
         offset: {
           x: this.base_size/2,
@@ -358,32 +360,33 @@ Vue.component('rl-local', {
           return undefined;
       }
     },
+
     handleMouseEnter(e) {
       const stage = e.target.getStage();
       stage.container().style.cursor = "pointer";
     },
+
     handleMouseLeave(e) {
       const stage = e.target.getStage();
       stage.container().style.cursor = "default";
     },
-    get_local_tile_config: function(i, t_type) {
-      // var pos = this.state2position(i);
-      // in plus
+
+    get_local_tile_config: function(index, t_type) {
+      const state = this.machine.position2state(Math.round(this.machine.state.x), Math.round(this.machine.state.y));
       var over = {};
 
-      if (i != this.machine.position2state(Math.round(this.machine.state.x), Math.round(this.machine.state.y)) &&
-          t_type != tile.wall) {
+      if (index != state && t_type != tile.wall) {
         over = {
           width: this.base_size,
           height: this.base_size,
-          stroke: '#ddd',
+          stroke: TileStrokeColor,
           strokeWidth: this.strokeW,
           offset: {
             x: this.base_size/2,
             y: this.base_size/2,
           },
           opacity: 1,
-          fill: "#eee",
+          fill: "#eeeeee",
         }
       }
       return over;
@@ -626,7 +629,9 @@ app = new Vue({
   },
   methods: {
     onEnterState: function(){},
+
     onLeaveState: function(){},
+
     handleState: function(s) {
       if (!this.machine.object.running) {
         this.machine.state_tween.to(this.machine.state, 0.2, {
@@ -637,13 +642,16 @@ app = new Vue({
         this.machine.state = this.machine.state2position(s);
       }
     },
+
     handleResize: function() {
       this.width = window.innerWidth;
       this.height = window.innerHeight;
     },
+
     isActive: function(what){
       return this.components.indexOf(what) >= 0;
     },
+
     changeState: function(state){
       this.components = [];
       this.navigation = {};
@@ -651,12 +659,13 @@ app = new Vue({
       this.onLeaveState = function(){};
       this.state = state;
     },
+
     onNewEpisode: function(result){
       var text;
       if (result == "failed"){
-        text = "Out of battery. The robot will be resetted.";
+        text = "Out of battery. The robot will be reset.";
       } else if (result == "success"){
-        text = "You reached the goal. The robot will be resetted.";
+        text = "You reached the goal. The robot will be reset.";
       }
       return this.$lightbox.popup(text, ["ok"]);
     }
