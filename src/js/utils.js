@@ -1,5 +1,5 @@
 
-function defer() {
+export function defer() {
   var res, rej;
 
   var promise = new Promise((resolve, reject) => {

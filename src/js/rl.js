@@ -205,7 +205,7 @@ export class Maze {
 export const reward = {[tile.regular]:-1,[tile.dangerous]:-100,[tile.end]:1000,[tile.start]:-1};
 export var maze = new Maze(map, reward);
 
-export var learning_rate = 0.75;
-export var discount_factor = 0.8;
+var learning_rate = 0.75;
+var discount_factor = 0.8;
 
 export var machine = new RL_machine(maze.actions, maze.transactions, maze.rewards,  maze.start_state, maze.end_states, 50, 0, learning_rate, discount_factor, 0.2);

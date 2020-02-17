@@ -1,8 +1,15 @@
 import Vue from 'vue';
 import VueChartJs from 'vue-chartjs';
 import katex from 'katex';
+import { TimelineLite } from "gsap";
+//import VueSlider from 'vue-slider-component'
 
 import { Texts } from "./language.js";
+import { machine, maze } from "./rl.js";
+import { key_callback } from "./controls.js";
+import { defer } from './utils.js';
+
+document.addEventListener('keydown', key_callback);
 
 // ----------------------------------------------------------------------------
 // -------------------------------- Plot --------------------------------------
@@ -453,7 +460,7 @@ const PopupLibrary = {
   }
 }
 
-window.Vue.use(PopupLibrary)
+Vue.use(PopupLibrary)
 
 // ----------------------------------------------------------------------------
 // -------------------------------- Main --------------------------------------
@@ -517,7 +524,7 @@ function makeMachineReactive(th, machine){
   $this.machine.object.setCallback($this.onNewEpisode);
 }
 
-app = new Vue({
+var app = new Vue({
   el: '#app',
   components: {
     VueSlider: window['vue-slider-component'],
@@ -682,17 +689,17 @@ app = new Vue({
 
 function renderLatex() {
   // (1-lr) * Q[state, action] + lr * (reward + gamma * np.max(Q[new_state, :])
-  katex.render(`Q(s,a)\\leftarrow${(1-machine.lr).toFixed(2)}Q(s,a)+${machine.lr.toFixed(2)}(reward + ${machine.df.toFixed(2)}\\max_{a'}(Q(s_{new}, a'))`, document.getElementById('formula'),{displayMode: true,});
+  const expression = `Q(s,a)\\leftarrow${(1-machine.lr).toFixed(2)}Q(s,a)+${machine.lr.toFixed(2)}(reward + ${machine.df.toFixed(2)}\\max_{a'}(Q(s_{new}, a'))`;
+  const baseNode = document.getElementById('formula');
+  katex.render(expression, baseNode, { displayMode: true } );
 }
 renderLatex();
-
-
 
 // ----------------------------------------------------------------------------
 // ------------------------------ StateMgr ------------------------------------
 // ----------------------------------------------------------------------------
 
-var StateMgr = {
+const StateMgr = {
   init: {
     onEnterState: function () {
       var lightText = Texts.intro;

@@ -1,3 +1,4 @@
+
 function dir_to_action(dir){
   let actions = [...Object.keys(machine.q_table[machine.state])];
   if (actions.indexOf(dir) > -1){
@@ -7,7 +8,7 @@ function dir_to_action(dir){
 }
 var animate = false;
 
-function key_callback(e) {
+export function key_callback(e) {
   var tmp;
   if (animate){
     return
@@ -30,6 +31,4 @@ function key_callback(e) {
   if (tmp != undefined && document.querySelector(".lightbox.active") == null){
     ret = machine.step(tmp);
   }
-  // show_q_table();
 }
-document.addEventListener('keydown', key_callback);
