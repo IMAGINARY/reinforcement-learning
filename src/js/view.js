@@ -1,3 +1,8 @@
+import Vue from 'vue';
+import VueChartJs from 'vue-chartjs';
+import katex from 'katex';
+
+import { Texts } from "./language.js";
 
 // ----------------------------------------------------------------------------
 // -------------------------------- Plot --------------------------------------

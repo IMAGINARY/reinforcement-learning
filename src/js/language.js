@@ -9,7 +9,7 @@ const AllTexts = {
   "de": {}
 }
 
-var Texts = AllTexts["en"];
+export var Texts = AllTexts["en"];
 function setLanguage(languageCode) {
   Texts = AllTexts[languageCode];
 }

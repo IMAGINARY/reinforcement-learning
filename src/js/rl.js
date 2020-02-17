@@ -1,4 +1,4 @@
-class RL_machine {
+export class RL_machine {
   constructor(actions_per_state,
               transactions,
               rewards,
@@ -106,7 +106,7 @@ function choose(array) {
 };
 
 // ------------------ maze stuff --------------------------------------------
-const tile = {
+export const tile = {
   regular: 0,
   wall: 1,
   start: 2,
@@ -114,14 +114,14 @@ const tile = {
   end: 8,
 };
 
-const dir = {
+export const dir = {
   UP: "UP",
   RIGHT: "RIGHT",
   DOWN: "DOWN",
   LEFT: "LEFT",
 };
 
-class Maze {
+export class Maze {
   constructor(map, reward_map) {
     this.map = map
     this.height = map.length;
@@ -202,10 +202,10 @@ class Maze {
   }
 }
 
-const reward = {[tile.regular]:-1,[tile.dangerous]:-100,[tile.end]:1000,[tile.start]:-1};
-var maze = new Maze(map, reward);
+export const reward = {[tile.regular]:-1,[tile.dangerous]:-100,[tile.end]:1000,[tile.start]:-1};
+export var maze = new Maze(map, reward);
 
-var learning_rate = 0.75;
-var discount_factor = 0.8;
+export var learning_rate = 0.75;
+export var discount_factor = 0.8;
 
-var machine = new RL_machine(maze.actions, maze.transactions, maze.rewards,  maze.start_state, maze.end_states, 50, 0, learning_rate, discount_factor, 0.2);
+export var machine = new RL_machine(maze.actions, maze.transactions, maze.rewards,  maze.start_state, maze.end_states, 50, 0, learning_rate, discount_factor, 0.2);
