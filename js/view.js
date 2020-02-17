@@ -160,8 +160,36 @@ function getTileColor(type) {
 
 //-----------------------------------------------------------------------------
 
-var palette = ['#d2000d', '#d30512', '#d40a17', '#d50f1c', '#d61420', '#d71a25', '#d71f2a', '#d8242f', '#d92934', '#da2e39', '#db333d', '#dc3842', '#dd3d47', '#de424c', '#df4751', '#e04d56', '#e0525a', '#e1575f', '#e25c64', '#e36169', '#e4666e', '#e56b73', '#e67077', '#e7757c', '#e87a81', '#e98086', '#e9858b', '#ea8a90', '#eb8f95', '#ec9499', '#ed999e', '#ee9ea3', '#efa3a8', '#f0a8ad', '#f1adb2', '#f2b3b6', '#f2b8bb', '#f3bdc0', '#f4c2c5', '#f5c7ca', '#f6cccf', '#f7d1d3', '#f8d6d8', '#f9dbdd', '#fae0e2', '#fbe6e7', '#fbebec', '#fcf0f0', '#fdf5f5', '#fefafa', '#ffffff', '#fafcfa', '#f5f9f5', '#f0f6f0', '#ebf3ec', '#e6f1e7', '#e1eee2', '#dcebdd', '#d7e8d8', '#d3e5d3', '#cee2cf', '#c9dfca', '#c4dcc5', '#bfd9c0', '#bad6bb', '#b5d4b6', '#b0d1b2', '#abcead', '#a6cba8', '#a1c8a3', '#9cc59e', '#97c299', '#92bf95', '#8dbc90', '#88b98b', '#84b786', '#7fb481', '#7ab17c', '#75ae77', '#70ab73', '#6ba86e', '#66a569', '#61a264', '#5c9f5f', '#579c5a', '#529a56', '#4d9751', '#48944c', '#439147', '#3e8e42', '#398b3d', '#348839', '#308534', '#2b822f', '#267f2a', '#217d25', '#1c7a20', '#17771c', '#127417', '#0d7112', '#086e0d']
 
+const arrowPalette = ['#d2000d', '#d30512', '#d40a17', '#d50f1c', '#d61420', '#d71a25', '#d71f2a', '#d8242f', '#d92934', '#da2e39', '#db333d', '#dc3842', '#dd3d47', '#de424c', '#df4751', '#e04d56', '#e0525a', '#e1575f', '#e25c64', '#e36169', '#e4666e', '#e56b73', '#e67077', '#e7757c', '#e87a81', '#e98086', '#e9858b', '#ea8a90', '#eb8f95', '#ec9499', '#ed999e', '#ee9ea3', '#efa3a8', '#f0a8ad', '#f1adb2', '#f2b3b6', '#f2b8bb', '#f3bdc0', '#f4c2c5', '#f5c7ca', '#f6cccf', '#f7d1d3', '#f8d6d8', '#f9dbdd', '#fae0e2', '#fbe6e7', '#fbebec', '#fcf0f0', '#fdf5f5', '#fefafa', '#ffffff', '#fafcfa', '#f5f9f5', '#f0f6f0', '#ebf3ec', '#e6f1e7', '#e1eee2', '#dcebdd', '#d7e8d8', '#d3e5d3', '#cee2cf', '#c9dfca', '#c4dcc5', '#bfd9c0', '#bad6bb', '#b5d4b6', '#b0d1b2', '#abcead', '#a6cba8', '#a1c8a3', '#9cc59e', '#97c299', '#92bf95', '#8dbc90', '#88b98b', '#84b786', '#7fb481', '#7ab17c', '#75ae77', '#70ab73', '#6ba86e', '#66a569', '#61a264', '#5c9f5f', '#579c5a', '#529a56', '#4d9751', '#48944c', '#439147', '#3e8e42', '#398b3d', '#348839', '#308534', '#2b822f', '#267f2a', '#217d25', '#1c7a20', '#17771c', '#127417', '#0d7112', '#086e0d']
+function arrowFillColor(value) {
+  var normalized_value = (value > 0) ? (value+1000)/(2000) : (value+30)/60;
+  return arrowPalette[Math.round(normalized_value*100)];
+}
+
+function dir2Rotation(direction) {
+  switch (direction) {
+    case dir.UP: return -90;
+    case dir.DOWN: return 90;
+    case dir.LEFT: return 180;
+    case dir.RIGHT: return 0;
+    default: return 0;
+  }
+}
+
+function arrowIndexToDirection(index) {
+  const directions = [undefined, dir.UP, dir.RIGHT, dir.DOWN, dir.LEFT];
+  return directions[index];
+}
+
+// 1: top, 2: right, 3: down, 4: left
+const KonvaArrowTextAlignment = [
+  {},
+  { align: "center", verticalAlign: "top" },
+  { align: "right", verticalAlign: "middle" },
+  { align: "center", verticalAlign: "bottom" },
+  { align: "left", verticalAlign: "middle" }
+];
 
 Vue.component('rl-map', {
   extends: MapBase,
@@ -191,38 +219,9 @@ Vue.component('rl-map', {
     }
   },
   methods: {
-    get_q_text_config: function (val, i) {
-      var off, key;
-      switch (i) {
-        case 1:
-          off = {
-            align: "center",
-            verticalAlign: "top",
-          };
-          key = dir.UP;
-          break;
-        case 2:
-          off = {
-            align: "right",
-            verticalAlign: "middle",
-          };
-          key = dir.RIGHT;
-          break;
-        case 3:
-          off = {
-            align: "center",
-            verticalAlign: "bottom",
-          };
-          key = dir.DOWN;
-          break;
-        case 4:
-          off = {
-            align: "left",
-            verticalAlign: "middle",
-          };
-          key = dir.LEFT;
-          break;
-      }
+    get_q_text_config: function (val, arrowIndex) {
+      const alignment = KonvaArrowTextAlignment[arrowIndex];
+      var key = arrowIndexToDirection(arrowIndex);
       if (val[key] === undefined) {
         return {}
       }
@@ -233,31 +232,17 @@ Vue.component('rl-map', {
         text: +val[key].toPrecision(3)+'',
         width: this.base_size-20,
         height: this.base_size-34,
-        ...off,
+        ...alignment,
         offset: {
           x: (this.base_size-20)/2,
           y: (this.base_size-34)/2,
         }
       }
     },
-    get_triangle_config: function(value, d) {
-      var rot = 0;
-      switch (d) {
-        case dir.UP:
-          rot = -90;
-          break;
-        case dir.RIGHT:
-          rot = 0;
-          break;
-        case dir.DOWN:
-          rot = 90;
-          break;
-        case dir.LEFT:
-          rot = 180;
-          break;
-      }
+
+    get_triangle_config: function(value, direction) {
       var $this = this;
-      var norma_value = value>0 ? (value+1000)/(2000) : (value+30)/60;
+
       return {
         sceneFunc: function(context, shape) {
           context.beginPath();
@@ -277,10 +262,10 @@ Vue.component('rl-map', {
           // (!) Konva specific method, it is very important
           context.fillStrokeShape(shape);
         },
-        fill: palette[Math.round(norma_value*100)],
+        fill: arrowFillColor(value),
         stroke: 'black',
         strokeWidth: 1,
-        rotation: rot,
+        rotation: dir2Rotation(direction),
       }
     },
   },
