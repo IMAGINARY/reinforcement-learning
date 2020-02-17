@@ -125,7 +125,7 @@ var MapBase = Vue.component('MapBase', {
       }
     },
     get_tile_config: function(t_type) {
-      const layout = {
+      return {
         width: this.base_size,
         height: this.base_size,
         stroke: '#ddd',
@@ -133,43 +133,28 @@ var MapBase = Vue.component('MapBase', {
         offset: {
           x: this.base_size/2,
           y: this.base_size/2,
-        }
+        },
+        opacity: 1,
+        fill: getTileColor(t_type)
       };
-      switch (t_type) {
-        case tile.regular:
-          return {
-            ...layout,
-            fill: '#fff',
-            opacity: 1,
-          }
-        case tile.end:
-          return {
-            ...layout,
-            fill: '#0eb500',
-            opacity: 1,
-          }
-        case tile.start:
-          return {
-            ...layout,
-            fill: '#ff0008',
-            opacity: 1,
-          }
-        case tile.dangerous:
-          return {
-            ...layout,
-            fill: '#FF7B17',
-            opacity: 1,
-          }
-        case tile.wall:
-          return {
-            ...layout,
-            fill: '#000000',
-            opacity: 1,
-          }
-      }
     },
   },
-})
+});
+
+function getTileColor(type) {
+  switch (type) {
+    case tile.regular:
+      return '#ffffff';
+    case tile.end:
+      return '#0eb500';
+    case tile.start:
+      return '#ff0008';
+    case tile.dangerous:
+      return '#FF7B17';
+    case tile.wall:
+      return '#000000';
+  }
+}
 
 //-----------------------------------------------------------------------------
 
