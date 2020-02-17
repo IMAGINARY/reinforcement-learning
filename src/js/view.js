@@ -5,7 +5,7 @@ import { TimelineLite } from "gsap";
 //import VueSlider from 'vue-slider-component'
 
 import { Texts } from "./language.js";
-import { machine, maze } from "./rl.js";
+import { machine, maze, tile, dir } from "./rl.js";
 import { key_callback } from "./controls.js";
 import { defer } from './utils.js';
 
