@@ -108,7 +108,7 @@ var MapBase = Vue.component('MapBase', {
   },
   methods: {
     get_tile_type: function(state) {
-      var pos = this.machine.s2p(state);
+      var pos = this.machine.state2position(state);
       if (pos.y > maze.height) {
         return null;
       } else if (pos.x > maze.width) {
@@ -118,7 +118,7 @@ var MapBase = Vue.component('MapBase', {
       }
     },
     get_field_config: function(state) {
-      var pos = this.machine.s2p(state);
+      var pos = this.machine.state2position(state);
       return {
         x: this.base_size * pos.x+this.base_size/2,
         y: this.base_size * pos.y+this.base_size/2,
@@ -367,11 +367,11 @@ Vue.component('rl-local', {
       stage.container().style.cursor = "default";
     },
     get_local_tile_config: function(i, t_type) {
-      // var pos = this.s2p(i);
+      // var pos = this.state2position(i);
       // in plus
       var over = {};
 
-      if (i != this.machine.p2s(Math.round(this.machine.state.x), Math.round(this.machine.state.y)) &&
+      if (i != this.machine.position2state(Math.round(this.machine.state.x), Math.round(this.machine.state.y)) &&
           t_type != tile.wall) {
         over = {
           width: this.base_size,
@@ -469,13 +469,13 @@ window.Vue.use(PopupLibrary)
 function makeMachineReactive(th, machine){
   var $this = th;
 
-  $this.machine.s2p = function(state) {
+  $this.machine.state2position = function(state) {
     return {
       x: (state % $this.maze.width),
       y: Math.floor(state / $this.maze.width),
     }
   };
-  $this.machine.p2s = function(x, y) {
+  $this.machine.position2state = function(x, y) {
     return x + y * $this.maze.width;
   };
 
@@ -509,7 +509,7 @@ function makeMachineReactive(th, machine){
 
   // State wrapper
   var s = machine.state;
-  $this.machine.state = $this.machine.s2p(s);
+  $this.machine.state = $this.machine.state2position(s);
   Object.defineProperty(machine, 'state', {
     get: function() {
       return this._state
@@ -545,8 +545,8 @@ app = new Vue({
       epsilon: machine.epsilon,
       score: machine.score,
       score_history: machine.score_history,
-      s2p: null,
-      p2s: null,
+      state2position: null,
+      position2state: null,
     },
     width: 0,
     height: 0,
@@ -630,11 +630,11 @@ app = new Vue({
     handleState: function(s) {
       if (!this.machine.object.running) {
         this.machine.state_tween.to(this.machine.state, 0.2, {
-          x: this.machine.s2p(s).x,
-          y: this.machine.s2p(s).y
+          x: this.machine.state2position(s).x,
+          y: this.machine.state2position(s).y
         });
       } else {
-        this.machine.state = this.machine.s2p(s);
+        this.machine.state = this.machine.state2position(s);
       }
     },
     handleResize: function() {
