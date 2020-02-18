@@ -12,6 +12,22 @@ import { defer } from './utils.js';
 
 document.addEventListener('keydown', key_callback);
 
+
+const PopupLibrary = {
+  install(Vue, options = {}) {
+    const root = new Vue(light_box)
+
+    // Mount root Vue instance on new div element added to body
+    root.$mount(document.body.appendChild(document.createElement('div')))
+
+    Vue.prototype.$lightbox = root;
+  }
+}
+
+Vue.use(PopupLibrary);
+Vue.use(VueKonva);
+//Vue.use(VueSlider);
+
 // ----------------------------------------------------------------------------
 // -------------------------------- Plot --------------------------------------
 // ----------------------------------------------------------------------------
@@ -450,19 +466,6 @@ var light_box = {
   </div>`
 }
 
-const PopupLibrary = {
-  install(Vue, options = {}) {
-    const root = new Vue(light_box)
-
-    // Mount root Vue instance on new div element added to body
-    root.$mount(document.body.appendChild(document.createElement('div')))
-
-    Vue.prototype.$lightbox = root;
-  }
-}
-
-Vue.use(PopupLibrary)
-Vue.use(VueKonva);
 
 // ----------------------------------------------------------------------------
 // -------------------------------- Main --------------------------------------
