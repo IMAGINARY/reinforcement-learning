@@ -76,7 +76,7 @@ export var MapBase = Vue.component('MapBase', {
       var pos = this.machine.state2position(state);
       return maze.getTileType(pos);
     },
-    
+
     get_field_config: function(state) {
       var pos = this.machine.state2position(state);
       return {
@@ -135,7 +135,7 @@ function dir2Rotation(direction) {
   }
 }
 
-function arrowIndexToDirection(index) {
+export function arrowIndexToDirection(index) {
   const directions = [undefined, dir.UP, dir.RIGHT, dir.DOWN, dir.LEFT];
   return directions[index];
 }

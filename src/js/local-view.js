@@ -1,7 +1,7 @@
 import Vue from 'vue';
 
 import { tile, dir } from "./rl.js";
-import { MapBase, TileStrokeColor } from './map.js';
+import { MapBase, TileStrokeColor, arrowIndexToDirection } from './map.js';
 
 Vue.component('rl-local', {
   extends: MapBase,
@@ -43,20 +43,7 @@ Vue.component('rl-local', {
     end: function(pos){
       return this.maze.get_states(tile.end).indexOf(pos) >= 0;
     },
-    id_to_dir: function(id){
-      switch (id) {
-        case 0:
-          return dir.UP;
-        case 1:
-          return dir.RIGHT;
-        case 2:
-          return dir.DOWN;
-        case 3:
-          return dir.LEFT;
-        default:
-          return undefined;
-      }
-    },
+    id_to_dir: arrowIndexToDirection,
 
     handleMouseEnter(e) {
       const stage = e.target.getStage();
