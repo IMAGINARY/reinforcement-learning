@@ -13,12 +13,10 @@
     <link rel="stylesheet" href="css/style.min.css">
   </head>
   <body>
-
+    <div id="popup"></div>
     <div id="app">
       <rl-local class="stage" :machine="machine" :maze="maze" :config="stage_config" v-show="isActive('local')"></rl-local>
-
       <rl-map class="stage" :machine="machine" :maze="maze" :config="stage_config"  v-show="isActive('global')"></rl-map>
-
       <line-chart css-classes="plot" :chart-data="datacollection" :options="plot_options"  v-show="isActive('plot')"></line-chart>
 <!--
       <div class="sliders" v-show="isActive('sliders')">
