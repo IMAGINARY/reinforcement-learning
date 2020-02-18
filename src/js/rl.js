@@ -132,6 +132,18 @@ export class Maze {
     this.transactions = this.get_transactions();
     this.rewards = this.get_rewards(reward_map);
   }
+  
+  getTileType(pos) {
+    if (this.isInside(pos)) {
+      return this.map[pos.y][pos.x];
+    }
+    return null;
+  }
+
+  isInside(coord) {
+    return coord.x <= this.width && coord.y <= this.height;
+  }
+
   get_states(tile) {
     var res = [];
     for (var idy = 0; idy < this.map.length; idy++) {

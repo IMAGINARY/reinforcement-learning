@@ -74,14 +74,9 @@ export var MapBase = Vue.component('MapBase', {
 
     get_tile_type: function(state) {
       var pos = this.machine.state2position(state);
-      if (pos.y > maze.height) {
-        return null;
-      } else if (pos.x > maze.width) {
-        return null;
-      } else {
-        return maze.map[pos.y][pos.x];
-      }
+      return maze.getTileType(pos);
     },
+    
     get_field_config: function(state) {
       var pos = this.machine.state2position(state);
       return {
