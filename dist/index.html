@@ -28,10 +28,10 @@
         <vue-slider v-model="machine.discount_factor" :drag-on-click="true" v-bind="slider_config"></vue-slider>
         <h1>Epsilon {{machine.epsilon}}</h1>
         <vue-slider v-model="machine.epsilon" :drag-on-click="true" v-bind="slider_config"></vue-slider>
-        <div id="formula"></div>
       </div>
 -->
-      <div class="score" v-show="isActive('score')">
+    <div id="formula"></div>
+    <div class="score" v-show="isActive('score')">
         <h1>Current Energy</h1>
         <h2>{{machine.score}}</h2>
       </div>
