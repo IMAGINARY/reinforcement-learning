@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueChartJs from 'vue-chartjs';
+import VueKonva from 'vue-konva'
 import katex from 'katex';
 import { TimelineLite } from "gsap";
 //import VueSlider from 'vue-slider-component'
@@ -461,6 +462,7 @@ const PopupLibrary = {
 }
 
 Vue.use(PopupLibrary)
+Vue.use(VueKonva);
 
 // ----------------------------------------------------------------------------
 // -------------------------------- Main --------------------------------------
