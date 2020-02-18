@@ -36,18 +36,3 @@ const lightBoxDef = {
 };
 
 export var lightbox = new Vue(lightBoxDef);
-
-/*
-const PopupLibrary = {
-  install(Vue, options = {}) {
-    const root = 
-
-    // Mount root Vue instance on new div element added to body
-    root.$mount(document.body.appendChild(document.createElement('div')))
-
-    lightbox = root;
-  }
-}
-Vue.use(PopupLibrary);
-
-*/
