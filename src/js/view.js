@@ -55,7 +55,6 @@ Vue.component('line-chart', {
   mounted() {
     this.renderChart(this.chartData, this.options);
   },
-
 })
 
 // ----------------------------------------------------------------------------
@@ -264,7 +263,6 @@ var app = new Vue({
     navigation: {},
   },
   created() {
-    // Resize handler
     window.addEventListener('resize', this.handleResize)
     this.handleResize();
 
@@ -298,19 +296,11 @@ var app = new Vue({
         datasets: [{
             label: 'Data One',
             backgroundColor: 'rgb(0,0,0,0)',
-            data: this.machine.score_history,//.simpleSMA(Math.round(50)),
+            data: this.machine.score_history,
             fill: false,
             borderColor: 'rgb(255, 159, 64)',
             pointRadius: 1,
           },
-          // {
-          //   label: 'Data One',
-          //   backgroundColor: 'rgb(0,0,0,0)',
-          //   data: this.score_history.max(),
-          //   fill: false,
-          //   borderColor: 'rgb(64, 159, 255)',
-          //   pointRadius: 1,
-          // },
         ]
       }
     },
@@ -321,7 +311,6 @@ var app = new Vue({
         maintainAspectRatio: false,
         scales: {
           xAxes: [{
-            // type: 'linear',
             ticks: {
               maxTicksLimit: 8,
               maxRotation: 0,
