@@ -6,8 +6,7 @@ export const StateMgr = {
   init: {
     onEnterState: function () {
       var lightText = Texts.intro;
-//      lightbox.popup(lightText, ["next"]).then((r) => this.changeState("local"));
-      this.changeState("local");
+      lightbox.popup(lightText, ["next"]).then((r) => this.changeState("local"));
     },
   },
   local: {
@@ -19,7 +18,7 @@ export const StateMgr = {
     onEnterState: function () {
       this.navigation.continue = () => this.changeState("global");
       var lightText = Texts.localIntro;
-//      lightbox.popup(lightText, ["next"]);
+      lightbox.popup(lightText, ["next"]);
     },
   },
   global: {
@@ -33,7 +32,7 @@ export const StateMgr = {
     },
     onEnterState: function () {
       var lightText = Texts.globalIntro;
-  //    lightbox.popup(lightText, ["continue"]);
+      lightbox.popup(lightText, ["continue"]);
     },
   }
 };
