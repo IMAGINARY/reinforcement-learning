@@ -1,3 +1,4 @@
+import { machine, dir } from "./rl.js";
 
 function dir_to_action(dir){
   let actions = [...Object.keys(machine.q_table[machine.state])];
