@@ -1,10 +1,13 @@
 import { Texts } from "./language.js";
+import { lightbox } from './lightbox.js';
+import { machine } from "./rl.js";
 
 export const StateMgr = {
   init: {
     onEnterState: function () {
       var lightText = Texts.intro;
-      this.$lightbox.popup(lightText, ["next"]).then((r) => this.changeState("local"));
+//      lightbox.popup(lightText, ["next"]).then((r) => this.changeState("local"));
+      this.changeState("local");
     },
   },
   local: {
@@ -16,7 +19,7 @@ export const StateMgr = {
     onEnterState: function () {
       this.navigation.continue = () => this.changeState("global");
       var lightText = Texts.localIntro;
-      this.$lightbox.popup(lightText, ["next"]);
+//      lightbox.popup(lightText, ["next"]);
     },
   },
   global: {
@@ -30,7 +33,7 @@ export const StateMgr = {
     },
     onEnterState: function () {
       var lightText = Texts.globalIntro;
-      this.$lightbox.popup(lightText, ["continue"]);
+  //    lightbox.popup(lightText, ["continue"]);
     },
   }
 };

@@ -8,11 +8,12 @@ import { TimelineLite } from "gsap";
 import { machine, maze, tile, dir } from "./rl.js";
 import { key_callback } from "./controls.js";
 import { defer } from './utils.js';
+import { lightbox } from './lightbox.js';
 import { StateMgr } from './state-manager.js';
 
 document.addEventListener('keydown', key_callback);
 
-
+/*
 const PopupLibrary = {
   install(Vue, options = {}) {
     const root = new Vue(light_box)
@@ -20,11 +21,11 @@ const PopupLibrary = {
     // Mount root Vue instance on new div element added to body
     root.$mount(document.body.appendChild(document.createElement('div')))
 
-    Vue.prototype.$lightbox = root;
+    lightbox = root;
   }
 }
-
 Vue.use(PopupLibrary);
+*/
 Vue.use(VueKonva);
 //Vue.use(VueSlider);
 
@@ -669,7 +670,7 @@ var app = new Vue({
       } else if (result == "success"){
         text = "You reached the goal. The robot will be reset.";
       }
-      return this.$lightbox.popup(text, ["ok"]);
+      return lightbox.popup(text, ["ok"]);
     }
   },
   watch: {
