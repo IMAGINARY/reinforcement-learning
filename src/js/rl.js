@@ -1,39 +1,56 @@
-class RL_machine {
+export class RL_machine {
   constructor(actions_per_state,
               transactions,
               rewards,
               start_state,
               end_states,
+              start_score,
               end_score,
               learning_rate,
               discount_factor,
               epsilon=0) {
-    this.q_table = actions_per_state.map((c) => c.reduce((o,n) => {o[n]=0; return o},{}));
+    this.actions_per_state = actions_per_state;
     this.transactions = transactions;
     this.rewards = rewards;
     this.lr = learning_rate;
     this.df = discount_factor;
-    this.state = start_state;
     this.start_state = start_state;
+    this.start_score = start_score;
     this.end_score = end_score;
     this.end_states = end_states;
-    this.episode = 0;
     this.epsilon = epsilon;
-    this.score = 0;
-    this.running = false;
-    this.score_history = [];
+    this.q_table = this.actions_per_state.map((c) => c.reduce((o,n) => {o[n]=0; return o},{}));
+    this.reset_machine();
+    this.callback = null;
+  }
+  setCallback(cb){
+    this.callback = cb;
   }
   reset_machine(){
-    this.q_table = this.q_table.map((c) => c.map((a) => a.fill(0)));
+    for (var q in this.q_table){
+      for (var key in this.q_table[q]){
+        this.q_table[q][key] = 0;
+      }
+    }
     this.episode = 0;
+    this.running = false;
+    this.score_history = [];
     this.state = this.start_state;
+    this.score = this.start_score;
   }
-  new_episode(){
+  new_episode(reason = "failed"){
+    const reset = () => {
+      this.episode++;
+      this.score_history.push(this.score);
+      this.state = this.start_state;
+      this.score = this.start_score;
+    }
     // add_new_episode_callback
-    this.episode++;
-    this.state = this.start_state;
-    this.score_history.push(this.score);
-    this.score = 0;
+    if (!this.running && this.callback) {
+      this.callback(reason).then((p) => reset());
+    } else {
+      reset();
+    }
   }
   auto_step(){
     if (Math.random() < this.epsilon){
@@ -48,8 +65,12 @@ class RL_machine {
   step(action){
     this.state = this.update_q_table(this.state, action);
     // add_new_step_callback
-    if (this.end_states.indexOf(this.state) >= 0 || this.score < this.end_score){
-      this.new_episode();
+    if (this.end_states.indexOf(this.state) >= 0) {
+      this.new_episode("success");
+      return 2
+    }
+    if (this.score <= this.end_score){
+      this.new_episode("failed");
       return 2
     }
     return 1
@@ -85,7 +106,7 @@ function choose(array) {
 };
 
 // ------------------ maze stuff --------------------------------------------
-const tile = {
+export const tile = {
   regular: 0,
   wall: 1,
   start: 2,
@@ -93,14 +114,14 @@ const tile = {
   end: 8,
 };
 
-const dir = {
+export const dir = {
   UP: "UP",
   RIGHT: "RIGHT",
   DOWN: "DOWN",
   LEFT: "LEFT",
 };
 
-class Maze {
+export class Maze {
   constructor(map, reward_map) {
     this.map = map
     this.height = map.length;
@@ -111,6 +132,18 @@ class Maze {
     this.transactions = this.get_transactions();
     this.rewards = this.get_rewards(reward_map);
   }
+  
+  getTileType(pos) {
+    if (this.isInside(pos)) {
+      return this.map[pos.y][pos.x];
+    }
+    return null;
+  }
+
+  isInside(coord) {
+    return coord.x <= this.width && coord.y <= this.height;
+  }
+
   get_states(tile) {
     var res = [];
     for (var idy = 0; idy < this.map.length; idy++) {
@@ -127,6 +160,10 @@ class Maze {
     for (let idy=0; idy<this.map.length; idy++){
       for (let idx=0; idx<this.map[0].length; idx++){
         var action = [];
+        if (this.map[idy][idx] == tile.wall){
+          actions.push(action);
+          continue;
+        }
         if (idy != 0){
           if(this.map[idy-1][idx] != tile.wall){
             action.push(dir.UP);
@@ -177,10 +214,10 @@ class Maze {
   }
 }
 
-const reward = {[tile.regular]:-1,[tile.dangerous]:-1000,[tile.end]:1000,[tile.start]:-1};
-var maze = new Maze(map, reward);
+export const reward = {[tile.regular]:-1,[tile.dangerous]:-100,[tile.end]:1000,[tile.start]:-1};
+export var maze = new Maze(map, reward);
 
 var learning_rate = 0.75;
 var discount_factor = 0.8;
 
-var machine = new RL_machine(maze.actions, maze.transactions, maze.rewards,  maze.start_state, maze.end_states, -999, learning_rate, discount_factor, 0.2);
+export var machine = new RL_machine(maze.actions, maze.transactions, maze.rewards,  maze.start_state, maze.end_states, 50, 0, learning_rate, discount_factor, 0.2);
