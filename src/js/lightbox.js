@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import { defer } from './utils.js';
 
 const lightBoxDef = {
   el: '#popup',
@@ -12,19 +11,19 @@ const lightBoxDef = {
     close: function(){
       this.active = false;
     },
-    popup: function(content, options){
+    popup: function(content, options) {
       this.content = content;
-      var answer = defer();
-      var $this = this;
-      this.options = options.reduce((old, opt) => {
-          old[opt] = function(){
-            $this.active = false;
-            answer.resolve(opt);
-          }
-          return old
-      }, {});
-      this.active = true;
-      return answer;
+      return new Promise( (resolve) => {
+        var $this = this;
+        this.options = options.reduce((old, opt) => {
+            old[opt] = function(){
+              $this.active = false;
+              resolve(opt);
+            }
+            return old
+        }, {});
+        this.active = true;
+      });
     }
   },
   template: `
