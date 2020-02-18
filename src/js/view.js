@@ -3,7 +3,7 @@ import VueChartJs from 'vue-chartjs';
 import VueKonva from 'vue-konva'
 import katex from 'katex';
 import { TimelineLite } from "gsap";
-//import VueSlider from 'vue-slider-component'
+import VueSlider from 'vue-slider-component'
 
 import { machine, maze } from "./rl.js";
 import { key_callback } from "./controls.js";
