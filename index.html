@@ -8,13 +8,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
     <script src="https://unpkg.com/vue-chartjs@3.4.2/dist/vue-chartjs.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue-slider-component@3.0.41/dist/vue-slider-component.umd.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue-slider-component@3.0.41/theme/default.css">
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
-
-    <!-- The loading of KaTeX is deferred to speed up page rendering -->
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
 
     <title>RL exhibit - prototype</title>
     <link rel="stylesheet" href="css/style.min.css">
@@ -34,42 +27,25 @@
               <v-line v-for="y in maze.height+1" :config="get_grid_line_config(y-1, true)"></v-line>
               <v-line v-for="x in maze.width+1" :config="get_grid_line_config(x-1)"></v-line>
             </v-group> -->
-            <v-rect v-for="(t_type, idx) in maze.map.flat()" :config="get_tile_config(idx, t_type)" :key="idx" ></v-rect>
-            <v-group v-for="(action,idx) in q_table" :config="get_field_config(idx)">
-              <v-shape v-for="(value, key) in action" :config="get_triangle_config(value, key)"></v-shape>
-              <v-text v-for="i in 4" :config="get_q_text_config(action,i)"></v-text>
-            </v-group>
+            <v-rect v-for="(t_type, idx) in maze.map.flat()" :config="get_tile_config(idx, t_type)" :key="idx"></v-rect>
             <v-regular-polygon :config="agent_config"></v-regular-polygon>
           </v-group>
         </v-layer>
       </v-stage>
-      <line-chart css-classes="plot" :chart-data="datacollection" :options="plot_options"></line-chart>
-      <div class="sliders">
-        <h1>Learning Rate {{learning_rate}}</h1>
-        <vue-slider v-model="learning_rate" :drag-on-click="true" v-bind="slider_config"></vue-slider>
-        <h1>Discount Factor {{discount_factor}}</h1>
-        <vue-slider v-model="discount_factor" :drag-on-click="true" v-bind="slider_config"></vue-slider>
-        <h1>Epsilon {{epsilon}}</h1>
-        <vue-slider v-model="epsilon" :drag-on-click="true" v-bind="slider_config"></vue-slider>
-        <h1>Current Score</h1>
-        <h2>{{score}}</h2>
-        <div id="test" style="position: absolute;bottom: 10vh;width:90vw"></div>
-      </div>
+      <line-chart css-classes="plot" :chart-data="datacollection" :options="{responsive: true, maintainAspectRatio: false,scales: {xAxes: [{ticks:{maxTicksLimit:11}}]},legend: {display: false}}"></line-chart>
     </div>
     <nav>
-      <button class="button" onclick="machine.run(1)">run 1 episode!</button>
-      <button class="button" onclick="machine.run(100)">run 100 episodes!</button>
+      <button class="button" onclick="machine.run(1)">run 100 episodes!</button>
       <button class="button" onclick="machine.auto_step();">auto step!</button>
       <button class="button" onclick="machine.greedy_step();">greedy step!</button>
-      <button class="button" onclick="machine.reset_machine()">reset machine</button>
     </nav>
     <script>
     var map = [
-      [0, 0, 1, 8, 0, 0, 0, 0],
-      [0, 0, 1, 1, 1, 1, 0, 0],
-      [1, 0, 0, 0, 0, 1, 0, 1],
+      [0, 0, 4, 8, 0, 0, 0, 0],
+      [0, 0, 4, 4, 4, 4, 0, 0],
+      [4, 0, 0, 0, 0, 4, 0, 4],
       [0, 0, 1, 0, 0, 0, 0, 0],
-      [2, 0, 1, 0, 1, 0, 0, 1]
+      [2, 0, 1, 0, 4, 0, 0, 4]
     ];
     </script>
     <script src="js/rl.js"></script>
