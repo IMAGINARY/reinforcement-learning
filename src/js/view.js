@@ -3,7 +3,6 @@ import VueChartJs from 'vue-chartjs';
 import VueKonva from 'vue-konva'
 import katex from 'katex';
 import { TimelineLite } from "gsap";
-import VueSlider from 'vue-slider-component'
 
 import { machine, maze } from "./rl.js";
 import { key_callback } from "./controls.js";
@@ -14,7 +13,6 @@ import './local-view.js';
 document.addEventListener('keydown', key_callback);
 
 Vue.use(VueKonva);
-//Vue.use(VueSlider);
 
 Vue.component('line-chart', {
   extends: VueChartJs.Line,
@@ -98,9 +96,6 @@ function makeMachineReactive(th, machine){
 
 var app = new Vue({
   el: '#app',
-  components: {
-    VueSlider: window['vue-slider-component'],
-  },
   data: {
     state: null,
     maze: maze,
@@ -227,15 +222,15 @@ var app = new Vue({
   },
   watch: {
     'machine.learning_rate': function(new_val) {
-      machine.lr = new_val;
+      machine.lr = parseFloat(new_val);
       renderLatex();
     },
     'machine.discount_factor': function(new_val) {
-      machine.df = new_val;
+      machine.df = parseFloat(new_val);
       renderLatex();
     },
     'machine.epsilon': function(new_val) {
-      machine.epsilon = new_val;
+      machine.epsilon = parseFloat(new_val);
     },
     state: function(state){
       this.onLeaveState();

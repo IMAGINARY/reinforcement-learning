@@ -16,14 +16,16 @@
       <rl-local class="stage" :machine="machine" :maze="maze" :config="stage_config" v-show="isActive('local')"></rl-local>
       <rl-map class="stage" :machine="machine" :maze="maze" :config="stage_config"  v-show="isActive('global')"></rl-map>
       <line-chart css-classes="plot" :chart-data="datacollection" :options="plot_options"  v-show="isActive('plot')"></line-chart>
+
       <div class="sliders" v-show="isActive('sliders')">
         <h1>Learning Rate {{machine.learning_rate}}</h1>
-        <vue-slider v-model="machine.learning_rate" :drag-on-click="true" v-bind="slider_config"></vue-slider>
-        <h1>Discount Factor {{machine.discount_factor}}</h1>
-        <vue-slider v-model="machine.discount_factor" :drag-on-click="true" v-bind="slider_config"></vue-slider>
-        <h1>Epsilon {{machine.epsilon}}</h1>
-        <vue-slider v-model="machine.epsilon" :drag-on-click="true" v-bind="slider_config"></vue-slider>
+        <input type="range" id="machine_learning_range" v-model="machine.learning_rate" min="0" max="1" step="0.01">
 
+        <h1>Discount Factor {{machine.discount_factor}}</h1>
+        <input type="range" id="machine_discount_factor" v-model="machine.discount_factor" min="0" max="1" step="0.01">
+
+        <h1>Epsilon {{machine.epsilon}}</h1>
+        <input type="range" id="machine_epsilon" v-model="machine.epsilon" min="0" max="1" step="0.01">
         <div id="formula"></div>
       </div>
 
