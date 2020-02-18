@@ -17,22 +17,22 @@
       <rl-local class="stage" :machine="machine" :maze="maze" :config="stage_config" v-show="isActive('local')"></rl-local>
       <rl-map class="stage" :machine="machine" :maze="maze" :config="stage_config"  v-show="isActive('global')"></rl-map>
       <line-chart css-classes="plot" :chart-data="datacollection" :options="plot_options"  v-show="isActive('plot')"></line-chart>
-<!--
       <div class="sliders" v-show="isActive('sliders')">
+<!--
         <h1>Learning Rate {{machine.learning_rate}}</h1>
         <vue-slider v-model="machine.learning_rate" :drag-on-click="true" v-bind="slider_config"></vue-slider>
         <h1>Discount Factor {{machine.discount_factor}}</h1>
         <vue-slider v-model="machine.discount_factor" :drag-on-click="true" v-bind="slider_config"></vue-slider>
         <h1>Epsilon {{machine.epsilon}}</h1>
         <vue-slider v-model="machine.epsilon" :drag-on-click="true" v-bind="slider_config"></vue-slider>
-      </div>
 -->
-    <div id="formula"></div>
-    <div class="score" v-show="isActive('score')">
+        <div id="formula"></div>
+      </div>
+
+      <div class="score" v-show="isActive('score')">
         <h1>Current Energy</h1>
         <h2>{{machine.score}}</h2>
       </div>
-
       <navi-gation :options="navigation" v-show="isActive('navi')"></navi-gation>
     </div>
 
