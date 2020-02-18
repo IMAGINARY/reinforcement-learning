@@ -16,38 +16,6 @@ document.addEventListener('keydown', key_callback);
 Vue.use(VueKonva);
 //Vue.use(VueSlider);
 
-// ----------------------------------------------------------------------------
-// -------------------------------- Plot --------------------------------------
-// ----------------------------------------------------------------------------
-
-Array.prototype.simpleSMA = function(N) {
-  return this.map(
-    function(el, index, _arr) {
-      return _arr.filter(
-          function(x2, i2) {
-            return i2 <= index && i2 > index - N;
-          })
-        .reduce(
-          function(last, current, index, arr) {
-            return (current / arr.length + last);
-          }, 0);
-    });
-};
-
-Array.prototype.max = function() {
-  return this.map(
-    function(el, index, _arr) {
-      return _arr.filter(
-          function(x2, i2) {
-            return i2 <= index;
-          })
-        .reduce(
-          function(last, current) {
-            return last > current ? last : current;
-          }, -1000000000);
-    });
-};
-
 Vue.component('line-chart', {
   extends: VueChartJs.Line,
   mixins: [VueChartJs.mixins.reactiveProp],
