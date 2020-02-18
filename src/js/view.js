@@ -9,7 +9,7 @@ import { machine, maze, tile, dir } from "./rl.js";
 import { key_callback } from "./controls.js";
 import { StateMgr } from './state-manager.js';
 import { lightbox } from './lightbox.js';
-import { MapBase, TileStrokeColor } from './map.js';
+import './local-view.js';
 
 document.addEventListener('keydown', key_callback);
 
@@ -168,7 +168,6 @@ var app = new Vue({
       }
     },
     plot_options: function() {
-      var $this = this;
       return {
         responsive: true,
         maintainAspectRatio: false,
@@ -193,10 +192,7 @@ var app = new Vue({
 
     handleState: function(s) {
       if (!this.machine.object.running) {
-        this.machine.state_tween.to(this.machine.state, 0.2, {
-          x: this.machine.state2position(s).x,
-          y: this.machine.state2position(s).y
-        });
+        this.machine.state_tween.to(this.machine.state, 0.2, this.machine.state2position(s));
       } else {
         this.machine.state = this.machine.state2position(s);
       }
