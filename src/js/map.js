@@ -4,6 +4,14 @@ import { maze, tile, dir } from "./rl.js";
 
 export const TileStrokeColor = "#DDDDDD";
 
+function asyncLoadImage(imagesrc, setFunction) {
+  const image = new window.Image();
+  image.src = imagesrc;
+  image.onload = () => {
+    setFunction(image);
+  }
+}
+
 export var MapBase = Vue.component('MapBase', {
   props: ['machine', 'maze', 'config'],
   data: function () {
@@ -13,17 +21,8 @@ export var MapBase = Vue.component('MapBase', {
     }
   },
   created() {
-    var $this = this;
-    const robot_image = new window.Image();
-    robot_image.src = "img/robot.png";
-    robot_image.onload = () => {
-      $this.robot_image = robot_image;
-    };
-    const energy_image = new window.Image();
-    energy_image.src = "img/station.png";
-    energy_image.onload = () => {
-      $this.energy_image = energy_image;
-    };
+    asyncLoadImage("img/robot.png", this.setRobotImage);
+    asyncLoadImage("img/station.png", this.setStationImage);
   },
   computed: {
     main_config: function(){
@@ -66,6 +65,13 @@ export var MapBase = Vue.component('MapBase', {
     },
   },
   methods: {
+    setRobotImage: function(image) {
+      this.robot_image = image;
+    },
+    setStationImage: function(image) {
+      this.energy_image = image;
+    },
+
     get_tile_type: function(state) {
       var pos = this.machine.state2position(state);
       if (pos.y > maze.height) {
