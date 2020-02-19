@@ -18,9 +18,15 @@ export class Maze {
     }
     return null;
   }
+
   isInside(coord) {
-    return coord.x <= this.width && coord.y <= this.height;
+    return coord.x >= 0 && coord.x < this.width && coord.y >= 0 && coord.y < this.height;
   }
+
+  isTransitable(coord) {
+    return this.isInside(coord) && this.getTileType(coord) != tile.wall;
+  }
+
   get_states(tile) {
     var res = [];
     for (var idy = 0; idy < this.map.length; idy++) {
@@ -33,53 +39,54 @@ export class Maze {
     return res;
   }
 
+  dirToDiff(direction) {
+    switch (direction) {
+      case dir.UP: return { x: 0, y: -1 };
+      case dir.DOWN: return { x: 0, y: 1 };
+      case dir.LEFT: return { x: -1, y: 0 };
+      case dir.RIGHT: return { x: 1, y: 0 };
+    }
+  }
+
+  canMove(from, dir) {
+    const diff = this.dirToDiff(dir);
+    const dest = { x: from.x + diff.x, y: from.y + diff.y };
+    return this.isTransitable(dest);
+  }
+
   get_actions() {
-    var actions = [];
-    for (let idy = 0; idy < this.map.length; idy++) {
-      for (let idx = 0; idx < this.map[0].length; idx++) {
-        var action = [];
-        if (this.map[idy][idx] == tile.wall) {
-          actions.push(action);
-          continue;
+    var mapActions = [];
+    var coord = { x : 0, y: 0 };
+
+    for (coord.y = 0; coord.y < this.map.length; coord.y++) {
+      for (coord.x = 0; coord.x < this.map[0].length; coord.x++) {
+        var cellActions = [];
+        if (this.isTransitable(coord)) {
+          [dir.UP, dir.DOWN, dir.RIGHT, dir.LEFT].forEach( dir => {
+            if (this.canMove(coord, dir))
+              cellActions.push(dir);
+          });
         }
-        if (idy != 0) {
-          if (this.map[idy - 1][idx] != tile.wall) {
-            action.push(dir.UP);
-          }
-        }
-        if (idy != this.map.length - 1) {
-          if (this.map[idy + 1][idx] != tile.wall) {
-            action.push(dir.DOWN);
-          }
-        }
-        if (idx != 0) {
-          if (this.map[idy][idx - 1] != tile.wall) {
-            action.push(dir.LEFT);
-          }
-        }
-        if (idx != this.map[0].length - 1) {
-          if (this.map[idy][idx + 1] != tile.wall) {
-            action.push(dir.RIGHT);
-          }
-        }
-        actions.push(action);
+        mapActions.push(cellActions);
       }
     }
-    return actions;
+    return mapActions;
   }
+
   get_transactions() {
+    const thisMaze = this;
     return function (state, action) {
       switch (action) {
         case dir.UP:
-          return state - this.width;
+          return state - thisMaze.width;
         case dir.RIGHT:
           return state + 1;
         case dir.DOWN:
-          return state + this.width;
+          return state + thisMaze.width;
         case dir.LEFT:
           return state - 1;
       }
-    }.bind(this);
+    };
   }
   get_rewards(rewards) {
     rewards = [];

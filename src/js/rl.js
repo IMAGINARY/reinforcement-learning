@@ -6,6 +6,75 @@ const StepState = {
   End: 2
 };
 
+
+function keyMax(obj) {
+  return Object.entries(obj).reduce((r, a) => (a[1] > r[1] ? a : r),[0,Number.MIN_SAFE_INTEGER])[0];
+}
+
+function pickRandom(array) {
+    return array[array.length * Math.random() << 0];
+};
+
+class QTable {
+  constructor(actions_per_state, transactions, rewards, learningRate, discountFactor) {
+    this.learningRate = learningRate;
+    this.discountFactor = discountFactor;
+    this.transactions = transactions;
+    this.rewards = rewards;
+    this.stateAction = actions_per_state.map( (c) => c.reduce((o,n) => {o[n]=0; return o},{}));
+  }
+  
+  getAllActions(state) {
+    return Object.keys(this.stateAction[state]);
+  }
+
+  getRandomAction(state) {
+    return pickRandom(this.getAllActions(state));
+  }
+
+  getMaxActionValue(state) {
+    const actions = this.getAllActions(state);
+    const actionValues = this.stateAction[state];
+    var bestAction = actions[0];
+    actions.forEach( action => {
+      if (actionValues[action] > actionValues[bestAction]) {
+        bestAction = action;
+      }
+    });
+    return { action: bestAction, value: actionValues[bestAction] };
+  }
+
+  getMaxValue(state) {
+    return this.getMaxActionValue(state).value;
+  }
+
+  getBestAction(state) {
+    return this.getMaxActionValue(state).action;
+  }
+
+  update(state, action){
+    let newState = this.transactions(state, action);
+    const newQ = (1 - this.learningRate) * this.stateAction[state][action] +
+                     this.learningRate * (this.rewards[newState] +
+                     this.discountFactor * this.getMaxValue(newState));
+
+    this.stateAction[state][action] = newQ;
+    return newState;
+  }
+
+  reset() {
+    for (var q in this.stateAction){
+      for (var key in this.stateAction[q]){
+        this.stateAction[q][key] = 0;
+      }
+    }
+  }
+
+  getStateValues() {
+    return Object.keys(this.stateAction).map( state => this.getMaxValue(state) );
+  }
+}
+
 export class RL_machine {
   constructor(actions_per_state,
               transactions,
@@ -17,18 +86,16 @@ export class RL_machine {
               learning_rate,
               discount_factor,
               epsilon=0) {
-    this.actions_per_state = actions_per_state;
-    this.transactions = transactions;
-    this.rewards = rewards;
     this.lr = learning_rate;
     this.df = discount_factor;
+    this.rewards = rewards;
     this.start_state = start_state;
     this.start_score = start_score;
     this.end_score = end_score;
     this.end_states = end_states;
     this.epsilon = epsilon;
     this.fogOfWar = false;
-    this.q_table = this.actions_per_state.map( (c) => c.reduce((o,n) => {o[n]=0; return o},{}));
+    this.qTable = new QTable(actions_per_state, transactions, rewards, learning_rate, discount_factor);
     this.reset_machine();
     this.callback = null;
   }
@@ -38,14 +105,14 @@ export class RL_machine {
   }
 
   reset_machine(){
-    for (var q in this.q_table){
-      for (var key in this.q_table[q]){
-        this.q_table[q][key] = 0;
-      }
-    }
+    this.qTable.reset();
     this.episode = 0;
     this.running = false;
     this.score_history = [];
+    this.resetState();
+  }
+
+  resetState() {
     this.state = this.start_state;
     this.score = this.start_score;
   }
@@ -54,8 +121,7 @@ export class RL_machine {
     const reset = () => {
       this.episode++;
       this.score_history.push(this.score);
-      this.state = this.start_state;
-      this.score = this.start_score;
+      this.resetState();
     }
     // add_new_episode_callback
     if (!this.running && this.callback) {
@@ -65,26 +131,28 @@ export class RL_machine {
     }
   }
 
-  auto_step(){
-    if (Math.random() < this.epsilon){
-      return this.step(pickRandom(Object.keys(this.q_table[this.state])));
-    } else{
-      return this.greedy_step();
-    }
+  auto_step() {
+    return (Math.random() < this.epsilon) ? this.random_step() : this.greedy_step();
   }
 
-  greedy_step(){
-    return this.step(keyMax(this.q_table[this.state]));
+  random_step() {
+    return this.step(this.qTable.getRandomAction(this.state));
+  }
+
+  greedy_step() {
+    return this.step(this.qTable.getBestAction(this.state));
   }
 
   attemptStep(state, dir) {
-    const actions = [...Object.keys(this.q_table[state])];
+    const actions = this.qTable.getAllActions(state);
     if (actions.includes(dir))
       this.step(dir);
   }
 
-  step(action){
-    this.state = this.update_q_table(this.state, action);
+  step(action) {
+    this.state = this.qTable.update(this.state, action);
+    this.score += this.rewards[this.state];
+
     // add_new_step_callback
     if (this.end_states.indexOf(this.state) >= 0) {
       this.new_episode("success");
@@ -97,13 +165,6 @@ export class RL_machine {
     return StepState.Continue;
   }
 
-  update_q_table(state, action){
-    let new_state = this.transactions(state, action);
-    this.q_table[state][action] = (1-this.lr)*this.q_table[state][action] + this.lr*(this.rewards[new_state] + this.df*Math.max(...Object.values(this.q_table[new_state])));
-    this.score += this.rewards[new_state];
-    return new_state;
-  }
-
   run(episodes, max_steps_per_episode=10000){
     this.running = true;
     for (var i = 0; i < episodes; i++) {
@@ -112,21 +173,11 @@ export class RL_machine {
           break;
         }
       }
-      // this.new_episode();
+      this.resetState();
     }
     this.running = false;
   }
 }
-
-function keyMax(obj) {
-  return Object.entries(obj).reduce((r, a) => (a[1] > r[1] ? a : r),[0,Number.MIN_SAFE_INTEGER])[0];
-}
-function argMax(array) {
-  return array.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1];
-}
-function pickRandom(array) {
-    return array[array.length * Math.random() << 0];
-};
 
 // ------------------ maze stuff --------------------------------------------
 export const tile = {
