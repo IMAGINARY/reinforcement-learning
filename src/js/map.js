@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-import { maze, tile, dir, machine } from "./rl.js";
+import { maze, tile, machine } from "./rl.js";
 
 export const TileStrokeColor = "#DDDDDD";
 const TileFogColor = "#303030";
