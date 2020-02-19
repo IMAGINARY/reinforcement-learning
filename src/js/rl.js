@@ -1,3 +1,5 @@
+import { Maze } from "./Maze";
+
 export class RL_machine {
   constructor(actions_per_state,
               transactions,
