@@ -3,6 +3,7 @@ import Vue from 'vue';
 import { maze, tile, dir, machine } from "./rl.js";
 
 export const TileStrokeColor = "#DDDDDD";
+const TileFogColor = "#303030";
 
 function asyncLoadImage(imagesrc, setFunction) {
   const image = new window.Image();
@@ -100,7 +101,7 @@ export var MapBase = Vue.component('MapBase', {
           y: this.base_size/2,
         },
         opacity: 1,
-        fill: (machine.fogOfWar && !isNextToRobot(index)) ? "#303030" : getTileColor(t_type)
+        fill: (machine.fogOfWar && !isNextToRobot(index)) ? TileFogColor : getTileColor(t_type)
       }
     },
   },
