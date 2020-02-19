@@ -1,4 +1,9 @@
-import { Maze } from "./Maze";
+import { Maze } from "./maze";
+
+const StepState = {
+  Continue: 1,
+  End: 2
+};
 
 export class RL_machine {
   constructor(actions_per_state,
@@ -21,13 +26,15 @@ export class RL_machine {
     this.end_score = end_score;
     this.end_states = end_states;
     this.epsilon = epsilon;
-    this.q_table = this.actions_per_state.map((c) => c.reduce((o,n) => {o[n]=0; return o},{}));
+    this.q_table = this.actions_per_state.map( (c) => c.reduce((o,n) => {o[n]=0; return o},{}));
     this.reset_machine();
     this.callback = null;
   }
+
   setCallback(cb){
     this.callback = cb;
   }
+
   reset_machine(){
     for (var q in this.q_table){
       for (var key in this.q_table[q]){
@@ -40,6 +47,7 @@ export class RL_machine {
     this.state = this.start_state;
     this.score = this.start_score;
   }
+
   new_episode(reason = "failed"){
     const reset = () => {
       this.episode++;
@@ -54,6 +62,7 @@ export class RL_machine {
       reset();
     }
   }
+
   auto_step(){
     if (Math.random() < this.epsilon){
       return this.step(choose(Object.keys(this.q_table[this.state])));
@@ -61,33 +70,37 @@ export class RL_machine {
       return this.greedy_step();
     }
   }
+
   greedy_step(){
     return this.step(keyMax(this.q_table[this.state]));
   }
+
   step(action){
     this.state = this.update_q_table(this.state, action);
     // add_new_step_callback
     if (this.end_states.indexOf(this.state) >= 0) {
       this.new_episode("success");
-      return 2
+      return StepState.End;
     }
     if (this.score <= this.end_score){
       this.new_episode("failed");
-      return 2
+      return StepState.End;
     }
-    return 1
+    return StepState.Continue;
   }
+
   update_q_table(state, action){
     let new_state = this.transactions(state, action);
     this.q_table[state][action] = (1-this.lr)*this.q_table[state][action] + this.lr*(this.rewards[new_state] + this.df*Math.max(...Object.values(this.q_table[new_state])));
     this.score += this.rewards[new_state];
     return new_state;
   }
+
   run(episodes, max_steps_per_episode=10000){
     this.running = true;
     for (var i = 0; i < episodes; i++) {
       for (var j = 0; j < max_steps_per_episode; j++) {
-        if (this.auto_step() != 1) {
+        if (this.auto_step() != StepState.Continue) {
           break;
         }
       }
@@ -122,99 +135,6 @@ export const dir = {
   DOWN: "DOWN",
   LEFT: "LEFT",
 };
-
-export class Maze {
-  constructor(map, reward_map) {
-    this.map = map
-    this.height = map.length;
-    this.width = map[0].length;
-    this.start_state = this.get_states(tile.start)[0];
-    this.end_states = this.get_states(tile.end);
-    this.actions = this.get_actions();
-    this.transactions = this.get_transactions();
-    this.rewards = this.get_rewards(reward_map);
-  }
-  
-  getTileType(pos) {
-    if (this.isInside(pos)) {
-      return this.map[pos.y][pos.x];
-    }
-    return null;
-  }
-
-  isInside(coord) {
-    return coord.x <= this.width && coord.y <= this.height;
-  }
-
-  get_states(tile) {
-    var res = [];
-    for (var idy = 0; idy < this.map.length; idy++) {
-      for (var idx = 0; idx < this.map[idy].length; idx++) {
-        if (this.map[idy][idx] == tile) {
-          res.push(idy*this.map[0].length+idx);
-        }
-      }
-    }
-    return res;
-  }
-  get_actions() {
-    var actions = [];
-    for (let idy=0; idy<this.map.length; idy++){
-      for (let idx=0; idx<this.map[0].length; idx++){
-        var action = [];
-        if (this.map[idy][idx] == tile.wall){
-          actions.push(action);
-          continue;
-        }
-        if (idy != 0){
-          if(this.map[idy-1][idx] != tile.wall){
-            action.push(dir.UP);
-          }
-        }
-        if (idy != this.map.length-1){
-          if(this.map[idy+1][idx] != tile.wall){
-            action.push(dir.DOWN);
-          }
-        }
-        if (idx != 0){
-          if(this.map[idy][idx-1] != tile.wall){
-            action.push(dir.LEFT);
-          }
-        }
-        if (idx != this.map[0].length-1){
-          if(this.map[idy][idx+1] != tile.wall){
-            action.push(dir.RIGHT);
-          }
-        }
-        actions.push(action);
-      }
-    }
-    return actions;
-  }
-  get_transactions(){
-    return function(state, action){
-      switch (action) {
-        case dir.UP:
-          return state-this.width;
-        case dir.RIGHT:
-          return state+1;
-        case dir.DOWN:
-          return state+this.width;
-        case dir.LEFT:
-          return state-1;
-      }
-    }.bind(this);
-  }
-  get_rewards(rewards){
-    rewards = [];
-    for (let idy=0; idy<this.map.length; idy++){
-      for (let idx=0; idx<this.map[0].length; idx++){
-        rewards.push(reward[this.map[idy][idx]]);
-      }
-    }
-    return rewards;
-  }
-}
 
 export const reward = {[tile.regular]:-1,[tile.dangerous]:-100,[tile.end]:1000,[tile.start]:-1};
 export var maze = new Maze(map, reward);

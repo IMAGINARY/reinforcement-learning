@@ -31,6 +31,7 @@ export class Maze {
     }
     return res;
   }
+
   get_actions() {
     var actions = [];
     for (let idy = 0; idy < this.map.length; idy++) {
