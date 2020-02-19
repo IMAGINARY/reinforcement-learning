@@ -88,6 +88,18 @@ export class Maze {
       }
     };
   }
+
+  state2position(state) {
+    return {
+      x: (state % this.width),
+      y: Math.floor(state / this.width),
+    }
+  };
+
+  position2state(coord) {
+    return coord.x + coord.y * this.width;
+  };
+
   get_rewards(rewards) {
     rewards = [];
     for (let idy = 0; idy < this.map.length; idy++) {

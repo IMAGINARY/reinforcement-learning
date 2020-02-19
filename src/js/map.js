@@ -79,12 +79,12 @@ export var MapBase = Vue.component('MapBase', {
     },
 
     get_tile_type: function(state) {
-      var pos = this.machine.state2position(state);
+      var pos = this.maze.state2position(state);
       return maze.getTileType(pos);
     },
 
     get_field_config: function(state) {
-      var pos = this.machine.state2position(state);
+      var pos = this.maze.state2position(state);
       return {
         x: this.base_size * pos.x+this.base_size/2,
         y: this.base_size * pos.y+this.base_size/2,
