@@ -6,11 +6,6 @@ const StepState = {
   End: 2
 };
 
-
-function keyMax(obj) {
-  return Object.entries(obj).reduce((r, a) => (a[1] > r[1] ? a : r),[0,Number.MIN_SAFE_INTEGER])[0];
-}
-
 function pickRandom(array) {
     return array[array.length * Math.random() << 0];
 };
@@ -86,8 +81,6 @@ export class RL_machine {
               learning_rate,
               discount_factor,
               epsilon=0) {
-    this.lr = learning_rate;
-    this.df = discount_factor;
     this.rewards = rewards;
     this.start_state = start_state;
     this.start_score = start_score;
