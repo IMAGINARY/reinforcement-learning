@@ -1,4 +1,5 @@
 import { Maze } from "./maze";
+import { levelMap } from './level';
 
 const StepState = {
   Continue: 1,
@@ -144,7 +145,7 @@ export const dir = {
 };
 
 export const reward = {[tile.regular]:-1,[tile.dangerous]:-100,[tile.end]:1000,[tile.start]:-1};
-export var maze = new Maze(map, reward);
+export var maze = new Maze(levelMap, reward);
 
 var learning_rate = 0.75;
 var discount_factor = 0.8;

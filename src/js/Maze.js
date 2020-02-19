@@ -1,16 +1,17 @@
 import { tile, dir, reward } from "./rl";
 
 export class Maze {
-  constructor(map, reward_map) {
-    this.map = map;
-    this.height = map.length;
-    this.width = map[0].length;
+  constructor(levelMap, reward_map) {
+    this.map = levelMap;
+    this.height = levelMap.length;
+    this.width = levelMap[0].length;
     this.start_state = this.get_states(tile.start)[0];
     this.end_states = this.get_states(tile.end);
     this.actions = this.get_actions();
     this.transactions = this.get_transactions();
     this.rewards = this.get_rewards(reward_map);
   }
+
   getTileType(pos) {
     if (this.isInside(pos)) {
       return this.map[pos.y][pos.x];
