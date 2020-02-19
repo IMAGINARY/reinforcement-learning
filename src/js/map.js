@@ -240,10 +240,6 @@ Vue.component('rl-map', {
           <v-rect :config="get_tile_config(t_type, idx)"></v-rect>
           <v-image :config="energy_config" v-if="t_type==8"></v-image>
         </v-group>
-        <v-group :key="'qgroup'+idx" v-for="(action, idx) in machine.q_table" :config="get_field_config(idx)">
-          <v-shape :key="'qvalshape'+idx+key" v-for="(value, key) in action" :config="get_triangle_config(value, key)"></v-shape>
-          <v-text :key="'qval'+idx+i" v-for="i in 4" :config="get_q_text_config(action,i)"></v-text>
-        </v-group>
         <v-image :config="robot_config"></v-image>
       </v-group>
     </v-layer>
