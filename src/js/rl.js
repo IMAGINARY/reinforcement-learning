@@ -67,7 +67,7 @@ export class RL_machine {
 
   auto_step(){
     if (Math.random() < this.epsilon){
-      return this.step(choose(Object.keys(this.q_table[this.state])));
+      return this.step(pickRandom(Object.keys(this.q_table[this.state])));
     } else{
       return this.greedy_step();
     }
@@ -124,7 +124,7 @@ function keyMax(obj) {
 function argMax(array) {
   return array.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1];
 }
-function choose(array) {
+function pickRandom(array) {
     return array[array.length * Math.random() << 0];
 };
 
