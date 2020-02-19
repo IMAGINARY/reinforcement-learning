@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-import { maze, tile, dir } from "./rl.js";
+import { maze, tile, dir, machine } from "./rl.js";
 
 export const TileStrokeColor = "#DDDDDD";
 
@@ -10,6 +10,11 @@ function asyncLoadImage(imagesrc, setFunction) {
   image.onload = () => {
     setFunction(image);
   }
+}
+
+function isNextToRobot(index) {
+  return index == machine.state - 1 || index == machine.state || index == machine.state + 1 ||
+         index == machine.state - maze.width || index == machine.state + maze.width;
 }
 
 export var MapBase = Vue.component('MapBase', {
@@ -84,7 +89,7 @@ export var MapBase = Vue.component('MapBase', {
         y: this.base_size * pos.y+this.base_size/2,
       }
     },
-    get_tile_config: function(t_type) {
+    get_tile_config: function(t_type, index) {
       return {
         width: this.base_size,
         height: this.base_size,
@@ -95,8 +100,8 @@ export var MapBase = Vue.component('MapBase', {
           y: this.base_size/2,
         },
         opacity: 1,
-        fill: getTileColor(t_type)
-      };
+        fill: (machine.fogOfWar && !isNextToRobot(index)) ? "#303030" : getTileColor(t_type)
+      }
     },
   },
 });
@@ -232,7 +237,7 @@ Vue.component('rl-map', {
     <v-layer ref="map_layer" :config="main_config">
       <v-group ref="map_group">
         <v-group :key="'tile'+idx" v-for="(t_type, idx) in maze.map.flat()" :config="get_field_config(idx)">
-          <v-rect :config="get_tile_config(t_type)"></v-rect>
+          <v-rect :config="get_tile_config(t_type, idx)"></v-rect>
           <v-image :config="energy_config" v-if="t_type==8"></v-image>
         </v-group>
         <v-group :key="'qgroup'+idx" v-for="(action, idx) in machine.q_table" :config="get_field_config(idx)">

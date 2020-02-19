@@ -10,12 +10,13 @@ export const StateMgr = {
     },
   },
   local: {
-    components: ["local", "navi", "score"],
+    components: ["global", "navi", "score"],
     navigation: {
       "reset robot": () => machine.reset_machine(),
       "continue": null,
     },
     onEnterState: function () {
+      machine.fogOfWar = true;
       this.navigation.continue = () => this.changeState("global");
       var lightText = Texts.localIntro;
       lightbox.popup(lightText, ["next"]);
@@ -31,6 +32,7 @@ export const StateMgr = {
       "reset machine": () => machine.reset_machine(),
     },
     onEnterState: function () {
+      machine.fogOfWar = false;
       var lightText = Texts.globalIntro;
       lightbox.popup(lightText, ["continue"]);
     },

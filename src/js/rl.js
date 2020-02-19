@@ -26,6 +26,7 @@ export class RL_machine {
     this.end_score = end_score;
     this.end_states = end_states;
     this.epsilon = epsilon;
+    this.fogOfWar = false;
     this.q_table = this.actions_per_state.map( (c) => c.reduce((o,n) => {o[n]=0; return o},{}));
     this.reset_machine();
     this.callback = null;
