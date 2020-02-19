@@ -37,62 +37,61 @@ Vue.component('navi-gation',  {
 // -------------------------------- Main --------------------------------------
 // ----------------------------------------------------------------------------
 
-function makeMachineReactive(th, machine){
-  var $this = th;
+function makeMachineReactive(vueInstance, machine){
 
-  $this.machine.state2position = function(state) {
+  vueInstance.machine.state2position = function(state) {
     return {
-      x: (state % $this.maze.width),
-      y: Math.floor(state / $this.maze.width),
+      x: (state % vueInstance.maze.width),
+      y: Math.floor(state / vueInstance.maze.width),
     }
   };
-  $this.machine.position2state = function(x, y) {
-    return x + y * $this.maze.width;
+  vueInstance.machine.position2state = function(x, y) {
+    return x + y * vueInstance.maze.width;
   };
 
   // Score wrapper
-  var s = machine.score;
-  $this.machine.score = s;
+  var score = machine.score;
+  vueInstance.machine.score = score;
   Object.defineProperty(machine, 'score', {
     get: function() {
       return this._score
     },
-    set: function(ne) {
-      this._score = ne;
-      $this.machine.score = ne
+    set: function(newScore) {
+      this._score = newScore;
+      vueInstance.machine.score = newScore
     }
   });
-  machine.score = s;
+  machine.score = score;
 
   // Score history wrapper
-  var s = machine.score_history;
-  $this.machine.score_history = s;
+  var scoreHistory = machine.score_history;
+  vueInstance.machine.score_history = scoreHistory;
   Object.defineProperty(machine, 'score_history', {
     get: function() {
       return this._score_history
     },
-    set: function(ne) {
-      this._score_history = ne;
-      $this.machine.score_history = ne
+    set: function(newScoreHistory) {
+      this._score_history = newScoreHistory;
+      vueInstance.machine.score_history = newScoreHistory
     }
   });
-  machine.score_history = s;
+  machine.score_history = scoreHistory;
 
   // State wrapper
-  var s = machine.state;
-  $this.machine.state = $this.machine.state2position(s);
+  var state = machine.state;
+  vueInstance.machine.state = vueInstance.machine.state2position(state);
   Object.defineProperty(machine, 'state', {
     get: function() {
       return this._state
     },
     set: function(ne) {
       this._state = ne;
-      $this.handleState(this._state);
+      vueInstance.handleState(this._state);
     }
   });
-  machine.state = s;
+  machine.state = state;
 
-  $this.machine.object.setCallback($this.onNewEpisode);
+  vueInstance.machine.object.setCallback(vueInstance.onNewEpisode);
 }
 
 var app = new Vue({
