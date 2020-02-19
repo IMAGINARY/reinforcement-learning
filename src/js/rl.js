@@ -81,6 +81,8 @@ export class RL_machine {
               learning_rate,
               discount_factor,
               epsilon=0) {
+    this.lr = learning_rate;
+    this.df = discount_factor;
     this.rewards = rewards;
     this.start_state = start_state;
     this.start_score = start_score;
