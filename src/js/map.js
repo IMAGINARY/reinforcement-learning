@@ -130,30 +130,6 @@ function arrowFillColor(value) {
   return arrowPalette[Math.round(normalized_value*100)];
 }
 
-function dir2Rotation(direction) {
-  switch (direction) {
-    case dir.UP: return -90;
-    case dir.DOWN: return 90;
-    case dir.LEFT: return 180;
-    case dir.RIGHT: return 0;
-    default: return 0;
-  }
-}
-
-export function arrowIndexToDirection(index) {
-  const directions = [undefined, dir.UP, dir.RIGHT, dir.DOWN, dir.LEFT];
-  return directions[index];
-}
-
-// 1: top, 2: right, 3: down, 4: left
-const KonvaArrowTextAlignment = [
-  {},
-  { align: "center", verticalAlign: "top" },
-  { align: "right", verticalAlign: "middle" },
-  { align: "center", verticalAlign: "bottom" },
-  { align: "left", verticalAlign: "middle" }
-];
-
 Vue.component('rl-map', {
   extends: MapBase,
   computed: {
@@ -164,71 +140,6 @@ Vue.component('rl-map', {
         x: this.base_size * this.machine.state.x,
         y: this.base_size * this.machine.state.y,
         image: this.robot_image,
-      }
-    },
-    extreme_q_values: function(){
-      var max = -10*30;
-      var min = 10*30;
-      for (field in this.q_table) {
-        for (key in this.q_table[field]){
-          if (this.q_table[field][key]<min){
-            min = this.q_table[field][key];
-          } else if (this.q_table[field][key]>max){
-            max = this.q_table[field][key];
-          }
-        }
-      }
-      return {min: min, max: max};
-    }
-  },
-  methods: {
-    get_q_text_config: function (val, arrowIndex) {
-      const alignment = KonvaArrowTextAlignment[arrowIndex];
-      var key = arrowIndexToDirection(arrowIndex);
-      if (val[key] === undefined) {
-        return {}
-      }
-      return {
-        fontSize: this.base_size/7,
-        fontFamily: 'Calibri',
-        fill: 'black',
-        text: +val[key].toPrecision(3)+'',
-        width: this.base_size-20,
-        height: this.base_size-34,
-        ...alignment,
-        offset: {
-          x: (this.base_size-20)/2,
-          y: (this.base_size-34)/2,
-        }
-      }
-    },
-
-    get_triangle_config: function(value, direction) {
-      var $this = this;
-
-      return {
-        sceneFunc: function(context, shape) {
-          context.beginPath();
-          var width = $this.base_size / 5;
-          var arrow_w = $this.base_size / 2;
-          var stumpf = $this.base_size / 6;
-          var arrow_l = $this.base_size / 5;
-          context.moveTo($this.base_size/2-stumpf-arrow_l, width/2);
-          context.lineTo($this.base_size/2-stumpf, width/2);
-          context.lineTo($this.base_size/2-stumpf, arrow_w/2);
-          context.lineTo($this.base_size/2-2, 0);
-          context.lineTo($this.base_size/2-stumpf, -arrow_w/2);
-          context.lineTo($this.base_size/2-stumpf, -width/2);
-          context.lineTo($this.base_size/2-stumpf-arrow_l, -width/2);
-          context.lineTo($this.base_size/2-stumpf-arrow_l, width/2);
-          context.closePath();
-          // (!) Konva specific method, it is very important
-          context.fillStrokeShape(shape);
-        },
-        fill: arrowFillColor(value),
-        stroke: 'black',
-        strokeWidth: 1,
-        rotation: dir2Rotation(direction),
       }
     },
   },
