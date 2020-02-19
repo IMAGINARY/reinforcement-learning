@@ -37,17 +37,6 @@ Vue.component('navi-gation',  {
 // ----------------------------------------------------------------------------
 
 function makeMachineReactive(vueInstance, machine){
-
-  vueInstance.machine.state2position = function(state) {
-    return {
-      x: (state % vueInstance.maze.width),
-      y: Math.floor(state / vueInstance.maze.width),
-    }
-  };
-  vueInstance.machine.position2state = function(x, y) {
-    return x + y * vueInstance.maze.width;
-  };
-
   // Score wrapper
   var score = machine.score;
   vueInstance.machine.score = score;
@@ -78,7 +67,7 @@ function makeMachineReactive(vueInstance, machine){
 
   // State wrapper
   var state = machine.state;
-  vueInstance.machine.state = vueInstance.machine.state2position(state);
+  vueInstance.machine.state = vueInstance.maze.state2position(state);
   Object.defineProperty(machine, 'state', {
     get: function() {
       return this._state
@@ -111,8 +100,6 @@ var app = new Vue({
       epsilon: machine.epsilon,
       score: machine.score,
       score_history: machine.score_history,
-      state2position: null,
-      position2state: null,
     },
     width: 0,
     height: 0,
@@ -186,9 +173,9 @@ var app = new Vue({
 
     handleState: function(s) {
       if (!this.machine.object.running) {
-        this.machine.state_tween.to(this.machine.state, 0.2, this.machine.state2position(s));
+        this.machine.state_tween.to(this.machine.state, 0.2, this.maze.state2position(s));
       } else {
-        this.machine.state = this.machine.state2position(s);
+        this.machine.state = this.maze.state2position(s);
       }
     },
 
