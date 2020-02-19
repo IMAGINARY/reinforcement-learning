@@ -1,12 +1,5 @@
 import { machine, dir } from "./rl.js";
 
-function dir_to_action(dir){
-  let actions = [...Object.keys(machine.q_table[machine.state])];
-  if (actions.indexOf(dir) > -1){
-    return dir;
-  }
-  return undefined;
-}
 var animate = false;
 
 const KeyCodeLeft = 37;
@@ -16,10 +9,10 @@ const KeyCodeDown= 40;
 
 function key2Action(keyCode) {
   switch (keyCode) {
-    case KeyCodeLeft: return dir_to_action(dir.LEFT);
-    case KeyCodeUp: return dir_to_action(dir.UP);
-    case KeyCodeRight: return dir_to_action(dir.RIGHT);
-    case KeyCodeDown: return dir_to_action(dir.DOWN);
+    case KeyCodeLeft: return dir.LEFT;
+    case KeyCodeUp: return dir.UP;
+    case KeyCodeRight: return dir.RIGHT;
+    case KeyCodeDown: return dir.DOWN;
   }
   return undefined;
 }
@@ -34,6 +27,6 @@ export function key_callback(e) {
   }
   var action = key2Action(e.keyCode);
   if (action != undefined && isLightBoxInactive()) {
-     machine.step(action);
+     machine.attemptStep(machine.state, action);
   }
 }

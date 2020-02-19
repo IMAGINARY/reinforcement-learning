@@ -75,6 +75,12 @@ export class RL_machine {
     return this.step(keyMax(this.q_table[this.state]));
   }
 
+  attemptStep(state, dir) {
+    const actions = [...Object.keys(this.q_table[state])];
+    if (actions.includes(dir))
+      this.step(dir);
+  }
+
   step(action){
     this.state = this.update_q_table(this.state, action);
     // add_new_step_callback
