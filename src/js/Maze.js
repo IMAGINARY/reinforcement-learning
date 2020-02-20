@@ -1,4 +1,4 @@
-import { tile, dir, reward } from "./rl";
+import { tile, dir, RewardsMap } from "./rl";
 
 export class Maze {
   constructor(levelMap, rewardsMap) {
@@ -7,7 +7,6 @@ export class Maze {
     this.width = levelMap[0].length;
     this.start_state = this.get_states(tile.start)[0];
     this.end_states = this.get_states(tile.end);
-    this.actions = this.get_actions();
     this.rewardsMap = rewardsMap;
   }
 
@@ -53,23 +52,19 @@ export class Maze {
     return this.isTransitable(dest);
   }
 
-  get_actions() {
-    var mapActions = [];
-    var coord = { x : 0, y: 0 };
-
-    for (coord.y = 0; coord.y < this.map.length; coord.y++) {
-      for (coord.x = 0; coord.x < this.map[0].length; coord.x++) {
-        var cellActions = [];
-        if (this.isTransitable(coord)) {
-          [dir.UP, dir.DOWN, dir.RIGHT, dir.LEFT].forEach( dir => {
-            if (this.canMove(coord, dir))
-              cellActions.push(dir);
-          });
-        }
-        mapActions.push(cellActions);
+  getActionsForStateFunction() {
+    const maze = this;
+    return function(state) {
+      const coord = maze.state2position(state);
+      var cellActions = [];
+      if (maze.isTransitable(coord)) {
+        [dir.UP, dir.DOWN, dir.RIGHT, dir.LEFT].forEach( dir => {
+          if (maze.canMove(coord, dir))
+            cellActions.push(dir);
+        });
       }
+      return cellActions;
     }
-    return mapActions;
   }
 
   getTransitionFunction() {
