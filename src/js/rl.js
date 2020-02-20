@@ -14,6 +14,7 @@ class QTable {
   constructor(learningRate, discountFactor) {
     this.learningRate = learningRate;
     this.discountFactor = discountFactor;
+    this.qBounds = { min: -Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER };
     /*
     Array implicitely state-indexed, where each element is a Map of action/values
 
@@ -72,16 +73,24 @@ class QTable {
     return this.getMaxActionValue(state).action;
   }
 
+  updateQBounds(qValue) {
+    if (qValue < this.qBounds.min)
+      this.qBounds.min = qValue;
+    if (qValue > this.qBounds.max)
+      this.qBounds.max = qValue;
+  }
+
   updateStateAction(state, action, newValue) {
     const stateArray = this.getStateActionValues(state);
     stateArray.set(action, newValue);
+    this.updateQBounds(newValue);
   }
 
   update(state, action, newState, reward) {
     const currentValue = this.getCurrentValue(state, action);
     const maxQ = this.getMaxValue(newState);
 
-    const newQ = (1 - this.learningRate) * currentValue + this.learningRate * (reward + this.discountFactor * maxQ);
+    const newQ = (1 - this.learningRate) * currentValue + this.learningRate * (reward + this.discountFactor * maxQ);  
     this.updateStateAction(state, action, newQ);
 
     return newState;
