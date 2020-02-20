@@ -1,6 +1,7 @@
 import Vue from 'vue';
 
 import { maze, tile, machine } from "./rl.js";
+import { hexToRgb, rgbToHex } from './color-utils';
 
 export const TileStrokeColor = "#DDDDDD";
 const TileFogColor = "#303030";
@@ -24,8 +25,8 @@ function isNextToRobot(index) {
 
 const ValueVisualizer = {
   fillColor(state) {
-    const type = maze.getTileType(maze.state2position(state));
-    return ((machine.fogOfWar && !isNextToRobot(state)) ? TileFogColor : getTileColor(type))
+    const color = rgbToHex(255, machine.normalizedValue(state), 255);
+    return color;
   },
   opacity(state) {
     return (occludedByFog(state) || !maze.isTransitable(maze.state2position(state))) ? 0 : 0.25;
