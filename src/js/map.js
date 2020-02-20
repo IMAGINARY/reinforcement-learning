@@ -13,6 +13,10 @@ function asyncLoadImage(imagesrc, setFunction) {
   }
 }
 
+function occludedByFog(state) {
+  return machine.fogOfWar && !isNextToRobot(state);
+}
+
 function isNextToRobot(index) {
   return index == machine.state - 1 || index == machine.state || index == machine.state + 1 ||
          index == machine.state - maze.width || index == machine.state + maze.width;
@@ -24,7 +28,7 @@ const ValueVisualizer = {
     return ((machine.fogOfWar && !isNextToRobot(state)) ? TileFogColor : getTileColor(type))
   },
   opacity(state) {
-    return 0.25;
+    return (occludedByFog(state) || !maze.isTransitable(maze.state2position(state))) ? 0 : 0.25;
   }
 }
 
@@ -111,7 +115,7 @@ export var MapBase = Vue.component('MapBase', {
           y: this.base_size/2,
         },
         opacity: 1,
-        fill: (machine.fogOfWar && !isNextToRobot(index)) ? TileFogColor : getTileColor(t_type)
+        fill: occludedByFog(index) ? TileFogColor : getTileColor(t_type)
       }
     },
     get_tile_value_config: function(index) {
