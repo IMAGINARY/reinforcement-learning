@@ -11,11 +11,11 @@ function pickRandom(array) {
 };
 
 class QTable {
-  constructor(actions_per_state, transactions, rewards, learningRate, discountFactor) {
+  constructor(actions_per_state, transactions, rewardFunction, learningRate, discountFactor) {
     this.learningRate = learningRate;
     this.discountFactor = discountFactor;
     this.transactions = transactions;
-    this.rewards = rewards;
+    this.rewardFunction = rewardFunction;
     this.stateAction = actions_per_state.map( (c) => c.reduce((o,n) => {o[n]=0; return o},{}));
   }
   
@@ -50,7 +50,7 @@ class QTable {
   update(state, action){
     let newState = this.transactions(state, action);
     const newQ = (1 - this.learningRate) * this.stateAction[state][action] +
-                     this.learningRate * (this.rewards[newState] +
+                     this.learningRate * (this.rewardFunction(newState) +
                      this.discountFactor * this.getMaxValue(newState));
 
     this.stateAction[state][action] = newQ;
@@ -73,7 +73,7 @@ class QTable {
 export class RL_machine {
   constructor(actions_per_state,
               transactions,
-              rewards,
+              rewardFunction,
               start_state,
               end_states,
               start_score,
@@ -83,14 +83,14 @@ export class RL_machine {
               epsilon=0) {
     this.lr = learning_rate;
     this.df = discount_factor;
-    this.rewards = rewards;
+    this.rewardFunction = rewardFunction;
     this.start_state = start_state;
     this.start_score = start_score;
     this.end_score = end_score;
     this.end_states = end_states;
     this.epsilon = epsilon;
     this.fogOfWar = false;
-    this.qTable = new QTable(actions_per_state, transactions, rewards, learning_rate, discount_factor);
+    this.qTable = new QTable(actions_per_state, transactions, rewardFunction, learning_rate, discount_factor);
     this.reset_machine();
     this.callback = null;
   }
@@ -146,7 +146,7 @@ export class RL_machine {
 
   step(action) {
     this.state = this.qTable.update(this.state, action);
-    this.score += this.rewards[this.state];
+    this.score += this.rewardFunction(this.state);
 
     // add_new_step_callback
     if (this.end_states.indexOf(this.state) >= 0) {
@@ -196,4 +196,4 @@ export var maze = new Maze(levelMap, reward);
 var learning_rate = 0.75;
 var discount_factor = 0.8;
 
-export var machine = new RL_machine(maze.actions, maze.transactions, maze.rewards,  maze.start_state, maze.end_states, 50, 0, learning_rate, discount_factor, 0.2);
+export var machine = new RL_machine(maze.actions, maze.transactions, maze.getRewardFunction(),  maze.start_state, maze.end_states, 50, 0, learning_rate, discount_factor, 0.2);

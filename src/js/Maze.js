@@ -1,7 +1,7 @@
 import { tile, dir, reward } from "./rl";
 
 export class Maze {
-  constructor(levelMap, reward_map) {
+  constructor(levelMap, rewardsMap) {
     this.map = levelMap;
     this.height = levelMap.length;
     this.width = levelMap[0].length;
@@ -9,7 +9,7 @@ export class Maze {
     this.end_states = this.get_states(tile.end);
     this.actions = this.get_actions();
     this.transactions = this.get_transactions();
-    this.rewards = this.get_rewards(reward_map);
+    this.rewardsMap = rewardsMap;
   }
 
   getTileType(pos) {
@@ -100,13 +100,12 @@ export class Maze {
     return coord.x + coord.y * this.width;
   };
 
-  get_rewards(rewards) {
-    rewards = [];
-    for (let idy = 0; idy < this.map.length; idy++) {
-      for (let idx = 0; idx < this.map[0].length; idx++) {
-        rewards.push(reward[this.map[idy][idx]]);
-      }
-    }
-    return rewards;
+  getRewardFunction() {
+    const maze = this;
+    return function(state) {
+      const position = maze.state2position(state);
+      return maze.rewardsMap[maze.map[position.y][position.x]];
+    };
   }
+
 }
