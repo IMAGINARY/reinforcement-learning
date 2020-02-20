@@ -11,31 +11,57 @@ function pickRandom(array) {
 };
 
 class QTable {
-  constructor(actions_per_state, rewardFunction, learningRate, discountFactor) {
+  constructor(learningRate, discountFactor) {
     this.learningRate = learningRate;
     this.discountFactor = discountFactor;
-    this.rewardFunction = rewardFunction;
-    this.stateAction = actions_per_state.map( (c) => c.reduce((o,n) => {o[n]=0; return o},{}));
-  }
-  
-  getAllActions(state) {
-    return Object.keys(this.stateAction[state]);
+    /*
+    Array implicitely state-indexed, where each element is a Map of action/values
+
+    state 1:
+      action 1: Q-value for action 1 taken in state 1
+      action 2: Q-value for action 2 taken in state 1
+    state 2:
+      action 1: Q-value for action 1 taken in state 1
+      action 2: Q-value for action 2 taken in state 2
+      action 3: Q-value for action 3 taken in state 3
+    */
+    this.reset();
   }
 
-  getRandomAction(state) {
-    return pickRandom(this.getAllActions(state));
+  // Returns the Map of action/values corresponding to the state
+  // Might be an empty Map
+  // Modifying this returned map WILL modify the stored values
+  getStateActionValues(state) {
+    return (state in this.stateAction) ? this.stateAction[state] : (this.stateAction[state] = new Map());
   }
 
+  // Returns an array of actions, NO values
+  // Modifying this array will NOT change the stored values
+  getStateActions(state) {
+    return (state in this.stateAction) ? Array.from(this.stateAction[state].keys()) : [];
+  }
+
+  // if state/action combination not known, returns 0
+  getCurrentValue(state, action) {
+    const actionValues = this.getStateActionValues(state);
+    return (action in actionValues) ? actionValues.get(action) : 0;
+  }
+
+  // returns an { action: value: } object
+  // If no actions are known for this state, action will be undefined
   getMaxActionValue(state) {
-    const actions = this.getAllActions(state);
-    const actionValues = this.stateAction[state];
+    const actionValues = this.getStateActionValues(state);
+    const actions = this.getStateActions(state);
+    if (actions.length == 0)
+      return { action: undefined, value: 0 };
+
     var bestAction = actions[0];
     actions.forEach( action => {
-      if (actionValues[action] > actionValues[bestAction]) {
+      if (actionValues.get(action) > actionValues.get(bestAction)) {
         bestAction = action;
       }
     });
-    return { action: bestAction, value: actionValues[bestAction] };
+    return { action: bestAction, value: actionValues.get(bestAction) };
   }
 
   getMaxValue(state) {
@@ -46,21 +72,23 @@ class QTable {
     return this.getMaxActionValue(state).action;
   }
 
-  update(state, action, newState) {
-    const newQ = (1 - this.learningRate) * this.stateAction[state][action] +
-                     this.learningRate * (this.rewardFunction(newState) +
-                     this.discountFactor * this.getMaxValue(newState));
+  updateStateAction(state, action, newValue) {
+    const stateArray = this.getStateActionValues(state);
+    stateArray.set(action, newValue);
+  }
 
-    this.stateAction[state][action] = newQ;
+  update(state, action, newState, reward) {
+    const currentValue = this.getCurrentValue(state, action);
+    const maxQ = this.getMaxValue(newState);
+
+    const newQ = (1 - this.learningRate) * currentValue + this.learningRate * (reward + this.discountFactor * maxQ);
+    this.updateStateAction(state, action, newQ);
+
     return newState;
   }
 
   reset() {
-    for (var q in this.stateAction){
-      for (var key in this.stateAction[q]){
-        this.stateAction[q][key] = 0;
-      }
-    }
+    this.stateAction = [];
   }
 
   getStateValues() {
@@ -69,7 +97,7 @@ class QTable {
 }
 
 export class RL_machine {
-  constructor(actions_per_state,
+  constructor(actionsForState,
               transitionFunction,
               rewardFunction,
               start_state,
@@ -89,7 +117,8 @@ export class RL_machine {
     this.end_states = end_states;
     this.epsilon = epsilon;
     this.fogOfWar = false;
-    this.qTable = new QTable(actions_per_state, rewardFunction, learning_rate, discount_factor);
+    this.actionsForState = actionsForState;
+    this.qTable = new QTable(learning_rate, discount_factor);
     this.reset_machine();
     this.callback = null;
   }
@@ -125,27 +154,33 @@ export class RL_machine {
     }
   }
 
+  randomAction(state) {
+    return pickRandom(this.actionsForState(state));
+  }
+
   auto_step() {
     return (Math.random() < this.epsilon) ? this.random_step() : this.greedy_step();
   }
 
   random_step() {
-    return this.step(this.qTable.getRandomAction(this.state));
+    return this.step(this.randomAction(this.state));
   }
 
   greedy_step() {
-    return this.step(this.qTable.getBestAction(this.state));
+    const bestAction = this.qTable.getBestAction(this.state) || this.randomAction(this.state);
+    return this.step(bestAction);
   }
 
   attemptStep(state, dir) {
-    const actions = this.qTable.getAllActions(state);
+    const actions = this.actionsForState(state);
     if (actions.includes(dir))
       this.step(dir);
   }
 
   step(action) {
     const newState = this.transitionFunction(this.state, action);
-    this.qTable.update(this.state, action, newState);
+    const reward = this.rewardFunction(newState);
+    this.qTable.update(this.state, action, newState, reward);
 
     this.state = newState;
     this.score += this.rewardFunction(this.state);
@@ -192,10 +227,30 @@ export const dir = {
   LEFT: "LEFT",
 };
 
-export const reward = {[tile.regular]:-1,[tile.dangerous]:-100,[tile.end]:1000,[tile.start]:-1};
-export var maze = new Maze(levelMap, reward);
+export const RewardsMap = {
+  [tile.regular]:-1,
+  [tile.dangerous]:-100,
+  [tile.end]:1000,
+  [tile.start]:-1
+};
+export var maze = new Maze(levelMap, RewardsMap);
 
 var learning_rate = 0.75;
 var discount_factor = 0.8;
 
-export var machine = new RL_machine(maze.actions, maze.getTransitionFunction(), maze.getRewardFunction(),  maze.start_state, maze.end_states, 50, 0, learning_rate, discount_factor, 0.2);
+const rewardFunction = (state) => {
+  const position = maze.state2position(state);
+  const tileType = levelMap[position.y][position.x];
+  return RewardsMap[tileType];
+}
+
+export var machine = new RL_machine(maze.getActionsForStateFunction(),
+                            maze.getTransitionFunction(),
+                            rewardFunction,
+                            maze.start_state,
+                            maze.end_states,
+                            50,
+                            0,
+                            learning_rate,
+                            discount_factor,
+                            0.2);
