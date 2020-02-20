@@ -126,6 +126,7 @@ export class RL_machine {
     this.end_states = end_states;
     this.epsilon = epsilon;
     this.fogOfWar = false;
+    this.show_qvalue_info = false;
     this.actionsForState = actionsForState;
     this.qTable = new QTable(learning_rate, discount_factor);
     this.reset_machine();

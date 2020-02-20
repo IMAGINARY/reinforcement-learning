@@ -101,6 +101,7 @@ var app = new Vue({
       epsilon: machine.epsilon,
       score: machine.score,
       score_history: machine.score_history,
+      show_qvalue_info: false
     },
     width: 0,
     height: 0,
