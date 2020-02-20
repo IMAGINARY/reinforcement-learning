@@ -8,7 +8,6 @@ export class Maze {
     this.start_state = this.get_states(tile.start)[0];
     this.end_states = this.get_states(tile.end);
     this.actions = this.get_actions();
-    this.transactions = this.get_transactions();
     this.rewardsMap = rewardsMap;
   }
 
@@ -73,7 +72,7 @@ export class Maze {
     return mapActions;
   }
 
-  get_transactions() {
+  getTransitionFunction() {
     const thisMaze = this;
     return function (state, action) {
       switch (action) {
