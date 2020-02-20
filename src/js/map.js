@@ -104,7 +104,19 @@ export var MapBase = Vue.component('MapBase', {
         fill: (machine.fogOfWar && !isNextToRobot(index)) ? TileFogColor : getTileColor(t_type)
       }
     },
-  },
+    get_tile_value_config: function(t_type, index) {
+      return {
+        width: this.base_size,
+        height: this.base_size,
+        offset: {
+          x: this.base_size/2 + 2,
+          y: this.base_size/2 + 2,
+        },
+        opacity: 0.25,
+        fill: ((machine.fogOfWar && !isNextToRobot(index)) ? TileFogColor : getTileColor(t_type))
+      }
+    }
+  }
 });
 
 function getTileColor(type) {
@@ -150,6 +162,7 @@ Vue.component('rl-map', {
       <v-group ref="map_group">
         <v-group :key="'tile'+idx" v-for="(t_type, idx) in maze.map.flat()" :config="get_field_config(idx)">
           <v-rect :config="get_tile_config(t_type, idx)"></v-rect>
+          <v-rect :config="get_tile_value_config(t_type, idx)"></v-rect>
           <v-image :config="energy_config" v-if="t_type==8"></v-image>
         </v-group>
         <v-image :config="robot_config"></v-image>
