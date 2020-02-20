@@ -18,6 +18,16 @@ function isNextToRobot(index) {
          index == machine.state - maze.width || index == machine.state + maze.width;
 }
 
+const ValueVisualizer = {
+  fillColor(state) {
+    const type = maze.getTileType(maze.state2position(state));
+    return ((machine.fogOfWar && !isNextToRobot(state)) ? TileFogColor : getTileColor(type))
+  },
+  opacity(state) {
+    return 0.25;
+  }
+}
+
 export var MapBase = Vue.component('MapBase', {
   props: ['machine', 'maze', 'config'],
   data: function () {
@@ -104,16 +114,16 @@ export var MapBase = Vue.component('MapBase', {
         fill: (machine.fogOfWar && !isNextToRobot(index)) ? TileFogColor : getTileColor(t_type)
       }
     },
-    get_tile_value_config: function(t_type, index) {
+    get_tile_value_config: function(index) {
       return {
         width: this.base_size,
         height: this.base_size,
         offset: {
-          x: this.base_size/2 + 2,
-          y: this.base_size/2 + 2,
+          x: this.base_size/2 + 4,
+          y: this.base_size/2 + 4,
         },
-        opacity: 0.25,
-        fill: ((machine.fogOfWar && !isNextToRobot(index)) ? TileFogColor : getTileColor(t_type))
+        opacity: ValueVisualizer.opacity(index),
+        fill: ValueVisualizer.fillColor(index)
       }
     }
   }
@@ -162,7 +172,7 @@ Vue.component('rl-map', {
       <v-group ref="map_group">
         <v-group :key="'tile'+idx" v-for="(t_type, idx) in maze.map.flat()" :config="get_field_config(idx)">
           <v-rect :config="get_tile_config(t_type, idx)"></v-rect>
-          <v-rect :config="get_tile_value_config(t_type, idx)"></v-rect>
+          <v-rect :config="get_tile_value_config(idx)"></v-rect>
           <v-image :config="energy_config" v-if="t_type==8"></v-image>
         </v-group>
         <v-image :config="robot_config"></v-image>
