@@ -14,7 +14,6 @@ class QTable {
   constructor(learningRate, discountFactor) {
     this.learningRate = learningRate;
     this.discountFactor = discountFactor;
-    this.qBounds = { min: -Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER };
     /*
     Array implicitely state-indexed, where each element is a Map of action/values
 
@@ -98,6 +97,9 @@ class QTable {
 
   reset() {
     this.stateAction = [];
+    // arbitrary starting values, but which should help start with a reasonable color gradient
+    // when visualizing all q values
+    this.qBounds = { min: 0, max: 0 };
   }
 
   getStateValues() {
@@ -218,6 +220,13 @@ export class RL_machine {
       this.resetState();
     }
     this.running = false;
+  }
+
+  normalizedValue(state) {
+    const max = this.qTable.qBounds.max;
+    const min = this.qTable.qBounds.min;
+    const value = this.qTable.getMaxValue(state);
+    return (value - min) / (max - min);
   }
 }
 
