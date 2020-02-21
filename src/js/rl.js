@@ -14,6 +14,7 @@ class QTable {
   constructor(learningRate, discountFactor) {
     this.learningRate = learningRate;
     this.discountFactor = discountFactor;
+    this.qCallback = undefined;
     /*
     Array implicitely state-indexed, where each element is a Map of action/values
 
@@ -89,7 +90,20 @@ class QTable {
     const currentValue = this.getCurrentValue(state, action);
     const maxQ = this.getMaxValue(newState);
 
-    const newQ = (1 - this.learningRate) * currentValue + this.learningRate * (reward + this.discountFactor * maxQ);  
+    const newQ = (1 - this.learningRate) * currentValue + this.learningRate * (reward + this.discountFactor * maxQ);
+
+    if (this.qCallback != undefined) {
+      this.qCallback({
+        state : state,
+        action: action,
+        newState: newState,
+        newState: newState,
+        currentValue: currentValue,
+        reward: reward,
+        maxQ: maxQ,
+        newQ: newQ
+      });
+    }
     this.updateStateAction(state, action, newQ);
 
     return newState;
@@ -133,6 +147,10 @@ export class RL_machine {
     this.qTable = new QTable(learning_rate, discount_factor);
     this.reset_machine();
     this.callback = null;
+  }
+
+  setQCallback(qCallback) {
+    this.qTable.qCallback = qCallback;
   }
 
   setCallback(cb){
