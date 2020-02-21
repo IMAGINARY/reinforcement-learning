@@ -32,6 +32,7 @@ Vue.component('navi-gation',  {
   </nav>`
 });
 
+var qLog = [];
 
 // ----------------------------------------------------------------------------
 // -------------------------------- Main --------------------------------------
@@ -80,6 +81,15 @@ function makeMachineReactive(vueInstance, machine){
   });
   machine.state = state;
 
+  machine.setQCallback( data => {
+    if (qLog.length == 20) {
+      qLog.splice(0, 2);
+    }
+    qLog.push(`Q(${data.state},${data.action}) <- (1 - ${machine.lr.toFixed(2)})*Q(${data.state},${data.action}) + ${machine.lr.toFixed(2)}*(${data.reward.toFixed(2)} + ${machine.df.toFixed(2)} * ${data.maxQ.toFixed(2)}))`);
+    qLog.push(`Q(${data.state},${data.action}) <- ${data.newQ}\n`);
+    vueInstance.q_log = qLog.reduce( (fullLog, line) => fullLog + "\n" + line );
+  });
+
   vueInstance.machine.object.setCallback(vueInstance.onNewEpisode);
 }
 
@@ -88,6 +98,8 @@ var app = new Vue({
   data: {
     state: null,
     maze: maze,
+    logLines: [],
+    q_log: "",
     machine: {
       object: machine,
       q_table: machine.q_table,
