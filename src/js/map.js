@@ -52,6 +52,10 @@ export class MapView {
     this.createObjectsLayer();
     this.createQLayer();
   }
+
+  setQValuesVisible(visible) {
+    this.qLayer.visible(visible);
+  }
   
   occludedByFog(coord) {
     return this.fogEnabled && !this.isNextToRobot(coord);

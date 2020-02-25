@@ -236,6 +236,9 @@ var app = new Vue({
     'machine.epsilon': function(new_val) {
       machine.epsilon = parseFloat(new_val);
     },
+    'machine.show_qvalue_info':function(newValue) {
+      mapView.setQValuesVisible(newValue);
+    },
     state: function(state){
       this.onLeaveState();
       Object.assign(this, StateMgr[state]);
