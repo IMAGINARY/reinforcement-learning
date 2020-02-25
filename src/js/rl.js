@@ -265,6 +265,19 @@ export class RL_machine {
     this.stateChange.call(oldState, newState);
   }
 
+  getGreedyPath() {
+    var states = [];
+    var state = this.start_state;
+    do {
+      states.push(state);
+      const action = this.qTable.getBestAction(state);
+      if (action == undefined)
+        break;
+      state = this.transitionFunction(state, action);
+    }  while (state != undefined && !(state in states) && !(state in this.end_states));
+    return states;
+  }
+
   run(episodes, max_steps_per_episode=10000){
     this.running = true;
     for (var i = 0; i < episodes; i++) {

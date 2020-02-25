@@ -51,10 +51,19 @@ export class MapView {
     this.createMazeLayer();
     this.createObjectsLayer();
     this.createQLayer();
+    this.createGreedyLayer();
   }
 
   setQValuesVisible(visible) {
     this.qLayer.visible(visible);
+  }
+
+  setGreedyVisible(visible) {
+    this.greedyLayer.visible(visible);
+  }
+
+  setFogVisible(visible) {
+    this.fogEnabled = visible;
   }
   
   occludedByFog(coord) {
@@ -71,6 +80,32 @@ export class MapView {
   getTileColor(coord) {
     return this.occludedByFog(coord) ? TileFogColor : 
            this.maze.isTransitable({ x: coord.x, y: coord.y}) ? TransitableColor : WallColor;
+  }
+
+  createGreedyLayer() {
+    this.greedyLayer = new Konva.Layer();
+    this.greedyPath = new Konva.Line({
+      stroke: '#F6D080',
+      strokeWidth: 5,
+      lineCap: 'round',
+      lineJoin: 'round'
+    });
+    this.greedyLayer.add(this.greedyPath);
+    this.stage.add(this.greedyLayer);
+  }
+
+  updateGreedyPath() {
+    const path = this.machine.getGreedyPath();
+    if (path.lenght < 2)
+      return;
+    
+    var lineCoordinates = [];
+    const coordinates = path.map( state => this.maze.state2position(state) ).forEach( coord => {
+      lineCoordinates.push(coord.x * this.TileSize + (this.TileSize/2));
+      lineCoordinates.push(coord.y * this.TileSize + (this.TileSize/2));
+    });
+    this.greedyPath.points(lineCoordinates);
+    this.greedyLayer.draw();
   }
 
   createMazeLayer() {
@@ -145,6 +180,7 @@ export class MapView {
 
   onStateChange(oldState, newState) {
     this.updateQValue(oldState);
+    this.updateGreedyPath();
     this.setRobotPosition(this.maze.state2position(newState));
     if (this.fogEnabled)
       this.updateFog();
