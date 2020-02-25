@@ -4,12 +4,13 @@ import { dir, dirToMovement } from './dir'
 export class Maze {
   constructor(levelMap, rewardsMap) {
     this.map = levelMap;
+    this.rewardsMap = rewardsMap;
     this.height = levelMap.length;
     this.width = levelMap[0].length;
-    this.start_state = this.get_states(tile.start)[0];
-    this.end_states = this.get_states(tile.end);
-    this.rewardsMap = rewardsMap;
     this.generateCoordinates();
+
+    this.start_state = this.getStatesWithType(tile.start)[0];
+    this.end_states = this.getStatesWithType(tile.end);
     this.allStates = new Array(this.height * this.height).map( (value, index) => index);
   }
 
@@ -35,15 +36,12 @@ export class Maze {
     return this.isInside(coord) && this.getTileType(coord) != tile.wall;
   }
 
-  get_states(tile) {
+  getStatesWithType(type) {
     var res = [];
-    for (var idy = 0; idy < this.map.length; idy++) {
-      for (var idx = 0; idx < this.map[idy].length; idx++) {
-        if (this.map[idy][idx] == tile) {
-          res.push(idy * this.map[0].length + idx);
-        }
-      }
-    }
+    this.allCoordinates.forEach( coord => {
+      if (this.map[coord.y][coord.x] == type)
+        res.push(coord.y * this.width + coord.x);
+    });
     return res;
   }
 
