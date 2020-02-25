@@ -13,6 +13,8 @@ import { MapView } from './map.js';
 
 import './map.js';
 
+const TileSize = 80;
+
 document.addEventListener('keydown', key_callback);
 
 Vue.use(VueKonva);
@@ -242,7 +244,7 @@ var app = new Vue({
   }
 })
 
-const mapView = new MapView('map_container', machine, maze, 50);
+const mapView = new MapView('map_container', machine, maze, TileSize);
 
 function renderLatex() {
   // (1-lr) * Q[state, action] + lr * (reward + gamma * np.max(Q[new_state, :])

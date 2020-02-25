@@ -85,6 +85,15 @@ button{
   width: 20vw;
 }
 
+div#map_container {
+  position: relative;
+  top: 100px;
+  left: 400px;
+  width: 800px;
+  height: 800px;
+  background-color: '#FF00FF';
+}
+
 .lightbox{
   padding: 2em;
   position: absolute;
