@@ -39,16 +39,13 @@ export class MapView {
     this.TileSize = tileSize;
     this.maze = maze;
     this.machine = machine;
+    this.machine.setStateChangeCallback(newState => this.onStateChange(newState));
 
     this.stage = new Konva.Stage({
       container: containerId,
       width: tileSize * maze.width,
       height: tileSize * maze.height
     });
-/*    
-    asyncLoadImage("img/robot.png", image => this.robotImage = image);
-    asyncLoadImage("img/station.png", image => this.stationImage = image);
-*/
     this.createMazeLayer(maze);
     this.createObjectsLayer();
   }
@@ -72,34 +69,43 @@ export class MapView {
     }
     this.stage.add(this.mapLayer);
   }
+
+  createImageAtTile(imageSource, coord) {
+    
+    const thisImage = new Konva.Image({
+      x: coord.x * this.TileSize,
+      y: coord.y * this.TileSize,
+      image: null,
+      width: this.TileSize,
+      height: this.TileSize
+    });
+    asyncLoadImage(imageSource, image => {
+      thisImage.image(image);
+      this.objectsLayer.draw();
+    });
+    return thisImage;
+  }
+
   createObjectsLayer() {
     this.objectsLayer = new Konva.Layer();
+    this.robot = this.createImageAtTile("img/robot.png", this.maze.state2position(this.maze.start_state));
+    this.station = this.createImageAtTile("img/station.png", this.maze.state2position(this.maze.end_states[0]));
+    this.objectsLayer.add(this.robot);
+    this.objectsLayer.add(this.station);
+    this.objectsLayer.batchDraw();
     this.stage.add(this.objectsLayer);
+  }
 
-    asyncLoadImage("img/robot.png", image => {
-      this.robot = new Konva.Image({
-        x: this.maze.state2position(this.maze.start_state).x * this.TileSize,
-        y: this.maze.state2position(this.maze.start_state).y * this.TileSize,
-        image: image,
-        width: this.TileSize,
-        height: this.TileSize
-      });
-      this.objectsLayer.add(this.robot);
-      this.objectsLayer.batchDraw();
-    });
+  onStateChange(newState) {
+    this.setRobotPosition(this.maze.state2position(newState));
+  }
 
-    asyncLoadImage("img/station.png", image => {
-      this.station = new Konva.Image({
-        x: this.maze.state2position(this.maze.end_states[0]).x * this.TileSize,
-        y: this.maze.state2position(this.maze.end_states[0]).y * this.TileSize,
-        image: image,
-        width: this.TileSize,
-        height: this.TileSize
-      });
-      this.objectsLayer.add(this.station);
-      this.objectsLayer.batchDraw();
-    });
-
+  setRobotPosition(coord) {
+    console.log("robot position: " + this.robot.x() + ", " + this.robot.y());
+    this.robot.x(coord.x * this.TileSize);
+    this.robot.y(coord.y * this.TileSize);
+    console.log("robot position: " + this.robot.x() + ", " + this.robot.y());
+    this.objectsLayer.draw();
   }
 }
 

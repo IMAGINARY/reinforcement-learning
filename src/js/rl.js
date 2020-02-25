@@ -147,6 +147,11 @@ export class RL_machine {
     this.qTable = new QTable(learning_rate, discount_factor);
     this.reset_machine();
     this.callback = null;
+    this.stateChangeCallback = null;
+  }
+
+  setStateChangeCallback(stateChangeCallback) {
+    this.stateChangeCallback = stateChangeCallback;
   }
 
   setQCallback(qCallback) {
@@ -166,7 +171,7 @@ export class RL_machine {
   }
 
   resetState() {
-    this.state = this.start_state;
+    this.setState(this.start_state);
     this.score = this.start_score;
   }
 
@@ -212,7 +217,7 @@ export class RL_machine {
     const reward = this.rewardFunction(newState);
     this.qTable.update(this.state, action, newState, reward);
 
-    this.state = newState;
+    this.setState(newState);
     this.score += this.rewardFunction(this.state);
 
     // add_new_step_callback
@@ -225,6 +230,13 @@ export class RL_machine {
       return StepState.End;
     }
     return StepState.Continue;
+  }
+
+  setState(newState) {
+    this.state = newState;
+    if (this.stateChangeCallback != null) {
+      this.stateChangeCallback(newState);
+    }
   }
 
   run(episodes, max_steps_per_episode=10000){

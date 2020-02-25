@@ -187,11 +187,11 @@ var app = new Vue({
 
     onLeaveState: function(){},
 
-    handleState: function(s) {
+    handleState: function(state) {
       if (!this.machine.object.running) {
-        this.machine.state_tween.to(this.machine.state, 0.2, this.maze.state2position(s));
+        this.machine.state_tween.to(this.machine.state, 0.2, this.maze.state2position(state));
       } else {
-        this.machine.state = this.maze.state2position(s);
+        this.machine.state = this.maze.state2position(state);
       }
     },
 
