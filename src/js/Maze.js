@@ -8,8 +8,16 @@ export class Maze {
     this.start_state = this.get_states(tile.start)[0];
     this.end_states = this.get_states(tile.end);
     this.rewardsMap = rewardsMap;
+    this.generateCoordinates();
   }
 
+  generateCoordinates(maze) {
+    this.allCoordinates = [];
+    for (var y = 0 ; y < this.height ; y++)
+      for (var x = 0 ; x < this.width ; x++)
+        this.allCoordinates.push({ x: x, y: y});
+  }
+  
   getTileType(pos) {
     if (this.isInside(pos)) {
       return this.map[pos.y][pos.x];

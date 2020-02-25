@@ -233,10 +233,10 @@ export class RL_machine {
   }
 
   setState(newState) {
-    this.state = newState;
     if (this.stateChangeCallback != null) {
-      this.stateChangeCallback(newState);
+      this.stateChangeCallback(this.state, newState);
     }
+    this.state = newState;
   }
 
   run(episodes, max_steps_per_episode=10000){

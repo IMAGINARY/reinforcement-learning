@@ -34,20 +34,30 @@ const ValueVisualizer = {
   }
 }
 
+function createMatrixFromMaze(maze) {
+  var matrix = [];
+  for (var y = 0 ; y < maze.height ; y++)
+    matrix[y] = new Array(maze.width);
+  return matrix;
+}
+
+
 export class MapView {
   constructor(containerId, machine, maze, tileSize) {
     this.TileSize = tileSize;
     this.maze = maze;
     this.machine = machine;
-    this.machine.setStateChangeCallback(newState => this.onStateChange(newState));
+    this.machine.setStateChangeCallback((oldState, newState) => this.onStateChange(oldState, newState));
 
     this.stage = new Konva.Stage({
       container: containerId,
       width: tileSize * maze.width,
       height: tileSize * maze.height
     });
+
     this.createMazeLayer(maze);
     this.createObjectsLayer();
+    this.createQLayer(maze);
   }
   
   createMazeLayer(maze) {
@@ -95,9 +105,33 @@ export class MapView {
     this.objectsLayer.batchDraw();
     this.stage.add(this.objectsLayer);
   }
+  
+  createQLayer(maze) {
+    this.qLayer = new Konva.Layer();
+    this.qTexts = createMatrixFromMaze(maze);
+    maze.allCoordinates.forEach( coord => {
+      this.qTexts[coord.y][coord.x] = new Konva.Text({
+        text: '',
+        x: coord.x * this.TileSize + 5,
+        y: coord.y * this.TileSize + 5,
+        width: this.TileSize,
+        height: this.TileSize,
+        color: 'black'
+      });
+      this.qLayer.add(this.qTexts[coord.y][coord.x]);
+    });
+    this.stage.add(this.qLayer);
+  }
 
-  onStateChange(newState) {
+  onStateChange(oldState, newState) {
+    this.updateQValue(oldState);
     this.setRobotPosition(this.maze.state2position(newState));
+  }
+
+  updateQValue(state) {
+    const coord = this.maze.state2position(state);
+    this.qTexts[coord.y][coord.x].text('Q: ' + this.machine.qTable.getMaxValue(state).toFixed(2));
+    this.qLayer.draw();
   }
 
   setRobotPosition(coord) {
