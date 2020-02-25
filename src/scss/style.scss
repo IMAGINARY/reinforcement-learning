@@ -7,9 +7,9 @@
 body{
   margin: 0;
   padding: 0;
-  // background-color: ;
-  font-family: sans-serif;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
+
 #container{
   height: 100vh;
   position: relative;
@@ -18,10 +18,20 @@ body{
   height: 100%;
 }
 
-nav{
+span.energy {
+  font-size: 20px;
+  font-weight: bold;
+}
+span.parameter {
+  font-size: 16px;
+}
+
+.navigation {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 1vh;
+  left: 2vw;
+  background-color: #F0F0F0;
+  padding: 5px;
 }
 
 button{
@@ -30,8 +40,8 @@ button{
 
 #log_area {
   position: absolute;
-  top: 200px;
-  right: 5px;
+  top: 21vh;
+  right: 1vw;
   text-align: center;
   padding: 10px;
   width: 24%;
@@ -65,11 +75,14 @@ button{
   height: 10vw;
 }
 
-.sliders{
+div.sliders{
   position: absolute;
   top: 20vh;
   left: 2vw;
   width: 20vw;
+  background-color: #F0F0F0;
+  border-color: black;
+  padding: 10px;
 }
 
 #formula{
@@ -80,18 +93,20 @@ button{
 
 .score{
   position: absolute;
-  top: 7vh;
+  top: 12vh;
   left: 2vw;
   width: 20vw;
+  background-color: #FFF0F0;
+  padding: 10px;
 }
 
 div#map_container {
-  position: relative;
-  top: 100px;
-  left: 400px;
+  position: absolute;
+  top: 12vh;
+  left: 26vw;
   width: 800px;
   height: 800px;
-  background-color: '#FF00FF';
+  background-color: #F8F8F8;
 }
 
 .lightbox{

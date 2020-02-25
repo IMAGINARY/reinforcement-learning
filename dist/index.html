@@ -21,15 +21,15 @@
       <line-chart css-classes="plot" :chart-data="datacollection" :options="plot_options"  v-show="isActive('plot')"></line-chart>
 
       <div class="sliders" v-show="isActive('sliders')">
-        <h1>Learning Rate {{machine.learning_rate}}</h1>
-        <input type="range" id="machine_learning_range" v-model="machine.learning_rate" min="0" max="1" step="0.01">
-
-        <h1>Discount Factor {{machine.discount_factor}}</h1>
-        <input type="range" id="machine_discount_factor" v-model="machine.discount_factor" min="0" max="1" step="0.01">
-
-        <h1>Epsilon {{machine.epsilon}}</h1>
-        <input type="range" id="machine_epsilon" v-model="machine.epsilon" min="0" max="1" step="0.01">
-
+        <span class="parameter">Learning Rate {{machine.learning_rate}}</span><br/>
+        <input type="range" id="machine_learning_range" v-model="machine.learning_rate" min="0" max="1" step="0.01"><br/>
+        <br/>
+        <span class="parameter">Discount Factor {{machine.discount_factor}}</span><br/>
+        <input type="range" id="machine_discount_factor" v-model="machine.discount_factor" min="0" max="1" step="0.01"><br/>
+        <br/>
+        <span class="parameter">Epsilon {{machine.epsilon}}</span><br/>
+        <input type="range" id="machine_epsilon" v-model="machine.epsilon" min="0" max="1" step="0.01"><br/>
+        <br/>
         <label><input type="checkbox" v-model="machine.show_qvalue_info">Show Q-Value</label>
         <div id="formula"></div>
       </div>
@@ -37,10 +37,9 @@
         <textarea id="q_log" v-model="q_log" v-if="machine.show_qvalue_info" rows="40" readonly></textarea>
       </div>
       <div class="score" v-show="isActive('score')">
-        <h1>Current Energy</h1>
-        <h2>{{machine.score}}</h2>
+        <span class="energy">Current Energy {{machine.score}}</span>
       </div>
-      <navi-gation :options="navigation" v-show="isActive('navi')"></navi-gation>
+      <navi-gation class="navigation" :options="navigation" v-show="isActive('navi')"></navi-gation>
     </div>
 
     <script src="main.js"></script>
