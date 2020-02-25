@@ -13,7 +13,11 @@
   <body>
     <div id="popup"></div>
     <div id="app">
+<!--
       <rl-map class="stage" :machine="machine" :maze="maze" :config="stage_config"  v-show="isActive('global')"></rl-map>
+-->            
+      <div id="map_container"></div>      
+
       <line-chart css-classes="plot" :chart-data="datacollection" :options="plot_options"  v-show="isActive('plot')"></line-chart>
 
       <div class="sliders" v-show="isActive('sliders')">

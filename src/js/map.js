@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import Konva from 'konva';
 
 import { maze, tile, machine } from "./rl.js";
 import { hexToRgb, rgbToHex } from './color-utils';
@@ -30,6 +31,75 @@ const ValueVisualizer = {
   },
   opacity(state) {
     return (occludedByFog(state) || !maze.isTransitable(maze.state2position(state))) ? 0 : 0.25;
+  }
+}
+
+export class MapView {
+  constructor(containerId, machine, maze, tileSize) {
+    this.TileSize = tileSize;
+    this.maze = maze;
+    this.machine = machine;
+
+    this.stage = new Konva.Stage({
+      container: containerId,
+      width: tileSize * maze.width,
+      height: tileSize * maze.height
+    });
+/*    
+    asyncLoadImage("img/robot.png", image => this.robotImage = image);
+    asyncLoadImage("img/station.png", image => this.stationImage = image);
+*/
+    this.createMazeLayer(maze);
+    this.createObjectsLayer();
+  }
+  
+  createMazeLayer(maze) {
+    this.mapLayer = new Konva.Layer();
+    this.mapTiles = [maze.height];
+    for (var y = 0 ; y < maze.height ; y++) {
+      this.mapTiles[y] = [maze.width];
+      for (var x = 0 ; x < maze.width ; x++) {
+        const rect = new Konva.Rect({
+          x: x * this.TileSize,
+          y: y * this.TileSize,
+          width: this.TileSize,
+          height: this.TileSize,
+          fill: maze.isTransitable({ x: x, y: y}) ? '#FFFFFF' : '#101010'
+        });
+        this.mapTiles[y][x] = rect;
+        this.mapLayer.add(rect);
+      }
+    }
+    this.stage.add(this.mapLayer);
+  }
+  createObjectsLayer() {
+    this.objectsLayer = new Konva.Layer();
+    this.stage.add(this.objectsLayer);
+
+    asyncLoadImage("img/robot.png", image => {
+      this.robot = new Konva.Image({
+        x: this.maze.state2position(this.maze.start_state).x * this.TileSize,
+        y: this.maze.state2position(this.maze.start_state).y * this.TileSize,
+        image: image,
+        width: this.TileSize,
+        height: this.TileSize
+      });
+      this.objectsLayer.add(this.robot);
+      this.objectsLayer.batchDraw();
+    });
+
+    asyncLoadImage("img/station.png", image => {
+      this.station = new Konva.Image({
+        x: this.maze.state2position(this.maze.end_states[0]).x * this.TileSize,
+        y: this.maze.state2position(this.maze.end_states[0]).y * this.TileSize,
+        image: image,
+        width: this.TileSize,
+        height: this.TileSize
+      });
+      this.objectsLayer.add(this.station);
+      this.objectsLayer.batchDraw();
+    });
+
   }
 }
 

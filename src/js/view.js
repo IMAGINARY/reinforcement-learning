@@ -9,6 +9,8 @@ import { key_callback } from "./controls.js";
 import { StateMgr } from './state-manager.js';
 import { lightbox } from './lightbox.js';
 
+import { MapView } from './map.js';
+
 import './map.js';
 
 document.addEventListener('keydown', key_callback);
@@ -239,6 +241,8 @@ var app = new Vue({
     },
   }
 })
+
+const mapView = new MapView('map_container', machine, maze, 50);
 
 function renderLatex() {
   // (1-lr) * Q[state, action] + lr * (reward + gamma * np.max(Q[new_state, :])
