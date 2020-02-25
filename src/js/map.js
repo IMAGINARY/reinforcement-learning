@@ -58,7 +58,7 @@ export class MapView {
 
     this.createMazeLayer(maze);
     this.createObjectsLayer();
-    this.createQLayer(maze);
+    this.createQLayer();
   }
   
   createMazeLayer(maze) {
@@ -107,15 +107,10 @@ export class MapView {
     this.stage.add(this.objectsLayer);
   }
   
-  createQLayer(maze) {
+  createQLayer() {
     this.qLayer = new Konva.Layer();
-    this.resetQTexts();
-    this.stage.add(this.qLayer);
-  }
-
-  resetQTexts() {
-    this.qTexts = createMatrixFromMaze(maze);
-    maze.allCoordinates.forEach( coord => {
+    this.qTexts = createMatrixFromMaze(this.maze);
+    this.maze.allCoordinates.forEach( coord => {
       this.qTexts[coord.y][coord.x] = new Konva.Text({
         text: '',
         x: coord.x * this.TileSize + 5,
@@ -125,6 +120,13 @@ export class MapView {
         color: 'black'
       });
       this.qLayer.add(this.qTexts[coord.y][coord.x]);
+    });
+    this.stage.add(this.qLayer);
+  }
+
+  resetQTexts() {
+    this.qLayer.getChildren().forEach( child => {
+      child.text("");
     });
   }
 
@@ -145,10 +147,8 @@ export class MapView {
   }
 
   setRobotPosition(coord) {
-    console.log("robot position: " + this.robot.x() + ", " + this.robot.y());
     this.robot.x(coord.x * this.TileSize);
     this.robot.y(coord.y * this.TileSize);
-    console.log("robot position: " + this.robot.x() + ", " + this.robot.y());
     this.objectsLayer.draw();
   }
 }
