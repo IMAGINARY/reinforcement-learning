@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueChartJs from 'vue-chartjs';
-import VueKonva from 'vue-konva'
 import katex from 'katex';
 import { TimelineLite } from "gsap";
 
@@ -16,8 +15,6 @@ import './map.js';
 const TileSize = 80;
 
 document.addEventListener('keydown', key_callback);
-
-Vue.use(VueKonva);
 
 Vue.component('line-chart', {
   extends: VueChartJs.Line,

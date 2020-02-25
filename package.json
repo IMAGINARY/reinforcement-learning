@@ -26,7 +26,6 @@
     "katex": "^0.11.1",
     "konva": "^4.1.5",
     "vue": "^2.6.11",
-    "vue-chartjs": "^3.5.0",
-    "vue-konva": "^2.1.1"
+    "vue-chartjs": "^3.5.0"
   }
 }
