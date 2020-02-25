@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueChartJs from 'vue-chartjs';
-import katex from 'katex';
 import { TimelineLite } from "gsap";
 
 import { machine, maze } from "./rl.js";
@@ -9,6 +8,7 @@ import { StateMgr } from './state-manager.js';
 import { lightbox } from './lightbox.js';
 
 import { MapView } from './map.js';
+import { renderEquation } from './equation.js';
 
 import './map.js';
 
@@ -224,11 +224,11 @@ var app = new Vue({
   watch: {
     'machine.learning_rate': function(new_val) {
       machine.lr = parseFloat(new_val);
-      renderLatex();
+      renderEquation(machine);
     },
     'machine.discount_factor': function(new_val) {
       machine.df = parseFloat(new_val);
-      renderLatex();
+      renderEquation(machine);
     },
     'machine.epsilon': function(new_val) {
       machine.epsilon = parseFloat(new_val);
@@ -246,10 +246,4 @@ var app = new Vue({
 
 const mapView = new MapView('map_container', machine, maze, TileSize);
 
-function renderLatex() {
-  // (1-lr) * Q[state, action] + lr * (reward + gamma * np.max(Q[new_state, :])
-  const expression = `Q(s,a)\\leftarrow${(1-machine.lr).toFixed(2)}Q(s,a)+${machine.lr.toFixed(2)}(reward + ${machine.df.toFixed(2)}\\max_{a'}(Q(s_{new}, a'))`;
-  const baseNode = document.getElementById('formula');
-  katex.render(expression, baseNode, { displayMode: true } );
-}
-renderLatex();
+renderEquation(machine);
