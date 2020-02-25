@@ -3,7 +3,7 @@ import VueChartJs from 'vue-chartjs';
 import { TimelineLite } from "gsap";
 
 import { machine, maze } from "./rl.js";
-import { key_callback, setKeyboardActionCallback } from "./controls.js";
+import { setKeyboardActionCallback } from "./controls.js";
 import { StateMgr } from './state-manager.js';
 import { lightbox } from './lightbox.js';
 

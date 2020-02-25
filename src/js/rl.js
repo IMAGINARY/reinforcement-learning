@@ -1,5 +1,6 @@
 import { Maze } from "./maze";
 import { levelMap } from './level';
+import { tile } from './tile';
 
 const StepState = {
   Continue: 1,
@@ -285,28 +286,13 @@ export class RL_machine {
   }
 }
 
-// ------------------ maze stuff --------------------------------------------
-export const tile = {
-  regular: 0,
-  wall: 1,
-  start: 2,
-  dangerous: 4,
-  end: 8,
-};
-
-export const dir = {
-  UP: "UP",
-  RIGHT: "RIGHT",
-  DOWN: "DOWN",
-  LEFT: "LEFT",
-};
-
 export const RewardsMap = {
   [tile.regular]:-1,
   [tile.dangerous]:-100,
   [tile.end]:1000,
   [tile.start]:-1
 };
+
 export var maze = new Maze(levelMap, RewardsMap);
 
 var learning_rate = 0.75;

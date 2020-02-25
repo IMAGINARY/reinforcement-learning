@@ -1,4 +1,4 @@
-import { dir } from "./rl.js";
+import { dir } from "./dir";
 
 const KeyCodeLeft = 37;
 const KeyCodeUp = 38;

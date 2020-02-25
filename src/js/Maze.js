@@ -1,4 +1,5 @@
-import { tile, dir, RewardsMap } from "./rl";
+import { tile } from "./tile";
+import { dir, dirToMovement } from './dir'
 
 export class Maze {
   constructor(levelMap, rewardsMap) {
@@ -46,18 +47,9 @@ export class Maze {
     return res;
   }
 
-  dirToDiff(direction) {
-    switch (direction) {
-      case dir.UP: return { x: 0, y: -1 };
-      case dir.DOWN: return { x: 0, y: 1 };
-      case dir.LEFT: return { x: -1, y: 0 };
-      case dir.RIGHT: return { x: 1, y: 0 };
-    }
-  }
-
   canMove(from, dir) {
-    const diff = this.dirToDiff(dir);
-    const dest = { x: from.x + diff.x, y: from.y + diff.y };
+    const movement = dirToMovement(dir);
+    const dest = { x: from.x + movement.x, y: from.y + movement.y };
     return this.isTransitable(dest);
   }
 
