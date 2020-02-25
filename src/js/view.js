@@ -8,7 +8,8 @@ import { machine, maze } from "./rl.js";
 import { key_callback } from "./controls.js";
 import { StateMgr } from './state-manager.js';
 import { lightbox } from './lightbox.js';
-import './local-view.js';
+
+import './map.js';
 
 document.addEventListener('keydown', key_callback);
 
