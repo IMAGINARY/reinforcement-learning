@@ -3,7 +3,7 @@ import VueChartJs from 'vue-chartjs';
 import { TimelineLite } from "gsap";
 
 import { machine, maze } from "./rl.js";
-import { key_callback } from "./controls.js";
+import { key_callback, setKeyboardActionCallback } from "./controls.js";
 import { StateMgr } from './state-manager.js';
 import { lightbox } from './lightbox.js';
 
@@ -13,8 +13,6 @@ import { renderEquation } from './equation.js';
 import './map.js';
 
 const TileSize = 80;
-
-document.addEventListener('keydown', key_callback);
 
 Vue.component('line-chart', {
   extends: VueChartJs.Line,
@@ -127,6 +125,7 @@ var app = new Vue({
 
     makeMachineReactive(this, machine);
     this.state = "init";
+    renderEquation(machine);
   },
   destroyed() {
     window.removeEventListener('resize', this.handleResize)
@@ -246,4 +245,5 @@ var app = new Vue({
 
 const mapView = new MapView('map_container', machine, maze, TileSize);
 
-renderEquation(machine);
+setKeyboardActionCallback( action => machine.attemptStep(machine.state, action) );
+

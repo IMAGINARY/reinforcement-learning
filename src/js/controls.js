@@ -1,6 +1,4 @@
-import { machine, dir } from "./rl.js";
-
-var animate = false;
+import { dir } from "./rl.js";
 
 const KeyCodeLeft = 37;
 const KeyCodeUp = 38;
@@ -17,16 +15,15 @@ function key2Action(keyCode) {
   return undefined;
 }
 
-function isLightBoxInactive() {
+function isModalDialogVisible() {
   return document.querySelector(".lightbox.active") == null;
 }
 
-export function key_callback(e) {
-  if (animate) {
-    return
-  }
-  var action = key2Action(e.keyCode);
-  if (action != undefined && isLightBoxInactive()) {
-     machine.attemptStep(machine.state, action);
-  }
+export function setKeyboardActionCallback(callback) {
+  document.addEventListener('keydown', (e) => {
+    var action = key2Action(e.keyCode);
+    if (action != undefined && isModalDialogVisible()) {
+      callback(action);
+    }
+  });
 }
