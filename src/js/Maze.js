@@ -9,9 +9,10 @@ export class Maze {
     this.end_states = this.get_states(tile.end);
     this.rewardsMap = rewardsMap;
     this.generateCoordinates();
+    this.allStates = new Array(this.height * this.height).map( (value, index) => index);
   }
 
-  generateCoordinates(maze) {
+  generateCoordinates() {
     this.allCoordinates = [];
     for (var y = 0 ; y < this.height ; y++)
       for (var x = 0 ; x < this.width ; x++)

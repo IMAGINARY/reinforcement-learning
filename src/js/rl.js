@@ -259,8 +259,9 @@ export class RL_machine {
   }
 
   setState(newState) {
-    this.stateChange.call(this.state, newState);
+    const oldState = this.state;
     this.state = newState;
+    this.stateChange.call(oldState, newState);
   }
 
   run(episodes, max_steps_per_episode=10000){

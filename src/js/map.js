@@ -4,7 +4,9 @@ import { maze, machine } from "./rl.js";
 import { rgbToHex } from './color-utils';
 
 export const TileStrokeColor = "#DDDDDD";
-const TileFogColor = "#303030";
+const TileFogColor = "#404040";
+const TransitableColor = "#F0F0F0";
+const WallColor = "#101010";
 
 function asyncLoadImage(imagesrc, setFunction) {
   const image = new window.Image();
@@ -12,15 +14,6 @@ function asyncLoadImage(imagesrc, setFunction) {
   image.onload = () => {
     setFunction(image);
   }
-}
-
-function occludedByFog(state) {
-  return machine.fogOfWar && !isNextToRobot(state);
-}
-
-function isNextToRobot(index) {
-  return index == machine.state - 1 || index == machine.state || index == machine.state + 1 ||
-         index == machine.state - maze.width || index == machine.state + maze.width;
 }
 
 const ValueVisualizer = {
@@ -45,6 +38,7 @@ export class MapView {
     this.TileSize = tileSize;
     this.maze = maze;
     this.machine = machine;
+    this.fogEnabled = false;
     this.machine.setStateChangeCallback((oldState, newState) => this.onStateChange(oldState, newState));
     this.machine.setResetCallback( () => this.onReset());
 
@@ -58,6 +52,22 @@ export class MapView {
     this.createObjectsLayer();
     this.createQLayer();
   }
+  
+  occludedByFog(coord) {
+    return this.fogEnabled && !this.isNextToRobot(coord);
+  }
+
+  isNextToRobot(coord) {
+    const robotPosition = this.maze.state2position(this.machine.state);
+    return (robotPosition.x == coord.x && (robotPosition.y == coord.y + 1 || robotPosition.y == coord.y - 1)) ||
+           (robotPosition.y == coord.y && (robotPosition.x == coord.x + 1 || robotPosition.x == coord.x - 1)) ||
+           (robotPosition.x == coord.x && robotPosition.y == coord.y);
+  }
+
+  getTileColor(coord) {
+    return this.occludedByFog(coord) ? TileFogColor : 
+           this.maze.isTransitable({ x: coord.x, y: coord.y}) ? TransitableColor : WallColor;
+  }
 
   createMazeLayer() {
     this.mapLayer = new Konva.Layer();
@@ -68,7 +78,7 @@ export class MapView {
         y: coord.y * this.TileSize,
         width: this.TileSize,
         height: this.TileSize,
-        fill: this.maze.isTransitable({ x: coord.x, y: coord.y}) ? '#FFFFFF' : '#101010'
+        fill: this.getTileColor(coord)
       });
       this.mapTiles[coord.y][coord.x] = rect;
       this.mapLayer.add(rect);
@@ -132,6 +142,15 @@ export class MapView {
   onStateChange(oldState, newState) {
     this.updateQValue(oldState);
     this.setRobotPosition(this.maze.state2position(newState));
+    if (this.fogEnabled)
+      this.updateFog();
+  }
+
+  updateFog() {
+    this.maze.allCoordinates.forEach( coord => {
+      this.mapTiles[coord.y][coord.x].fill( this.getTileColor(coord) );
+    });
+    this.mapLayer.draw();
   }
 
   updateQValue(state) {
