@@ -121,6 +121,20 @@ class QTable {
   }
 }
 
+class CallBack {
+  constructor() {
+    this.callback = null;
+  }
+  set(callback) {
+    this.callback = callback;
+  }
+  call(...args) {
+    if (this.callback != null) {
+      this.callback(...args);
+    }
+  }
+}
+
 export class RL_machine {
   constructor(actionsForState,
               transitionFunction,
@@ -132,34 +146,45 @@ export class RL_machine {
               learning_rate,
               discount_factor,
               epsilon=0) {
+
     this.lr = learning_rate;
     this.df = discount_factor;
     this.rewardFunction = rewardFunction;
     this.transitionFunction = transitionFunction;
+    this.epsilon = epsilon;
+
     this.start_state = start_state;
     this.start_score = start_score;
     this.end_score = end_score;
     this.end_states = end_states;
-    this.epsilon = epsilon;
+
     this.fogOfWar = false;
     this.show_qvalue_info = false;
+
     this.actionsForState = actionsForState;
+
+    this.stateChange = new CallBack();
+    this.onReset = new CallBack();
+    this.onNewEpisode = new CallBack();
+
     this.qTable = new QTable(learning_rate, discount_factor);
     this.reset_machine();
-    this.callback = null;
-    this.stateChangeCallback = null;
+  }
+
+  setResetCallback(resetCallback) {
+    this.onReset.set(resetCallback);
   }
 
   setStateChangeCallback(stateChangeCallback) {
-    this.stateChangeCallback = stateChangeCallback;
+    this.stateChange.set(stateChangeCallback);
   }
 
   setQCallback(qCallback) {
     this.qTable.qCallback = qCallback;
   }
 
-  setCallback(cb){
-    this.callback = cb;
+  setNewEpisodeCallback(onNewEpisode){
+    this.onNewEpisode = onNewEpisode;
   }
 
   reset_machine(){
@@ -168,6 +193,7 @@ export class RL_machine {
     this.running = false;
     this.score_history = [];
     this.resetState();
+    this.onReset.call();
   }
 
   resetState() {
@@ -182,8 +208,8 @@ export class RL_machine {
       this.resetState();
     }
     // add_new_episode_callback
-    if (!this.running && this.callback) {
-      this.callback(reason).then((p) => reset());
+    if (!this.running && this.onNewEpisode) {
+      this.onNewEpisode(reason).then((p) => reset());
     } else {
       reset();
     }
@@ -233,9 +259,7 @@ export class RL_machine {
   }
 
   setState(newState) {
-    if (this.stateChangeCallback != null) {
-      this.stateChangeCallback(this.state, newState);
-    }
+    this.stateChange.call(this.state, newState);
     this.state = newState;
   }
 

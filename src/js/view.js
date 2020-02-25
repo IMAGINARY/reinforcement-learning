@@ -94,7 +94,7 @@ function makeMachineReactive(vueInstance, machine){
     vueInstance.q_log = qLog.reduce( (fullLog, line) => fullLog + "\n" + line );
   });
 
-  vueInstance.machine.object.setCallback(vueInstance.onNewEpisode);
+  vueInstance.machine.object.setNewEpisodeCallback(vueInstance.onNewEpisode);
 }
 
 var app = new Vue({

@@ -48,6 +48,7 @@ export class MapView {
     this.maze = maze;
     this.machine = machine;
     this.machine.setStateChangeCallback((oldState, newState) => this.onStateChange(oldState, newState));
+    this.machine.setResetCallback( () => this.onReset());
 
     this.stage = new Konva.Stage({
       container: containerId,
@@ -108,6 +109,11 @@ export class MapView {
   
   createQLayer(maze) {
     this.qLayer = new Konva.Layer();
+    this.resetQTexts();
+    this.stage.add(this.qLayer);
+  }
+
+  resetQTexts() {
     this.qTexts = createMatrixFromMaze(maze);
     maze.allCoordinates.forEach( coord => {
       this.qTexts[coord.y][coord.x] = new Konva.Text({
@@ -120,7 +126,11 @@ export class MapView {
       });
       this.qLayer.add(this.qTexts[coord.y][coord.x]);
     });
-    this.stage.add(this.qLayer);
+  }
+
+  onReset() {
+    this.resetQTexts();
+    this.qLayer.draw();
   }
 
   onStateChange(oldState, newState) {
