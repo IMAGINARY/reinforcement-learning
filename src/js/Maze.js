@@ -10,8 +10,8 @@ export class Maze {
     this.width = levelMap[0].length;
     this.generateCoordinates();
 
-    this.start_state = this.getStatesWithType(tile.start)[0];
-    this.end_states = this.getStatesWithType(tile.end);
+    this.startPosition = this.getCoordsWithType(tile.start)[0];
+    this.endPositions = this.getCoordsWithType(tile.end);
     this.allStates = new Array(this.height * this.height).map( (value, index) => index);
   }
 
@@ -41,13 +41,8 @@ export class Maze {
     return this.isInside(coord) && this.getTileType(coord) != tile.wall;
   }
 
-  getStatesWithType(type) {
-    var res = [];
-    this.allCoordinates.forEach( coord => {
-      if (this.map[coord.y][coord.x] == type)
-        res.push(coord.y * this.width + coord.x);
-    });
-    return res;
+  getCoordsWithType(type) {
+    return this.allCoordinates.filter( coord => this.map[coord.y][coord.x] == type );
   }
 
   canMove(from, dir) {
