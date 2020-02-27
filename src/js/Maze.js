@@ -28,6 +28,10 @@ export class Maze {
     return null;
   }
 
+  isEndState(coord) {
+    return this.end_states.includes(this.position2state(coord));
+  }
+
   isInside(coord) {
     return coord.x >= 0 && coord.x < this.width && coord.y >= 0 && coord.y < this.height;
   }

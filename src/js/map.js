@@ -36,13 +36,21 @@ function createMatrixFromMaze(maze) {
   return matrix;
 }
 
+function areEqual(coordA, coordB) {
+  return (coordA.x == coordB.x && coordA.y == coordB.y);
+}
+
+function areAdjacent(coordA, coordB) {
+  return (coordA.x == coordB.x && (coordA.y == coordB.y + 1 || coordA.y == coordB.y - 1)) ||
+         (coordA.y == coordB.y && (coordA.x == coordB.x + 1 || coordA.x == coordB.x - 1));
+}
+
 export class MapView {
   constructor(containerId, machine, maze, tileSize) {
     this.TileSize = tileSize;
     this.HalfTile = this.TileSize/2;
     this.maze = maze;
     this.machine = machine;
-    this.fogEnabled = false;
     this.machine.setStateChangeCallback((oldState, newState) => this.onStateChange(oldState, newState));
     this.machine.setResetCallback( () => this.onReset());
 
@@ -81,20 +89,17 @@ export class MapView {
       this.fogLayer.draw();
   }
   
-  occludedByFog(coord) {
-    return this.fogEnabled && !this.isNextToRobot(coord);
+  visibleInFog(coord) {
+    const robotPosition = this.maze.state2position(this.machine.state);
+    return areAdjacent(robotPosition, coord) || areEqual(robotPosition, coord) || this.isEndState(coord);
   }
 
-  isNextToRobot(coord) {
-    const robotPosition = this.maze.state2position(this.machine.state);
-    return (robotPosition.x == coord.x && (robotPosition.y == coord.y + 1 || robotPosition.y == coord.y - 1)) ||
-           (robotPosition.y == coord.y && (robotPosition.x == coord.x + 1 || robotPosition.x == coord.x - 1)) ||
-           (robotPosition.x == coord.x && robotPosition.y == coord.y);
+  isEndState(coord) {
+    return this.maze.isEndState(coord);
   }
 
   getTileColor(coord) {
-    return this.occludedByFog(coord) ? TileFogColor : 
-           this.maze.isTransitable({ x: coord.x, y: coord.y}) ? TransitableColor : WallColor;
+    return this.maze.isTransitable({ x: coord.x, y: coord.y}) ? TransitableColor : WallColor;
   }
 
   tilePos(coord) {
@@ -268,7 +273,7 @@ export class MapView {
 
   updateFog() {
     this.maze.allCoordinates.forEach( coord => {
-      this.fogTiles[coord.y][coord.x].visible( !this.isNextToRobot(coord) );
+      this.fogTiles[coord.y][coord.x].visible( !this.visibleInFog(coord) );
     });
     this.fogLayer.draw();
   }
