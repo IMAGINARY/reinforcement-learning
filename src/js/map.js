@@ -60,10 +60,17 @@ export class MapView {
 
   setQValuesVisible(visible) {
     this.qLayer.visible(visible);
+    if (visible)
+      this.qLayer.draw();
   }
 
   setGreedyVisible(visible) {
-    this.greedyLayer.visible(visible);
+    this.greedyPathLayer.visible(visible);
+    this.greedyTilesLayer.visible(visible);
+    if (visible) {
+      this.greedyPathLayer.draw();
+      this.greedyTilesLayer.draw();
+    }
   }
 
   setFogVisible(visible) {
@@ -99,11 +106,17 @@ export class MapView {
       lineCap: 'round',
       lineJoin: 'round'
     };
-    this.greedyLayer = new Konva.Layer();
+
+    this.greedyPathLayer = new Konva.Layer();
     this.greedyPath = new Konva.Line({
       ...ArrowProperties,
       stroke: MainViolet,
     });
+    this.greedyPathLayer.add(this.greedyPath);
+    this.greedyPathLayer.visible(false);
+    this.stage.add(this.greedyPathLayer);
+
+    this.greedyTilesLayer = new Konva.Layer();
     this.greedyTiles = createMatrixFromMaze(this.maze);
     maze.allCoordinates.forEach( coord => {
       this.greedyTiles[coord.y][coord.x] = new Konva.Arrow({
@@ -112,10 +125,10 @@ export class MapView {
         stroke: MainYellow,
         visible: false
       });
-      this.greedyLayer.add(this.greedyTiles[coord.y][coord.x]);
+      this.greedyTilesLayer.add(this.greedyTiles[coord.y][coord.x]);
     });
-    this.greedyLayer.add(this.greedyPath);
-    this.stage.add(this.greedyLayer);
+    this.greedyTilesLayer.visible(false);
+    this.stage.add(this.greedyTilesLayer);
   }
 
   updateGreedyPath(oldState) {
@@ -139,7 +152,8 @@ export class MapView {
       lineCoordinates.push(coord.y * this.TileSize + (this.TileSize/2));
     });
     this.greedyPath.points(lineCoordinates);
-    this.greedyLayer.draw();
+    this.greedyTilesLayer.draw();
+    this.greedyPathLayer.draw();
   }
 
   createMazeLayer() {
@@ -196,6 +210,7 @@ export class MapView {
       });
       this.qLayer.add(this.qTexts[coord.y][coord.x]);
     });
+    this.qLayer.visible(false);
     this.stage.add(this.qLayer);
   }
 
@@ -205,8 +220,18 @@ export class MapView {
     });
   }
 
+  resetGreedy() {
+    this.greedyTilesLayer.getChildren().forEach( child => {
+      child.visible(false);
+    });
+    this.greedyPath.points([]);
+  }
+
   onReset() {
     this.resetQTexts();
+    this.resetGreedy();
+    this.greedyTilesLayer.draw();
+    this.greedyPathLayer.draw();
     this.qLayer.draw();
   }
 

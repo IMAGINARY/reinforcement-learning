@@ -112,7 +112,8 @@ var app = new Vue({
       epsilon: machine.epsilon,
       score: machine.score,
       score_history: machine.score_history,
-      show_qvalue_info: false
+      show_qvalue_info: false,
+      show_greedy_info: false
     },
     width: 0,
     height: 0,
@@ -234,6 +235,9 @@ var app = new Vue({
     },
     'machine.show_qvalue_info':function(newValue) {
       mapView.setQValuesVisible(newValue);
+    },
+    'machine.show_greedy_info':function(newValue) {
+      mapView.setGreedyVisible(newValue);
     },
     state: function(state){
       this.onLeaveState();
