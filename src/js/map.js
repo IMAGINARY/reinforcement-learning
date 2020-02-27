@@ -2,7 +2,7 @@ import Konva from 'konva';
 
 import { maze, machine } from "./rl.js";
 import { dir, dirToMovement } from './dir';
-import { rgbToHex } from './color-utils';
+import { areEqual, areAdjacent } from './coord';
 
 export const TileStrokeColor = "#DDDDDD";
 const TileFogColor = "#404040";
@@ -24,15 +24,6 @@ function createMatrixFromMaze(maze) {
   for (var y = 0 ; y < maze.height ; y++)
     matrix[y] = new Array(maze.width);
   return matrix;
-}
-
-function areEqual(coordA, coordB) {
-  return (coordA.x == coordB.x && coordA.y == coordB.y);
-}
-
-function areAdjacent(coordA, coordB) {
-  return (coordA.x == coordB.x && (coordA.y == coordB.y + 1 || coordA.y == coordB.y - 1)) ||
-         (coordA.y == coordB.y && (coordA.x == coordB.x + 1 || coordA.x == coordB.x - 1));
 }
 
 export class MapView {
@@ -191,8 +182,8 @@ export class MapView {
 
   createObjectsLayer() {
     this.objectsLayer = new Konva.Layer();
-    this.robot = this.createImageAtTile("img/robot.png", this.maze.state2position(this.maze.start_state));
-    this.station = this.createImageAtTile("img/station.png", this.maze.state2position(this.maze.end_states[0]));
+    this.robot = this.createImageAtTile("img/robot.png", this.maze.startPosition);
+    this.station = this.createImageAtTile("img/station.png", this.maze.endPositions[0]);
     this.objectsLayer.add(this.robot);
     this.objectsLayer.add(this.station);
     this.objectsLayer.batchDraw();

@@ -1,5 +1,6 @@
 import { tile } from "./tile";
 import { dir, dirToMovement } from './dir'
+import { areEqual } from './coord';
 
 export class Maze {
   constructor(levelMap, rewardsMap) {
@@ -29,7 +30,7 @@ export class Maze {
   }
 
   isEndState(coord) {
-    return this.end_states.includes(this.position2state(coord));
+    return this.endPositions.some( c => areEqual(c, coord) );
   }
 
   isInside(coord) {
