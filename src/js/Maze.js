@@ -27,7 +27,7 @@ export class Maze {
     return null;
   }
 
-  isEndState(coord) {
+  isEndPosition(coord) {
     return this.endPositions.some( c => areEqual(c, coord) );
   }
 

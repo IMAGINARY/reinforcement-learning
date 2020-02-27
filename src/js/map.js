@@ -73,11 +73,11 @@ export class MapView {
   
   visibleInFog(coord) {
     const robotPosition = this.environment.state2position(this.machine.state);
-    return areAdjacent(robotPosition, coord) || areEqual(robotPosition, coord) || this.isEndState(coord);
+    return areAdjacent(robotPosition, coord) || areEqual(robotPosition, coord) || this.isEndPosition(coord);
   }
 
-  isEndState(coord) {
-    return this.maze.isEndState(coord);
+  isEndPosition(coord) {
+    return this.maze.isEndPosition(coord);
   }
 
   getTileColor(coord) {
