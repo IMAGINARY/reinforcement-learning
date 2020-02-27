@@ -159,9 +159,6 @@ export class RL_machine {
     this.end_score = end_score;
     this.end_states = end_states;
 
-    this.fogOfWar = false;
-    this.show_qvalue_info = false;
-
     this.actionsForState = actionsForState;
 
     this.stateChange = new CallBack();
