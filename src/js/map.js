@@ -1,12 +1,15 @@
 import Konva from 'konva';
 
 import { maze, machine } from "./rl.js";
+import { dir, dirToMovement } from './dir';
 import { rgbToHex } from './color-utils';
 
 export const TileStrokeColor = "#DDDDDD";
 const TileFogColor = "#404040";
 const TransitableColor = "#F0F0F0";
 const WallColor = "#101010";
+const MainYellow = "#FFEC02";
+const MainViolet = "#8F1A81";
 
 function asyncLoadImage(imagesrc, setFunction) {
   const image = new window.Image();
@@ -36,6 +39,7 @@ function createMatrixFromMaze(maze) {
 export class MapView {
   constructor(containerId, machine, maze, tileSize) {
     this.TileSize = tileSize;
+    this.HalfTile = this.TileSize/2;
     this.maze = maze;
     this.machine = machine;
     this.fogEnabled = false;
@@ -82,19 +86,49 @@ export class MapView {
            this.maze.isTransitable({ x: coord.x, y: coord.y}) ? TransitableColor : WallColor;
   }
 
+  tilePos(coord) {
+    return {
+      x: coord.x * this.TileSize,
+      y: coord.y * this.TileSize
+    }
+  };
+
   createGreedyLayer() {
-    this.greedyLayer = new Konva.Layer();
-    this.greedyPath = new Konva.Line({
-      stroke: '#F6D080',
+    const ArrowProperties = {
       strokeWidth: 5,
       lineCap: 'round',
       lineJoin: 'round'
+    };
+    this.greedyLayer = new Konva.Layer();
+    this.greedyPath = new Konva.Line({
+      ...ArrowProperties,
+      stroke: MainViolet,
+    });
+    this.greedyTiles = createMatrixFromMaze(this.maze);
+    maze.allCoordinates.forEach( coord => {
+      this.greedyTiles[coord.y][coord.x] = new Konva.Arrow({
+        ...this.tilePos(coord),
+        ...ArrowProperties,
+        stroke: MainYellow,
+        visible: false
+      });
+      this.greedyLayer.add(this.greedyTiles[coord.y][coord.x]);
     });
     this.greedyLayer.add(this.greedyPath);
     this.stage.add(this.greedyLayer);
   }
 
-  updateGreedyPath() {
+  updateGreedyPath(oldState) {
+    const oldCoord = this.maze.state2position(oldState);
+    const bestAction = this.machine.qTable.getBestAction(oldState);
+    const hasBestAction = bestAction != undefined;
+    if (hasBestAction) {
+      const arrowDirection = dirToMovement(bestAction);
+      this.greedyTiles[oldCoord.y][oldCoord.x].points(
+        [this.HalfTile, this.HalfTile, this.HalfTile + arrowDirection.x*this.HalfTile, this.HalfTile + arrowDirection.y*this.HalfTile]);
+    }
+    this.greedyTiles[oldCoord.y][oldCoord.x].visible(hasBestAction);
+
     const path = this.machine.getGreedyPath();
     if (path.lenght < 2)
       return;
@@ -113,8 +147,7 @@ export class MapView {
     this.mapTiles = createMatrixFromMaze(this.maze);
     this.maze.allCoordinates.forEach( coord => {
       const rect = new Konva.Rect({
-        x: coord.x * this.TileSize,
-        y: coord.y * this.TileSize,
+        ...this.tilePos(coord),
         width: this.TileSize,
         height: this.TileSize,
         fill: this.getTileColor(coord)
@@ -127,8 +160,7 @@ export class MapView {
 
   createImageAtTile(imageSource, coord) {
     const thisImage = new Konva.Image({
-      x: coord.x * this.TileSize,
-      y: coord.y * this.TileSize,
+      ...this.tilePos(coord),
       image: null,
       width: this.TileSize,
       height: this.TileSize
@@ -180,7 +212,7 @@ export class MapView {
 
   onStateChange(oldState, newState) {
     this.updateQValue(oldState);
-    this.updateGreedyPath();
+    this.updateGreedyPath(oldState);
     this.setRobotPosition(this.maze.state2position(newState));
     if (this.fogEnabled)
       this.updateFog();
