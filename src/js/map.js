@@ -100,6 +100,14 @@ export class MapView {
     }
   };
 
+  tileRect(coord) {
+    return {
+      ...this.tilePos(coord),
+      width: this.TileSize,
+      height: this.TileSize,
+    };
+  }
+
   createGreedyLayer() {
     const ArrowProperties = {
       strokeWidth: 5,
@@ -148,8 +156,8 @@ export class MapView {
     
     var lineCoordinates = [];
     path.map( state => this.maze.state2position(state) ).forEach( coord => {
-      lineCoordinates.push(coord.x * this.TileSize + (this.TileSize/2));
-      lineCoordinates.push(coord.y * this.TileSize + (this.TileSize/2));
+      lineCoordinates.push(coord.x * this.TileSize + this.HalfTile);
+      lineCoordinates.push(coord.y * this.TileSize + this.HalfTile);
     });
     this.greedyPath.points(lineCoordinates);
     this.greedyTilesLayer.draw();
@@ -161,9 +169,7 @@ export class MapView {
     this.mapTiles = createMatrixFromMaze(this.maze);
     this.maze.allCoordinates.forEach( coord => {
       const rect = new Konva.Rect({
-        ...this.tilePos(coord),
-        width: this.TileSize,
-        height: this.TileSize,
+        ...this.tileRect(coord),
         fill: this.getTileColor(coord)
       });
       this.mapTiles[coord.y][coord.x] = rect;
@@ -174,10 +180,8 @@ export class MapView {
 
   createImageAtTile(imageSource, coord) {
     const thisImage = new Konva.Image({
-      ...this.tilePos(coord),
+      ...this.tileRect(coord),
       image: null,
-      width: this.TileSize,
-      height: this.TileSize
     });
     asyncLoadImage(imageSource, image => {
       thisImage.image(image);
