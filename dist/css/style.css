@@ -126,4 +126,15 @@ div#map_container {
   transform: translateX(-50%) translateY(-50%);
 }
 
+/* exo-2-regular - latin */
+@font-face {
+  font-family: "Exo 2";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/exo-2-v7-latin-regular.eot");
+  /* IE9 Compat Modes */
+  src: local("Exo 2 Regular"), local("Exo2-Regular"), url("../fonts/exo-2-v7-latin-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/exo-2-v7-latin-regular.woff2") format("woff2"), url("../fonts/exo-2-v7-latin-regular.woff") format("woff"), url("../fonts/exo-2-v7-latin-regular.ttf") format("truetype"), url("../fonts/exo-2-v7-latin-regular.svg#Exo2") format("svg");
+  /* Legacy iOS */
+}
+
 /*# sourceMappingURL=style.css.map */
