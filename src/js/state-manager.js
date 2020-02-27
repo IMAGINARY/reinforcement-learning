@@ -5,6 +5,7 @@ import { machine } from "./rl.js";
 export const StateMgr = {
   init: {
     onEnterState: function () {
+      this.views.fog = true;
       var lightText = Texts.intro;
       lightbox.popup(lightText, ["next"]).then((r) => this.changeState("local"));
     },
@@ -16,7 +17,7 @@ export const StateMgr = {
       "continue": null,
     },
     onEnterState: function () {
-      machine.fogOfWar = true;
+      this.views.fog = true;
       this.navigation.continue = () => this.changeState("global");
       var lightText = Texts.localIntro;
       lightbox.popup(lightText, ["next"]);
@@ -32,7 +33,7 @@ export const StateMgr = {
       "reset machine": () => machine.reset_machine(),
     },
     onEnterState: function () {
-      machine.fogOfWar = false;
+      this.views.fog = false;
       var lightText = Texts.globalIntro;
       lightbox.popup(lightText, ["continue"]);
     },

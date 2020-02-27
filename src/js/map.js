@@ -53,9 +53,11 @@ export class MapView {
     });
 
     this.createMazeLayer();
-    this.createObjectsLayer();
     this.createQLayer();
     this.createGreedyLayer();
+    this.createFogLayer();
+    this.createObjectsLayer();
+    this.updateFog();
   }
 
   setQValuesVisible(visible) {
@@ -74,7 +76,9 @@ export class MapView {
   }
 
   setFogVisible(visible) {
-    this.fogEnabled = visible;
+    this.fogLayer.visible(visible);
+    if (visible)
+      this.fogLayer.draw();
   }
   
   occludedByFog(coord) {
@@ -218,6 +222,21 @@ export class MapView {
     this.stage.add(this.qLayer);
   }
 
+  createFogLayer() {
+    this.fogLayer = new Konva.Layer();
+    this.fogTiles = createMatrixFromMaze(maze);
+    this.maze.allCoordinates.forEach( coord => {
+      const fog = new Konva.Rect({
+        ...this.tileRect(coord),
+        fill: TileFogColor
+      });
+      this.fogTiles[coord.y][coord.x] = fog;
+      this.fogLayer.add(fog);
+    });
+    this.fogLayer.visible(false);
+    this.stage.add(this.fogLayer);
+  }
+
   resetQTexts() {
     this.qLayer.getChildren().forEach( child => {
       child.text("");
@@ -237,21 +256,21 @@ export class MapView {
     this.greedyTilesLayer.draw();
     this.greedyPathLayer.draw();
     this.qLayer.draw();
+    this.updateFog();
   }
 
   onStateChange(oldState, newState) {
     this.updateQValue(oldState);
     this.updateGreedyPath(oldState);
     this.setRobotPosition(this.maze.state2position(newState));
-    if (this.fogEnabled)
-      this.updateFog();
+    this.updateFog();
   }
 
   updateFog() {
     this.maze.allCoordinates.forEach( coord => {
-      this.mapTiles[coord.y][coord.x].fill( this.getTileColor(coord) );
+      this.fogTiles[coord.y][coord.x].visible( !this.isNextToRobot(coord) );
     });
-    this.mapLayer.draw();
+    this.fogLayer.draw();
   }
 
   updateQValue(state) {

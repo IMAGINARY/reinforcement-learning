@@ -230,6 +230,9 @@ var app = new Vue({
     'views.greedy':function(newValue) {
       mapView.setGreedyVisible(newValue);
     },
+    'views.fog':function(newValue) {
+      mapView.setFogVisible(newValue);
+    },
     state: function(state){
       this.onLeaveState();
       Object.assign(this, StateMgr[state]);
