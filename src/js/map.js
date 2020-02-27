@@ -19,16 +19,6 @@ function asyncLoadImage(imagesrc, setFunction) {
   }
 }
 
-const ValueVisualizer = {
-  fillColor(state) {
-    const color = rgbToHex(255, machine.normalizedValue(state), 255);
-    return color;
-  },
-  opacity(state) {
-    return (occludedByFog(state) || !maze.isTransitable(maze.state2position(state))) ? 0 : 0.25;
-  }
-}
-
 function createMatrixFromMaze(maze) {
   var matrix = [];
   for (var y = 0 ; y < maze.height ; y++)
