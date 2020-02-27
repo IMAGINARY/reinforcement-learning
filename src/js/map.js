@@ -100,7 +100,7 @@ export class MapView {
       return;
     
     var lineCoordinates = [];
-    const coordinates = path.map( state => this.maze.state2position(state) ).forEach( coord => {
+    path.map( state => this.maze.state2position(state) ).forEach( coord => {
       lineCoordinates.push(coord.x * this.TileSize + (this.TileSize/2));
       lineCoordinates.push(coord.y * this.TileSize + (this.TileSize/2));
     });
