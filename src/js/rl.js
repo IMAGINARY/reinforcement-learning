@@ -137,7 +137,7 @@ class CallBack {
 }
 
 export class RL_machine {
-  constructor(actionsForState,
+  constructor(actionsFunction,
               transitionFunction,
               rewardFunction,
               start_state,
@@ -159,7 +159,7 @@ export class RL_machine {
     this.end_score = end_score;
     this.end_states = end_states;
 
-    this.actionsForState = actionsForState;
+    this.actionsFunction = actionsFunction;
 
     this.stateChange = new CallBack();
     this.onReset = new CallBack();
@@ -214,7 +214,7 @@ export class RL_machine {
   }
 
   randomAction(state) {
-    return pickRandom(this.actionsForState(state));
+    return pickRandom(this.actionsFunction(state));
   }
 
   auto_step() {
@@ -231,7 +231,7 @@ export class RL_machine {
   }
 
   attemptStep(state, dir) {
-    const actions = this.actionsForState(state);
+    const actions = this.actionsFunction(state);
     if (actions.includes(dir))
       this.step(dir);
   }
