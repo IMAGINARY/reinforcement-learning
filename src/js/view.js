@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueChartJs from 'vue-chartjs';
 import { TimelineLite } from "gsap";
 
-import { machine, maze } from "./rl.js";
+import { machine, maze, environment } from "./rl.js";
 import { setKeyboardActionCallback } from "./controls.js";
 import { StateMgr } from './state-manager.js';
 import { lightbox } from './lightbox.js';
@@ -67,7 +67,7 @@ function makeMachineReactive(vueInstance, machine){
 
   // State wrapper
   var state = machine.state;
-  vueInstance.machine.state = vueInstance.maze.state2position(state);
+  vueInstance.machine.state = environment.state2position(state);
   Object.defineProperty(machine, 'state', {
     get: function() {
       return this._state
@@ -179,9 +179,9 @@ var app = new Vue({
 
     handleState: function(state) {
       if (!this.machine.object.running) {
-        this.machine.state_tween.to(this.machine.state, 0.2, this.maze.state2position(state));
+        this.machine.state_tween.to(this.machine.state, 0.2, environment.state2position(state));
       } else {
-        this.machine.state = this.maze.state2position(state);
+        this.machine.state = environment.state2position(state);
       }
     },
 
@@ -241,7 +241,7 @@ var app = new Vue({
   }
 })
 
-const mapView = new MapView('map_container', machine, maze, TileSize);
+const mapView = new MapView('map_container', machine, maze, environment, TileSize);
 
 setKeyboardActionCallback( action => machine.attemptStep(machine.state, action) );
 

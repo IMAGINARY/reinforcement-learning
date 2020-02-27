@@ -1,6 +1,7 @@
 import { Maze } from "./maze";
 import { levelMap } from './level';
 import { tile } from './tile';
+import { dir } from './dir';
 
 const StepState = {
   Continue: 1,
@@ -137,11 +138,7 @@ class CallBack {
 }
 
 export class RL_machine {
-  constructor(actionsFunction,
-              transitionFunction,
-              rewardFunction,
-              start_state,
-              end_states,
+  constructor(environment,
               start_score,
               end_score,
               learning_rate,
@@ -150,16 +147,15 @@ export class RL_machine {
 
     this.lr = learning_rate;
     this.df = discount_factor;
-    this.rewardFunction = rewardFunction;
-    this.transitionFunction = transitionFunction;
     this.epsilon = epsilon;
 
-    this.start_state = start_state;
+    this.environment = environment;
+
     this.start_score = start_score;
     this.end_score = end_score;
-    this.end_states = end_states;
 
-    this.actionsFunction = actionsFunction;
+    this.start_state = this.environment.startState();
+    this.end_states = this.environment.endStates();
 
     this.stateChange = new CallBack();
     this.onReset = new CallBack();
@@ -214,7 +210,7 @@ export class RL_machine {
   }
 
   randomAction(state) {
-    return pickRandom(this.actionsFunction(state));
+    return pickRandom(this.environment.actions(state));
   }
 
   auto_step() {
@@ -231,18 +227,18 @@ export class RL_machine {
   }
 
   attemptStep(state, dir) {
-    const actions = this.actionsFunction(state);
+    const actions = this.environment.actions(state);
     if (actions.includes(dir))
       this.step(dir);
   }
 
   step(action) {
-    const newState = this.transitionFunction(this.state, action);
-    const reward = this.rewardFunction(newState);
+    const newState = this.environment.transition(this.state, action);
+    const reward = this.environment.reward(newState);
     this.qTable.update(this.state, action, newState, reward);
 
     this.setState(newState);
-    this.score += this.rewardFunction(this.state);
+    this.score += this.environment.reward(this.state);
 
     // add_new_step_callback
     if (this.end_states.indexOf(this.state) >= 0) {
@@ -270,7 +266,7 @@ export class RL_machine {
       const action = this.qTable.getBestAction(state);
       if (action == undefined)
         break;
-      state = this.transitionFunction(state, action);
+      state = this.environment.transition(state, action);
     }  while (state != undefined && !(state in states) && !(state in this.end_states));
     return states;
   }
@@ -308,17 +304,65 @@ export var maze = new Maze(levelMap, RewardsMap);
 var learning_rate = 0.75;
 var discount_factor = 0.8;
 
-const rewardFunction = (state) => {
-  const position = maze.state2position(state);
-  const tileType = levelMap[position.y][position.x];
-  return RewardsMap[tileType];
+class Environment {
+  constructor(maze, rewardsMap) {
+    this.maze = maze;
+    this.rewardsMap = rewardsMap;
+  }
+  
+  state2position(state) {
+    return {
+      x: (state % this.maze.width),
+      y: Math.floor(state / this.maze.width),
+    }
+  };
+
+  position2state(coord) {
+    return coord.x + coord.y * this.maze.width;
+  };
+
+  reward(state) {
+    const position = this.state2position(state);
+    return this.rewardsMap[this.maze.map[position.y][position.x]];
+  }
+
+  actions(state) {
+    const coord = this.state2position(state);
+    var cellActions = [];
+    if (this.maze.isTransitable(coord)) {
+      [dir.UP, dir.DOWN, dir.RIGHT, dir.LEFT].forEach( dir => {
+        if (this.maze.canMove(coord, dir))
+          cellActions.push(dir);
+      });
+    }
+    return cellActions;
+  }
+
+  transition(state, action) {
+    switch (action) {
+      case dir.UP:
+        return state - this.maze.width;
+      case dir.RIGHT:
+        return state + 1;
+      case dir.DOWN:
+        return state + this.maze.width;
+      case dir.LEFT:
+        return state - 1;
+    }
+  }
+
+  startState() {
+    return this.position2state(this.maze.startPosition);
+  }
+
+  endStates() {
+    return this.maze.endPositions.map( coord => this.position2state(coord) )
+  }
 }
 
-export var machine = new RL_machine(maze.getActionsForStateFunction(),
-                            maze.getTransitionFunction(),
-                            rewardFunction,
-                            maze.position2state(maze.startPosition),
-                            maze.endPositions.map( pos => maze.position2state(pos) ),
+export const environment = new Environment(maze, RewardsMap);
+
+export var machine = new RL_machine(environment,
                             50,
                             0,
                             learning_rate,

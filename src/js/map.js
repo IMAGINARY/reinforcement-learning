@@ -27,11 +27,12 @@ function createMatrixFromMaze(maze) {
 }
 
 export class MapView {
-  constructor(containerId, machine, maze, tileSize) {
+  constructor(containerId, machine, maze, environment, tileSize) {
     this.TileSize = tileSize;
     this.HalfTile = this.TileSize/2;
     this.maze = maze;
     this.machine = machine;
+    this.environment = environment;
     this.machine.setStateChangeCallback((oldState, newState) => this.onStateChange(oldState, newState));
     this.machine.setResetCallback( () => this.onReset());
 
@@ -71,7 +72,7 @@ export class MapView {
   }
   
   visibleInFog(coord) {
-    const robotPosition = this.maze.state2position(this.machine.state);
+    const robotPosition = this.environment.state2position(this.machine.state);
     return areAdjacent(robotPosition, coord) || areEqual(robotPosition, coord) || this.isEndState(coord);
   }
 
@@ -130,7 +131,7 @@ export class MapView {
   }
 
   updateGreedyPath(oldState) {
-    const oldCoord = this.maze.state2position(oldState);
+    const oldCoord = this.environment.state2position(oldState);
     const bestAction = this.machine.qTable.getBestAction(oldState);
     const hasBestAction = bestAction != undefined;
     if (hasBestAction) {
@@ -145,7 +146,7 @@ export class MapView {
       return;
     
     var lineCoordinates = [];
-    path.map( state => this.maze.state2position(state) ).forEach( coord => {
+    path.map( state => this.environment.state2position(state) ).forEach( coord => {
       lineCoordinates.push(coord.x * this.TileSize + this.HalfTile);
       lineCoordinates.push(coord.y * this.TileSize + this.HalfTile);
     });
@@ -248,7 +249,7 @@ export class MapView {
   onStateChange(oldState, newState) {
     this.updateQValue(oldState);
     this.updateGreedyPath(oldState);
-    this.setRobotPosition(this.maze.state2position(newState));
+    this.setRobotPosition(this.environment.state2position(newState));
     this.updateFog();
   }
 
@@ -260,7 +261,7 @@ export class MapView {
   }
 
   updateQValue(state) {
-    const coord = this.maze.state2position(state);
+    const coord = this.environment.state2position(state);
     this.qTexts[coord.y][coord.x].text('Q: ' + this.machine.qTable.getMaxValue(state).toFixed(2));
     this.qLayer.draw();
   }
