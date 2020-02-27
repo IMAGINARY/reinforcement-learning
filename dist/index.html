@@ -32,9 +32,9 @@
         <span class="parameter">Epsilon {{machine.epsilon}}</span><br/>
         <input type="range" id="machine_epsilon" v-model="machine.epsilon" min="0" max="1" step="0.01"><br/>
         <br/>
-        <label><input type="checkbox" v-model="machine.show_qvalue_info">Show Q-Value</label>
+        <label><input type="checkbox" v-model="views.qvalue">Show Q-Value</label>
         <br/>
-        <label><input type="checkbox" v-model="machine.show_greedy_info">Show Greedy Path</label>
+        <label><input type="checkbox" v-model="views.greedy">Show Greedy Path</label>
         <div id="formula"></div>
       </div>
       <div class="score" v-show="isActive('score')">

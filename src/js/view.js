@@ -100,8 +100,11 @@ var app = new Vue({
       epsilon: machine.epsilon,
       score: machine.score,
       score_history: machine.score_history,
-      show_qvalue_info: false,
-      show_greedy_info: false
+    },
+    views: {
+      qvalue: false,
+      greedy: false,
+      fog: false
     },
     width: 0,
     height: 0,
@@ -221,10 +224,10 @@ var app = new Vue({
     'machine.epsilon': function(new_val) {
       machine.epsilon = parseFloat(new_val);
     },
-    'machine.show_qvalue_info':function(newValue) {
+    'views.qvalue':function(newValue) {
       mapView.setQValuesVisible(newValue);
     },
-    'machine.show_greedy_info':function(newValue) {
+    'views.greedy':function(newValue) {
       mapView.setGreedyVisible(newValue);
     },
     state: function(state){
