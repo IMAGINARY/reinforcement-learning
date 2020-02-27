@@ -299,8 +299,9 @@ export const RewardsMap = {
   [tile.start]:-1
 };
 
-var learning_rate = 0.75;
-var discount_factor = 0.8;
+const InitialLearningRate = 0.75;
+const InitialDiscountFactor = 0.8;
+const InitialEpsilon = 0.2;
 
 export var maze = new Maze(levelMap);
 
@@ -309,6 +310,6 @@ export const environment = new Environment(maze, RewardsMap);
 export var machine = new RL_machine(environment,
                             50,
                             0,
-                            learning_rate,
-                            discount_factor,
-                            0.2);
+                            InitialLearningRate,
+                            InitialDiscountFactor,
+                            InitialEpsilon);
