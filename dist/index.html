@@ -37,9 +37,6 @@
         <label><input type="checkbox" v-model="machine.show_greedy_info">Show Greedy Path</label>
         <div id="formula"></div>
       </div>
-      <div id="log_area">
-        <textarea id="q_log" v-model="q_log" v-if="machine.show_qvalue_info" rows="40" readonly></textarea>
-      </div>
       <div class="score" v-show="isActive('score')">
         <span class="energy">Current Energy {{machine.score}}</span>
       </div>
