@@ -100,7 +100,6 @@ class QTable {
         state : state,
         action: action,
         newState: newState,
-        newState: newState,
         currentValue: currentValue,
         reward: reward,
         maxQ: maxQ,
