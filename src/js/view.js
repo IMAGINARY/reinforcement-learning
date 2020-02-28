@@ -37,19 +37,6 @@ Vue.component('navi-gation',  {
 // ----------------------------------------------------------------------------
 
 function makeMachineReactive(vueInstance, machine){
-  // Score history wrapper
-  var scoreHistory = machine.score_history;
-  vueInstance.machine.score_history = scoreHistory;
-  Object.defineProperty(machine, 'score_history', {
-    get: function() {
-      return this._score_history
-    },
-    set: function(newScoreHistory) {
-      this._score_history = newScoreHistory;
-      vueInstance.machine.score_history = newScoreHistory
-    }
-  });
-  machine.score_history = scoreHistory;
   vueInstance.machine.object.setNewEpisodeCallback(vueInstance.onNewEpisode);
 }
 
@@ -92,11 +79,11 @@ var app = new Vue({
     },
     datacollection: function() {
       return {
-        labels: Array.from(Array(this.machine.score_history.length).keys()),
+        labels: Array.from(Array(machine.score_history.length).keys()),
         datasets: [{
             label: 'Data One',
             backgroundColor: 'rgb(0,0,0,0)',
-            data: this.machine.score_history,
+            data: machine.score_history,
             fill: false,
             borderColor: 'rgb(255, 159, 64)',
             pointRadius: 1,
