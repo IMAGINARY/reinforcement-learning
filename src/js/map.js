@@ -30,7 +30,6 @@ export class MapView {
   constructor(containerId, machine, maze, environment, tileSize) {
     this.TileSize = tileSize;
     this.HalfTile = this.TileSize/2;
-    this.maze = maze;
     this.machine = machine;
     this.environment = environment;
     this.machine.setStateChangeCallback((oldState, newState) => this.onStateChange(oldState, newState));
@@ -38,9 +37,20 @@ export class MapView {
 
     this.stage = new Konva.Stage({
       container: containerId,
-      width: tileSize * maze.width,
-      height: tileSize * maze.height
+      width: 0,
+      height: 0
     });
+
+    this.setMaze(maze);
+  }
+
+  setMaze(maze) {
+    this.maze = maze;
+    if (this.stage.hasChildren())
+      this.stage.destroyChildren();
+
+    this.stage.width(this.TileSize * maze.width);
+    this.stage.height(this.TileSize * maze.height);
 
     this.createMazeLayer();
     this.createQLayer();
