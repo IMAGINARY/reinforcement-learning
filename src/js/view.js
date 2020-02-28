@@ -32,28 +32,12 @@ Vue.component('navi-gation',  {
 });
 
 
-// ----------------------------------------------------------------------------
-// -------------------------------- Main --------------------------------------
-// ----------------------------------------------------------------------------
-
-function makeMachineReactive(vueInstance, machine){
-  vueInstance.machine.object.setNewEpisodeCallback(vueInstance.onNewEpisode);
-}
-
 var app = new Vue({
   el: '#app',
   data: {
     appState: null,
     maze: maze,
-    machine: {
-      object: machine,
-      q_table: machine.q_table,
-      learning_rate: machine.lr,
-      discount_factor: machine.df,
-      epsilon: machine.epsilon,
-      score: machine.score,
-      score_history: machine.score_history,
-    },
+    machine: machine,
     views: {
       qvalue: false,
       greedy: false,
@@ -66,7 +50,8 @@ var app = new Vue({
   },
 
   created() {
-    makeMachineReactive(this, machine);
+    machine.setNewEpisodeCallback(this.onNewEpisode);
+
     this.appState = "init";
     renderEquation(machine);
   },
