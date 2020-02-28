@@ -56,7 +56,7 @@ function makeMachineReactive(vueInstance, machine){
 var app = new Vue({
   el: '#app',
   data: {
-    state: null,
+    appState: null,
     maze: maze,
     machine: {
       object: machine,
@@ -80,7 +80,7 @@ var app = new Vue({
 
   created() {
     makeMachineReactive(this, machine);
-    this.state = "init";
+    this.appState = "init";
     renderEquation(machine);
   },
 
@@ -131,12 +131,12 @@ var app = new Vue({
       return this.components.indexOf(what) >= 0;
     },
 
-    changeState: function(state){
+    changeState: function(appState){
       this.components = [];
       this.navigation = {};
       this.onEnterState = function(){};
       this.onLeaveState = function(){};
-      this.state = state;
+      this.appState = appState;
     },
 
     onNewEpisode: function(result){
@@ -170,9 +170,9 @@ var app = new Vue({
     'views.fog':function(newValue) {
       mapView.setFogVisible(newValue);
     },
-    state: function(state){
+    appState: function(appState){
       this.onLeaveState();
-      Object.assign(this, StateMgr[state]);
+      Object.assign(this, StateMgr[appState]);
       this.onEnterState();
     },
   }
