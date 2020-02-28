@@ -122,6 +122,10 @@ var app = new Vue({
     },
   },
   methods: {
+    setTileType: function(tileType) {
+      console.log('change current tile to ' + tileType);
+    },
+
     onEnterState: function(){},
 
     onLeaveState: function(){},
