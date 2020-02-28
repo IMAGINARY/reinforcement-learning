@@ -111,35 +111,16 @@ var app = new Vue({
     components: [],
     navigation: {},
   },
-  created() {
-    window.addEventListener('resize', this.handleResize)
-    this.handleResize();
 
+  created() {
     makeMachineReactive(this, machine);
     this.state = "init";
     renderEquation(machine);
   },
-  destroyed() {
-    window.removeEventListener('resize', this.handleResize)
-  },
+
+  destroyed() { },
+
   computed: {
-    stage_config: function() {
-      return {
-        x: 0,
-        y: 0,
-        width: this.width*0.5,
-        height: this.height*0.8,
-      }
-    },
-    slider_config: function(){
-        return {
-          min: 0,
-          max: 1,
-          duration: 0,
-          interval: 0.01,
-          tooltip: 'none'
-        }
-    },
     datacollection: function() {
       return {
         labels: Array.from(Array(this.machine.score_history.length).keys()),
@@ -183,11 +164,6 @@ var app = new Vue({
       } else {
         this.machine.state = environment.state2position(state);
       }
-    },
-
-    handleResize: function() {
-      this.width = window.innerWidth;
-      this.height = window.innerHeight;
     },
 
     isActive: function(what){
