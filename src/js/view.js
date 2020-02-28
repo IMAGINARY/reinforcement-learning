@@ -11,6 +11,7 @@ import { renderEquation } from './equation.js';
 
 import './map.js';
 import './editor';
+import { tile } from './tile.js';
 
 const TileSize = 80;
 
@@ -46,11 +47,11 @@ var app = new Vue({
     height: 0,
     components: [],
     navigation: {},
+    tile_types: Object.keys(tile)
   },
 
   created() {
     machine.setNewEpisodeCallback(this.onNewEpisode);
-
     this.appState = "init";
     renderEquation(machine);
   },
