@@ -4,6 +4,7 @@ import { machine, maze, environment } from "./rl.js";
 import { setKeyboardActionCallback } from "./controls.js";
 import { lightbox } from './lightbox.js';
 import { Texts } from "./language.js";
+import { LevelMaps } from './level';
 
 import { MapView } from './map.js';
 import { renderEquation } from './equation.js';
@@ -49,6 +50,9 @@ export const StateMgr = {
     },
     onEnterState: function () {
       this.views.fog = false;
+      maze.setLevelMap(LevelMaps[1]);
+      mapView.setMaze(maze);
+      environment.setMaze(maze);
       var lightText = Texts.globalIntro;
       lightbox.popup(lightText, ["continue"]);
     },
