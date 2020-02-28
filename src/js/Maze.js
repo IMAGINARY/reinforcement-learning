@@ -4,11 +4,14 @@ import { areEqual } from './coord';
 
 export class Maze {
   constructor(levelMap) {
+    this.setLevelMap(levelMap);
+  }
+
+  setLevelMap(levelMap) {
     this.map = levelMap;
     this.height = levelMap.length;
     this.width = levelMap[0].length;
     this.generateCoordinates();
-
     this.startPosition = this.getCoordsWithType(tile.start)[0];
     this.endPositions = this.getCoordsWithType(tile.end);
   }
@@ -17,7 +20,7 @@ export class Maze {
     this.allCoordinates = [];
     for (var y = 0 ; y < this.height ; y++)
       for (var x = 0 ; x < this.width ; x++)
-        this.allCoordinates.push({ x: x, y: y});
+        this.allCoordinates.push({ x: x, y: y });
   }
   
   getTileType(pos) {
