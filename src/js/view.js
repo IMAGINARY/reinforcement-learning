@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import VueChartJs from 'vue-chartjs';
 
 import { machine, maze, environment } from "./rl.js";
 import { setKeyboardActionCallback } from "./controls.js";
@@ -9,28 +8,14 @@ import { lightbox } from './lightbox.js';
 import { MapView } from './map.js';
 import { renderEquation } from './equation.js';
 
-import './map.js';
-import './editor';
 import { tile } from './tile.js';
 
+import './map.js';
+import './editor';
+import './navigation';
+import './line-chart';
+
 const TileSize = 80;
-
-Vue.component('line-chart', {
-  extends: VueChartJs.Line,
-  mixins: [VueChartJs.mixins.reactiveProp],
-  props: ['options'],
-  mounted() {
-    this.renderChart(this.chartData, this.options);
-  },
-})
-
-Vue.component('navi-gation',  {
-  props: ["options"],
-  template: `
-  <nav class="navi">
-    <button v-for="(item, key) in options" v-on:click="item">{{ key }}</button>
-  </nav>`
-});
 
 var app = new Vue({
   el: '#app',
