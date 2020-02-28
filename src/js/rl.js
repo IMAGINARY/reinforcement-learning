@@ -2,6 +2,7 @@ import { Maze } from "./maze";
 import { levelMap } from './level';
 import { tile } from './tile';
 import { Environment } from "./environment";
+import { CallBack } from "./callback";
 
 const StepState = {
   Continue: 1,
@@ -120,20 +121,6 @@ class QTable {
 
   getStateValues() {
     return Object.keys(this.stateAction).map( state => this.getMaxValue(state) );
-  }
-}
-
-class CallBack {
-  constructor() {
-    this.callback = null;
-  }
-  set(callback) {
-    this.callback = callback;
-  }
-  call(...args) {
-    if (this.callback != null) {
-      this.callback(...args);
-    }
   }
 }
 
