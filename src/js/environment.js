@@ -2,10 +2,18 @@ import { dir } from './dir';
 
 export class Environment {
   constructor(maze, rewardsMap) {
-    this.maze = maze;
-    this.rewardsMap = rewardsMap;
+    this.setMaze(maze);
+    this.setRewards(rewardsMap);
     this.startState = this.position2state(this.maze.startPosition);
     this.endStates = this.maze.endPositions.map(coord => this.position2state(coord));
+  }
+
+  setMaze(maze) {
+    this.maze = maze;
+  }
+
+  setRewards(rewardsMap) {
+    this.rewardsMap = rewardsMap;
   }
 
   state2position(state) {
