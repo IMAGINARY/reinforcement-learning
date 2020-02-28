@@ -37,20 +37,6 @@ Vue.component('navi-gation',  {
 // ----------------------------------------------------------------------------
 
 function makeMachineReactive(vueInstance, machine){
-  // Score wrapper
-  var score = machine.score;
-  vueInstance.machine.score = score;
-  Object.defineProperty(machine, 'score', {
-    get: function() {
-      return this._score
-    },
-    set: function(newScore) {
-      this._score = newScore;
-      vueInstance.machine.score = newScore
-    }
-  });
-  machine.score = score;
-
   // Score history wrapper
   var scoreHistory = machine.score_history;
   vueInstance.machine.score_history = scoreHistory;
@@ -121,6 +107,9 @@ var app = new Vue({
   destroyed() { },
 
   computed: {
+    score: function() {
+      return machine.score;
+    },
     datacollection: function() {
       return {
         labels: Array.from(Array(this.machine.score_history.length).keys()),
