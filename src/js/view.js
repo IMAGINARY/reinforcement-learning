@@ -2,8 +2,8 @@ import Vue from 'vue';
 
 import { machine, maze, environment } from "./rl.js";
 import { setKeyboardActionCallback } from "./controls.js";
-import { StateMgr } from './state-manager.js';
 import { lightbox } from './lightbox.js';
+import { Texts } from "./language.js";
 
 import { MapView } from './map.js';
 import { renderEquation } from './equation.js';
@@ -16,6 +16,44 @@ import './navigation';
 import './line-chart';
 
 const TileSize = 80;
+
+export const StateMgr = {
+  init: {
+    onEnterState: function () {
+      this.views.fog = true;
+      var lightText = Texts.intro;
+      lightbox.popup(lightText, ["next"]).then((r) => this.changeState("local"));
+    },
+  },
+  local: {
+    components: ["global", "navi", "score"],
+    navigation: {
+      "reset robot": () => machine.reset_machine(),
+      "continue": null,
+    },
+    onEnterState: function () {
+      this.views.fog = true;
+      this.navigation.continue = () => this.changeState("global");
+      var lightText = Texts.localIntro;
+      lightbox.popup(lightText, ["next"]);
+    },
+  },
+  global: {
+    components: ["global", "sliders", "plot", "navi", "score"],
+    navigation: {
+      "run 1 episode!": () => machine.run(1),
+      "run 100 episodes!": () => machine.run(100),
+      "auto step!": () => machine.auto_step(),
+      "greedy step!": () => machine.greedy_step(),
+      "reset machine": () => machine.reset_machine(),
+    },
+    onEnterState: function () {
+      this.views.fog = false;
+      var lightText = Texts.globalIntro;
+      lightbox.popup(lightText, ["continue"]);
+    },
+  }
+};
 
 var app = new Vue({
   el: '#app',
