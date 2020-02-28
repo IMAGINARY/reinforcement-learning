@@ -6,8 +6,11 @@ export class CallBack {
     this.callback = callback;
   }
   call(...args) {
-    if (this.callback != null) {
-      this.callback(...args);
-    }
+    return new Promise( resolve => {
+      if (this.callback != null) {
+        this.callback(...args);
+      }
+      resolve('call');
+    });
   }
 }
