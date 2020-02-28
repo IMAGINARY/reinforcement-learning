@@ -1,7 +1,7 @@
 import Konva from 'konva';
 
-import { maze, machine } from "./rl.js";
-import { dir, dirToMovement } from './dir';
+import { maze, } from "./rl.js";
+import { dirToMovement } from './dir';
 import { areEqual, areAdjacent } from './coord';
 
 export const TileStrokeColor = "#DDDDDD";
