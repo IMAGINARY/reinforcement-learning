@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueChartJs from 'vue-chartjs';
-import { TimelineLite } from "gsap";
 
 import { machine, maze, environment } from "./rl.js";
 import { setKeyboardActionCallback } from "./controls.js";
