@@ -10,6 +10,7 @@ import { MapView } from './map.js';
 import { renderEquation } from './equation.js';
 
 import './map.js';
+import './editor';
 
 const TileSize = 80;
 
@@ -29,7 +30,6 @@ Vue.component('navi-gation',  {
     <button v-for="(item, key) in options" v-on:click="item">{{ key }}</button>
   </nav>`
 });
-
 
 var app = new Vue({
   el: '#app',

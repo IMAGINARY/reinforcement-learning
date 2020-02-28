@@ -45,6 +45,15 @@ button {
   left: 0;
 }
 
+div.editor-palette {
+  position: absolute;
+  right: 2vw;
+  top: 12vh;
+  width: 20vw;
+  height: 40vh;
+  background-color: #F0F0F0;
+}
+
 .stage {
   display: flex;
   justify-content: center;
