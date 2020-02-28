@@ -141,7 +141,7 @@ export class MapView {
     }
     this.greedyTiles[oldCoord.y][oldCoord.x].visible(hasBestAction);
 
-    const path = this.machine.getGreedyPath();
+    const path = this.machine.getGreedyPath(this.environment.startState);
     if (path.lenght < 2)
       return;
     

@@ -4,7 +4,10 @@ export class Environment {
   constructor(maze, rewardsMap) {
     this.maze = maze;
     this.rewardsMap = rewardsMap;
+    this.startState = this.position2state(this.maze.startPosition);
+    this.endStates = this.maze.endPositions.map(coord => this.position2state(coord));
   }
+
   state2position(state) {
     return {
       x: (state % this.maze.width),
@@ -44,13 +47,5 @@ export class Environment {
       case dir.LEFT:
         return state - 1;
     }
-  }
-  
-  startState() {
-    return this.position2state(this.maze.startPosition);
-  }
-
-  endStates() {
-    return this.maze.endPositions.map(coord => this.position2state(coord));
   }
 }

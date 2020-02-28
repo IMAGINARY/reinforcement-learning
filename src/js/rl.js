@@ -154,9 +154,6 @@ export class RL_machine {
     this.start_score = start_score;
     this.end_score = end_score;
 
-    this.start_state = this.environment.startState();
-    this.end_states = this.environment.endStates();
-
     this.stateChange = new CallBack();
     this.onReset = new CallBack();
     this.onNewEpisode = new CallBack();
@@ -191,7 +188,7 @@ export class RL_machine {
   }
 
   resetState() {
-    this.setState(this.start_state);
+    this.setState(this.environment.startState);
     this.score = this.start_score;
   }
 
@@ -241,7 +238,7 @@ export class RL_machine {
     this.score += this.environment.reward(this.state);
 
     // add_new_step_callback
-    if (this.end_states.indexOf(this.state) >= 0) {
+    if (this.environment.endStates.indexOf(this.state) >= 0) {
       this.new_episode("success");
       return StepState.End;
     }
@@ -258,16 +255,16 @@ export class RL_machine {
     this.stateChange.call(oldState, newState);
   }
 
-  getGreedyPath() {
+  getGreedyPath(startOfPath) {
     var states = [];
-    var state = this.start_state;
+    var state = startOfPath;
     do {
       states.push(state);
       const action = this.qTable.getBestAction(state);
       if (action == undefined)
         break;
       state = this.environment.transition(state, action);
-    }  while (state != undefined && !(state in states) && !(state in this.end_states));
+    }  while (state != undefined && !(state in states) && !(state in this.environment.endStates));
     return states;
   }
 
