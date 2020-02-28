@@ -50,21 +50,6 @@ function makeMachineReactive(vueInstance, machine){
     }
   });
   machine.score_history = scoreHistory;
-
-  // State wrapper
-  var state = machine.state;
-  vueInstance.machine.state = environment.state2position(state);
-  Object.defineProperty(machine, 'state', {
-    get: function() {
-      return this._state
-    },
-    set: function(ne) {
-      this._state = ne;
-      vueInstance.handleState(this._state);
-    }
-  });
-  machine.state = state;
-
   vueInstance.machine.object.setNewEpisodeCallback(vueInstance.onNewEpisode);
 }
 
@@ -76,11 +61,6 @@ var app = new Vue({
     machine: {
       object: machine,
       q_table: machine.q_table,
-      state: {
-        x:0,
-        y:0,
-      },
-      state_tween: new TimelineLite(),
       learning_rate: machine.lr,
       discount_factor: machine.df,
       epsilon: machine.epsilon,
@@ -146,14 +126,6 @@ var app = new Vue({
     onEnterState: function(){},
 
     onLeaveState: function(){},
-
-    handleState: function(state) {
-      if (!this.machine.object.running) {
-        this.machine.state_tween.to(this.machine.state, 0.2, environment.state2position(state));
-      } else {
-        this.machine.state = environment.state2position(state);
-      }
-    },
 
     isActive: function(what){
       return this.components.indexOf(what) >= 0;
