@@ -27,7 +27,7 @@ function createMatrixFromMaze(maze) {
 }
 
 export class MapView {
-  constructor(containerId, machine, maze, environment, tileSize, onCellTouch) {
+  constructor(containerId, machine, maze, environment, tileSize, infoViews, onCellTouch) {
     this.TileSize = tileSize;
     this.HalfTile = this.TileSize/2;
     this.machine = machine;
@@ -36,6 +36,7 @@ export class MapView {
     this.machine.setResetCallback( () => this.onReset());
     this.onCellTouch = onCellTouch;
     this.editorMode = machine.editorMode;
+    this.infoViews = infoViews;
 
     this.stage = new Konva.Stage({
       container: containerId,
@@ -48,14 +49,7 @@ export class MapView {
 
   setEditorMode(editorMode) {
     this.editorMode = editorMode;
-    if (editorMode) {
-      this.setFogVisible(false);
-      this.setQValuesVisible(false);
-      this.setGreedyVisible(false);
-    } else {
-      this.setMaze(this.maze);
-    }
-    this.objectsLayer.visible(!editorMode);
+    this.updateVisibilities();
   }
 
   setMaze(maze) {
@@ -72,6 +66,7 @@ export class MapView {
     this.createFogLayer();
     this.createObjectsLayer();
     this.updateFog();
+    this.updateVisibilities();
   }
 
   redrawMap() {
@@ -81,15 +76,24 @@ export class MapView {
     this.mapLayer.draw();
   }
 
+  updateVisibilities() {
+    this.objectsLayer.visible(!this.editorMode);
+    this.qLayer.visible(this.infoViews.qvalue && !this.editorMode);
+    this.greedyPathLayer.visible(this.infoViews.greedy && !this.editorMode);
+    this.greedyTilesLayer.visible(this.infoViews.greedy && !this.editorMode);
+    this.fogLayer.visible(this.infoViews.fog && !this.editorMode);
+  }
+
   setQValuesVisible(visible) {
-    this.qLayer.visible(visible);
+    this.infoViews.qvalue = visible;
+    this.updateVisibilities();
     if (visible)
       this.qLayer.draw();
   }
 
   setGreedyVisible(visible) {
-    this.greedyPathLayer.visible(visible);
-    this.greedyTilesLayer.visible(visible);
+    this.infoViews.greedy = visible;
+    this.updateVisibilities();
     if (visible) {
       this.greedyPathLayer.draw();
       this.greedyTilesLayer.draw();
@@ -97,7 +101,9 @@ export class MapView {
   }
 
   setFogVisible(visible) {
-    this.fogLayer.visible(visible);
+    this.infoViews.fog = visible;
+    this.updateVisibilities();
+
     if (visible)
       this.fogLayer.draw();
   }
@@ -143,7 +149,6 @@ export class MapView {
       stroke: MainViolet,
     });
     this.greedyPathLayer.add(this.greedyPath);
-    this.greedyPathLayer.visible(false);
     this.stage.add(this.greedyPathLayer);
 
     this.greedyTilesLayer = new Konva.Layer();
@@ -157,7 +162,6 @@ export class MapView {
       });
       this.greedyTilesLayer.add(this.greedyTiles[coord.y][coord.x]);
     });
-    this.greedyTilesLayer.visible(false);
     this.stage.add(this.greedyTilesLayer);
   }
 
@@ -237,7 +241,6 @@ export class MapView {
       });
       this.qLayer.add(this.qTexts[coord.y][coord.x]);
     });
-    this.qLayer.visible(false);
     this.stage.add(this.qLayer);
   }
 
@@ -253,7 +256,6 @@ export class MapView {
       this.fogLayer.add(fog);
       fog.on('mousedown tap', () => this.onCellTouch(coord) );
     });
-    this.fogLayer.visible(false);
     this.stage.add(this.fogLayer);
   }
 

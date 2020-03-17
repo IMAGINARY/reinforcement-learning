@@ -66,17 +66,19 @@ var editor = {
   enabled: false
 };
 
+var infoViews = {
+  qvalue: false,
+  greedy: false,
+  fog: false
+};
+
 var app = new Vue({
   el: '#app',
   data: {
     appState: null,
     maze: maze,
     machine: machine,
-    views: {
-      qvalue: false,
-      greedy: false,
-      fog: false
-    },
+    views: infoViews,
     width: 0,
     height: 0,
     components: [],
@@ -202,7 +204,7 @@ function onCellTouch(coord) {
   mapView.redrawMap();
 }
 
-const mapView = new MapView('map_container', machine, maze, environment, TileSize, onCellTouch);
+const mapView = new MapView('map_container', machine, maze, environment, TileSize, infoViews, onCellTouch);
 
 setKeyboardActionCallback( action => machine.attemptStep(machine.state, action) );
 
