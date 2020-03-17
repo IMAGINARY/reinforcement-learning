@@ -74,6 +74,13 @@ export class MapView {
     this.updateFog();
   }
 
+  redrawMap() {
+    this.maze.allCoordinates.forEach( coord => {
+      this.mapTiles[coord.y][coord.x].fill(this.getTileColor(coord));
+    });
+    this.mapLayer.draw();
+  }
+
   setQValuesVisible(visible) {
     this.qLayer.visible(visible);
     if (visible)
