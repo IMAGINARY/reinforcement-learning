@@ -199,7 +199,7 @@ var app = new Vue({
 
 function onCellTouch(coord) {
   console.log('cell touched @ ' + coord.x + ", " + coord.y);
-  maze.map[coord.y][coord.x] = tile[editor.current_type];
+  maze.setCell(coord, editor.current_type);
   mapView.redrawMap();
 }
 

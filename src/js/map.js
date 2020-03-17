@@ -1,5 +1,6 @@
 import Konva from 'konva';
 
+import { tile } from './tile';
 import { maze, } from "./rl.js";
 import { dirToMovement } from './dir';
 import { areEqual, areAdjacent } from './coord';
@@ -69,6 +70,12 @@ export class MapView {
     this.createObjectsLayer();
     this.updateFog();
     this.updateVisibilities();
+  }
+
+  setCell(coord, type) {
+    this.maze.setTileType(coord, tile[type]);
+    this.mapTiles[coord.y][coord.x].fill(this.getTileColor(coord));
+    this.mapLayer.draw();
   }
 
   redrawMap() {

@@ -31,6 +31,11 @@ export class Maze {
         this.allCoordinates.push({ x: x, y: y });
   }
   
+  setTileType(coord, type) {
+    if (this.isInside(coord))
+      this.map[coord.y][coord.x] = type;
+  }
+
   getTileType(pos) {
     if (this.isInside(pos)) {
       return this.map[pos.y][pos.x];
