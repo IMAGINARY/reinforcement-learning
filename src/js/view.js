@@ -129,8 +129,10 @@ var app = new Vue({
 
     switchEditor: function() {
       this.editor.enabled = !this.editor.enabled;
+      mapView.setEditorMode(this.editor.enabled);
       console.log('editor enabled: ' + this.editor.enabled);
     },
+
     setTileType: function(tileType) {
       this.editor.current_type = tileType;
       console.log('change current tile to ' + tileType);

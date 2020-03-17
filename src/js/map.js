@@ -35,6 +35,7 @@ export class MapView {
     this.machine.setStateChangeCallback((oldState, newState) => this.onStateChange(oldState, newState));
     this.machine.setResetCallback( () => this.onReset());
     this.onCellTouch = onCellTouch;
+    this.editorMode = machine.editorMode;
 
     this.stage = new Konva.Stage({
       container: containerId,
@@ -43,6 +44,16 @@ export class MapView {
     });
 
     this.setMaze(maze);
+  }
+
+  setEditorMode(editorMode) {
+    this.editorMode = editorMode;
+    if (editorMode) {
+      this.setFogVisible(false);
+      this.setQValuesVisible(false);
+      this.setGreedyVisible(false);
+    }
+    this.objectsLayer.visible(!editorMode);
   }
 
   setMaze(maze) {
