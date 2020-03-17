@@ -20,8 +20,8 @@ export class Maze {
     this.height = levelMap.length;
     this.width = levelMap[0].length;
     this.generateCoordinates();
-    this.startPosition = this.getCoordsWithType(tile.start)[0];
-    this.endPositions = this.getCoordsWithType(tile.end);
+    this.startPosition = this.findFirstWithType(tile.start);
+    this.endPosition = this.findFirstWithType(tile.end);
   }
 
   generateCoordinates() {
@@ -44,7 +44,7 @@ export class Maze {
   }
 
   isEndPosition(coord) {
-    return this.endPositions.some( c => areEqual(c, coord) );
+    return areEqual(this.endPosition, coord);
   }
 
   isInside(coord) {
@@ -58,6 +58,10 @@ export class Maze {
 
   getCoordsWithType(type) {
     return this.allCoordinates.filter( coord => this.map[coord.y][coord.x] == type );
+  }
+
+  findFirstWithType(type) {
+    return this.allCoordinates.find( coord => this.map[coord.y][coord.x] == type );
   }
 
   canMove(from, dir) {

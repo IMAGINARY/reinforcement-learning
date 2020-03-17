@@ -9,7 +9,11 @@ export class Environment {
   setMaze(maze) {
     this.maze = maze;
     this.startState = this.position2state(this.maze.startPosition);
-    this.endStates = this.maze.endPositions.map(coord => this.position2state(coord));
+    this.endState = this.position2state(this.maze.endPosition);
+  }
+
+  isEndState(state) {
+    return state == this.endState;
   }
 
   setRewards(rewardsMap) {

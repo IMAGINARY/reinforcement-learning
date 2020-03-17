@@ -226,7 +226,7 @@ export class MapView {
   createObjectsLayer() {
     this.objectsLayer = new Konva.Layer();
     this.robot = this.createImageAtTile("img/robot.png", this.maze.startPosition);
-    this.station = this.createImageAtTile("img/station.png", this.maze.endPositions[0]);
+    this.station = this.createImageAtTile("img/station.png", this.maze.endPosition);
     this.objectsLayer.add(this.robot);
     this.objectsLayer.add(this.station);
     this.objectsLayer.batchDraw();

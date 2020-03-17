@@ -229,7 +229,7 @@ export class RL_machine {
     this.score += this.environment.reward(this.state);
 
     // add_new_step_callback
-    if (this.environment.endStates.indexOf(this.state) >= 0) {
+    if (this.environment.isEndState(this.state)) {
       this.new_episode("success");
       return StepState.End;
     }
@@ -255,7 +255,7 @@ export class RL_machine {
       if (action == undefined)
         break;
       state = this.environment.transition(state, action);
-    }  while (state != undefined && !(state in states) && !(state in this.environment.endStates));
+    }  while (state != undefined && !(state in states) && !this.environment.isEndState(state));
     return states;
   }
 
