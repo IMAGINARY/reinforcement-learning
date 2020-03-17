@@ -74,7 +74,10 @@ var app = new Vue({
     height: 0,
     components: [],
     navigation: {},
-    tile_types: Object.keys(tile)
+    editor: {
+      tile_types: Object.keys(tile),
+      current_type: 'regular'
+    }
   },
 
   created() {
@@ -123,6 +126,7 @@ var app = new Vue({
   },
   methods: {
     setTileType: function(tileType) {
+      this.editor.current_type = tileType;
       console.log('change current tile to ' + tileType);
     },
 
