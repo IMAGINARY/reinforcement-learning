@@ -27,13 +27,14 @@ function createMatrixFromMaze(maze) {
 }
 
 export class MapView {
-  constructor(containerId, machine, maze, environment, tileSize) {
+  constructor(containerId, machine, maze, environment, tileSize, onCellTouch) {
     this.TileSize = tileSize;
     this.HalfTile = this.TileSize/2;
     this.machine = machine;
     this.environment = environment;
     this.machine.setStateChangeCallback((oldState, newState) => this.onStateChange(oldState, newState));
     this.machine.setResetCallback( () => this.onReset());
+    this.onCellTouch = onCellTouch;
 
     this.stage = new Konva.Stage({
       container: containerId,
@@ -173,6 +174,7 @@ export class MapView {
         ...this.tileRect(coord),
         fill: this.getTileColor(coord)
       });
+      rect.on('mousedown tap', () => this.onCellTouch(coord) );
       this.mapTiles[coord.y][coord.x] = rect;
       this.mapLayer.add(rect);
     });
@@ -229,6 +231,7 @@ export class MapView {
       });
       this.fogTiles[coord.y][coord.x] = fog;
       this.fogLayer.add(fog);
+      fog.on('mousedown tap', () => this.onCellTouch(coord) );
     });
     this.fogLayer.visible(false);
     this.stage.add(this.fogLayer);

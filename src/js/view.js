@@ -185,7 +185,11 @@ var app = new Vue({
   }
 })
 
-const mapView = new MapView('map_container', machine, maze, environment, TileSize);
+function onCellTouch(coord) {
+  console.log('cell touched @ ' + coord.x + ", " + coord.y);
+}
+
+const mapView = new MapView('map_container', machine, maze, environment, TileSize, onCellTouch);
 
 setKeyboardActionCallback( action => machine.attemptStep(machine.state, action) );
 
