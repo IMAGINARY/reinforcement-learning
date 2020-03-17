@@ -11,6 +11,8 @@ const TransitableColor = "#F0F0F0";
 const WallColor = "#101010";
 const MainYellow = "#FFEC02";
 const MainViolet = "#8F1A81";
+const DangerousColor = "#665F25";
+const Magenta = "#FF00FF";
 
 function asyncLoadImage(imagesrc, setFunction) {
   const image = new window.Image();
@@ -124,12 +126,14 @@ export class MapView {
   }
 
   getTileColor(coord) {
-    if (this.maze.isEndPosition(coord)) {
-      return MainViolet;
-    } else if (this.maze.isStartPosition(coord)) {
-      return MainYellow;
+    switch (this.maze.getTileType(coord)) {
+      case tile.start: return MainYellow;
+      case tile.end: return MainViolet;
+      case tile.regular: return TransitableColor;
+      case tile.wall: return WallColor;
+      case tile.dangerous: return DangerousColor;
+      default: return Magenta;
     }
-    return this.maze.isTransitable({ x: coord.x, y: coord.y}) ? TransitableColor : WallColor;
   }
 
   tilePos(coord) {
