@@ -35,7 +35,13 @@
       <div class="score" v-show="isActive('score')">
         <span class="energy">Current Energy {{score}}</span>
       </div>
-      <editor-palette :tile_types="tile_types" v-on:set-tile-type="setTileType($event)"></editor-palette>
+      <editor-palette
+        :enabled="editor.enabled"
+        :current_type="editor.current_type"
+        :tile_types="editor.tile_types"
+        v-on:set-tile-type="setTileType($event)"
+        v-on:switch-editor="switchEditor($event)">
+      </editor-palette>
       <navi-gation class="navigation" :options="navigation" v-show="isActive('navi')"></navi-gation>
     </div>
 

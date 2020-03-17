@@ -76,7 +76,8 @@ var app = new Vue({
     navigation: {},
     editor: {
       tile_types: Object.keys(tile),
-      current_type: 'regular'
+      current_type: 'regular',
+      enabled: false
     }
   },
 
@@ -125,6 +126,11 @@ var app = new Vue({
     },
   },
   methods: {
+
+    switchEditor: function() {
+      this.editor.enabled = !this.editor.enabled;
+      console.log('editor enabled: ' + this.editor.enabled);
+    },
     setTileType: function(tileType) {
       this.editor.current_type = tileType;
       console.log('change current tile to ' + tileType);
