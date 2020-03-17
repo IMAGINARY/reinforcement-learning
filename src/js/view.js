@@ -131,7 +131,6 @@ var app = new Vue({
     },
   },
   methods: {
-
     switchEditor: function() {
       this.editor.enabled = !this.editor.enabled;
       mapView.setEditorMode(this.editor.enabled);

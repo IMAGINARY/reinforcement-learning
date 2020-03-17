@@ -143,6 +143,8 @@ export class RL_machine {
     this.stateChange = new CallBack();
     this.onReset = new CallBack();
     this.onNewEpisode = new CallBack();
+    this.onRunStart = new CallBack();
+    this.onRunEnd = new CallBack();
 
     this.qTable = new QTable(learning_rate, discount_factor);
     this.reset_machine();
@@ -259,6 +261,7 @@ export class RL_machine {
 
   run(episodes, max_steps_per_episode=10000){
     this.running = true;
+    this.onRunStart.call();
     for (var i = 0; i < episodes; i++) {
       for (var j = 0; j < max_steps_per_episode; j++) {
         if (this.auto_step() != StepState.Continue) {
@@ -268,6 +271,7 @@ export class RL_machine {
       this.resetState();
     }
     this.running = false;
+    this.onRunEnd.call();
   }
 
   normalizedValue(state) {

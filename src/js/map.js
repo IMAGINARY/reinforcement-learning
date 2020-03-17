@@ -34,6 +34,8 @@ export class MapView {
     this.environment = environment;
     this.machine.setStateChangeCallback((oldState, newState) => this.onStateChange(oldState, newState));
     this.machine.setResetCallback( () => this.onReset());
+    this.machine.onRunStart.set( () => this.updateVisibilities() );
+    this.machine.onRunEnd.set( () => this.updateVisibilities() );
     this.onCellTouch = onCellTouch;
     this.editorMode = machine.editorMode;
     this.infoViews = infoViews;
@@ -78,34 +80,31 @@ export class MapView {
 
   updateVisibilities() {
     this.objectsLayer.visible(!this.editorMode);
-    this.qLayer.visible(this.infoViews.qvalue && !this.editorMode);
-    this.greedyPathLayer.visible(this.infoViews.greedy && !this.editorMode);
-    this.greedyTilesLayer.visible(this.infoViews.greedy && !this.editorMode);
+    this.qLayer.visible(this.infoViews.qvalue && !this.editorMode && !this.machine.running);
+    this.greedyPathLayer.visible(this.infoViews.greedy && !this.editorMode && !this.machine.running);
+    this.greedyTilesLayer.visible(this.infoViews.greedy && !this.editorMode && !this.machine.running);
     this.fogLayer.visible(this.infoViews.fog && !this.editorMode);
+
+    this.objectsLayer.draw();
+    this.qLayer.draw();
+    this.greedyPathLayer.draw();
+    this.greedyTilesLayer.draw();
+    this.fogLayer.draw();
   }
 
   setQValuesVisible(visible) {
     this.infoViews.qvalue = visible;
     this.updateVisibilities();
-    if (visible)
-      this.qLayer.draw();
   }
 
   setGreedyVisible(visible) {
     this.infoViews.greedy = visible;
     this.updateVisibilities();
-    if (visible) {
-      this.greedyPathLayer.draw();
-      this.greedyTilesLayer.draw();
-    }
   }
 
   setFogVisible(visible) {
     this.infoViews.fog = visible;
     this.updateVisibilities();
-
-    if (visible)
-      this.fogLayer.draw();
   }
   
   visibleInFog(coord) {
