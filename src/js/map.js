@@ -52,6 +52,8 @@ export class MapView {
       this.setFogVisible(false);
       this.setQValuesVisible(false);
       this.setGreedyVisible(false);
+    } else {
+      this.setMaze(this.maze);
     }
     this.objectsLayer.visible(!editorMode);
   }

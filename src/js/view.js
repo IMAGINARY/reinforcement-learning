@@ -59,6 +59,12 @@ export const StateMgr = {
   }
 };
 
+var editor = {
+  tile_types: Object.keys(tile),
+  current_type: 'regular',
+  enabled: false
+};
+
 var app = new Vue({
   el: '#app',
   data: {
@@ -74,11 +80,7 @@ var app = new Vue({
     height: 0,
     components: [],
     navigation: {},
-    editor: {
-      tile_types: Object.keys(tile),
-      current_type: 'regular',
-      enabled: false
-    }
+    editor: editor
   },
 
   created() {
@@ -195,6 +197,7 @@ var app = new Vue({
 
 function onCellTouch(coord) {
   console.log('cell touched @ ' + coord.x + ", " + coord.y);
+  maze.map[coord.y][coord.x] = tile[editor.current_type];
 }
 
 const mapView = new MapView('map_container', machine, maze, environment, TileSize, onCellTouch);
