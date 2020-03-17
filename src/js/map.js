@@ -72,8 +72,7 @@ export class MapView {
     this.updateVisibilities();
   }
 
-  setCell(coord, type) {
-    this.maze.setTileType(coord, tile[type]);
+  update(coord) {
     this.mapTiles[coord.y][coord.x].fill(this.getTileColor(coord));
     this.mapLayer.draw();
   }
@@ -82,6 +81,7 @@ export class MapView {
     this.maze.allCoordinates.forEach( coord => {
       this.mapTiles[coord.y][coord.x].fill(this.getTileColor(coord));
     });
+    this.placeImageOverTile(this.station, this.maze.endPosition);
     this.mapLayer.draw();
   }
 
@@ -124,6 +124,11 @@ export class MapView {
   }
 
   getTileColor(coord) {
+    if (this.maze.isEndPosition(coord)) {
+      return MainViolet;
+    } else if (this.maze.isStartPosition(coord)) {
+      return MainYellow;
+    }
     return this.maze.isTransitable({ x: coord.x, y: coord.y}) ? TransitableColor : WallColor;
   }
 
@@ -133,6 +138,11 @@ export class MapView {
       y: coord.y * this.TileSize
     }
   };
+
+  placeImageOverTile(image, coord) {
+    image.x(coord.x * this.TileSize);
+    image.y(coord.y * this.TileSize);
+  }
 
   tileRect(coord) {
     return {

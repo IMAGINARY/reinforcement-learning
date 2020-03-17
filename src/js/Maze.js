@@ -20,6 +20,10 @@ export class Maze {
     this.height = levelMap.length;
     this.width = levelMap[0].length;
     this.generateCoordinates();
+    this.updateStartAndEnd();
+  }
+
+  updateStartAndEnd() {
     this.startPosition = this.findFirstWithType(tile.start);
     this.endPosition = this.findFirstWithType(tile.end);
   }
@@ -32,19 +36,28 @@ export class Maze {
   }
   
   setTileType(coord, type) {
-    if (this.isInside(coord))
-      this.map[coord.y][coord.x] = type;
+    if (!this.isInside(coord))
+      return;
+
+    if (type == tile.start)
+      this.map[this.startPosition.y][this.startPosition.x] = tile.regular;
+    else if (type == tile.end)
+      this.map[this.endPosition.y][this.endPosition.x] = tile.regular;
+
+    this.map[coord.y][coord.x] = type;
+    this.updateStartAndEnd();
   }
 
   getTileType(pos) {
-    if (this.isInside(pos)) {
-      return this.map[pos.y][pos.x];
-    }
-    return null;
+    return this.isInside(pos) ? this.map[pos.y][pos.x] : null;
   }
 
   isEndPosition(coord) {
     return areEqual(this.endPosition, coord);
+  }
+
+  isStartPosition(coord) {
+    return areEqual(this.startPosition, coord);
   }
 
   isInside(coord) {
