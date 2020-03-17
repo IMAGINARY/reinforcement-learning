@@ -2,13 +2,21 @@ import { tile } from "./tile";
 import { dirToMovement } from './dir'
 import { areEqual } from './coord';
 
+function cloneMatrix(matrix) {
+  var newMatrix = [];
+  for (var i = 0; i < matrix.length; i++)
+    newMatrix[i] = matrix[i].slice();
+
+  return newMatrix;
+}
+
 export class Maze {
   constructor(levelMap) {
     this.setLevelMap(levelMap);
   }
 
   setLevelMap(levelMap) {
-    this.map = levelMap;
+    this.map = cloneMatrix(levelMap);
     this.height = levelMap.length;
     this.width = levelMap[0].length;
     this.generateCoordinates();
