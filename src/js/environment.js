@@ -4,12 +4,12 @@ export class Environment {
   constructor(maze, rewardsMap) {
     this.setMaze(maze);
     this.setRewards(rewardsMap);
-    this.startState = this.position2state(this.maze.startPosition);
-    this.endStates = this.maze.endPositions.map(coord => this.position2state(coord));
   }
 
   setMaze(maze) {
     this.maze = maze;
+    this.startState = this.position2state(this.maze.startPosition);
+    this.endStates = this.maze.endPositions.map(coord => this.position2state(coord));
   }
 
   setRewards(rewardsMap) {

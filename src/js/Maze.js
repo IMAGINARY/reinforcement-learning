@@ -39,7 +39,8 @@ export class Maze {
   }
 
   isTransitable(coord) {
-    return this.isInside(coord) && this.getTileType(coord) != tile.wall;
+    const type = this.getTileType(coord);
+    return type != null && type != tile.wall;
   }
 
   getCoordsWithType(type) {

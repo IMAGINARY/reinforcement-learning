@@ -53,6 +53,7 @@ export const StateMgr = {
       maze.setLevelMap(LevelMaps[1]);
       mapView.setMaze(maze);
       environment.setMaze(maze);
+      machine.resetState();
       var lightText = Texts.globalIntro;
       lightbox.popup(lightText, ["continue"]);
     },

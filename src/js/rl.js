@@ -205,7 +205,10 @@ export class RL_machine {
   }
 
   greedy_step() {
-    const bestAction = this.qTable.getBestAction(this.state) || this.randomAction(this.state);
+    var bestAction = this.qTable.getBestAction(this.state);
+    if (bestAction == undefined) 
+      bestAction = this.randomAction(this.state);
+
     return this.step(bestAction);
   }
 
