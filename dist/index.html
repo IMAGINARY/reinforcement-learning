@@ -36,6 +36,7 @@
         <span class="energy">Current Energy {{score}}</span>
       </div>
       <editor-palette
+        v-show="isActive('editor')"
         :enabled="editor.enabled"
         :current_type="editor.current_type"
         :tile_types="editor.tile_types"

@@ -40,7 +40,7 @@ export const StateMgr = {
     },
   },
   global: {
-    components: ["global", "sliders", "plot", "navi", "score"],
+    components: ["global", "sliders", "plot", "navi", "score", "editor"],
     navigation: {
       "run 1 episode!": () => machine.run(1),
       "run 100 episodes!": () => machine.run(100),
