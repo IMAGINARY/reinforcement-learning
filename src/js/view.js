@@ -22,10 +22,19 @@ export const StateMgr = {
   init: {
     onEnterState: function () {
       this.views.fog = true;
-      var lightText = Texts.intro;
-      lightbox.popup(lightText, ["next"]).then((r) => this.changeState("local"));
+      lightbox.popup(Texts.intro, ["next"]).then((r) => this.changeState("goal"));
     },
   },
+  goal: {
+    components: ["global", "navi"],
+    navigation: {
+      "continue": () => this.changeState("local")
+    },
+    onEnterState: function () {
+      lightbox.popup(Texts.goal, ["next"]);
+    }
+  },
+
   local: {
     components: ["global", "navi", "score"],
     navigation: {
@@ -35,8 +44,7 @@ export const StateMgr = {
     onEnterState: function () {
       this.views.fog = true;
       this.navigation.continue = () => this.changeState("global");
-      var lightText = Texts.localIntro;
-      lightbox.popup(lightText, ["next"]);
+      lightbox.popup(Texts.localIntro, ["next"]);
     },
   },
   global: {
@@ -54,8 +62,7 @@ export const StateMgr = {
       mapView.setMaze(maze);
       environment.setMaze(maze);
       machine.resetState();
-      var lightText = Texts.globalIntro;
-      lightbox.popup(lightText, ["continue"]);
+      lightbox.popup(Texts.globalIntro, ["continue"]);
     },
   }
 };
