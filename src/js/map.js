@@ -51,6 +51,13 @@ export class MapView {
 
     this.setMaze(maze);
   }
+  
+  loadLevel(levelMap) {
+    this.maze.setLevelMap(levelMap);
+    this.setMaze(maze);
+    this.environment.setMaze(maze);
+    this.machine.resetState();
+  }
 
   setEditorMode(editorMode) {
     this.editorMode = editorMode;

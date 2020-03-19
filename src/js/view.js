@@ -4,7 +4,7 @@ import { machine, maze, environment } from "./rl.js";
 import { setKeyboardActionCallback } from "./controls.js";
 import { lightbox } from './lightbox.js';
 import { Texts } from "./language.js";
-import { LevelMaps } from './level';
+import { LevelMaps, GoalLevel } from './level';
 
 import { MapView } from './map.js';
 import { renderEquation } from './equation.js';
@@ -32,6 +32,7 @@ export const StateMgr = {
     },
     onEnterState: function () {
       this.navigation.continue = () => this.changeState("local");
+      mapView.loadLevel(GoalLevel);
       lightbox.popup(Texts.goal, ["next"]);
     }
   },
@@ -45,6 +46,7 @@ export const StateMgr = {
     onEnterState: function () {
       this.views.fog = true;
       this.navigation.continue = () => this.changeState("global");
+      mapView.loadLevel(LevelMaps[0]);
       lightbox.popup(Texts.localIntro, ["next"]);
     },
   },
@@ -59,10 +61,7 @@ export const StateMgr = {
     },
     onEnterState: function () {
       this.views.fog = false;
-      maze.setLevelMap(LevelMaps[1]);
-      mapView.setMaze(maze);
-      environment.setMaze(maze);
-      machine.resetState();
+      mapView.loadLevel(LevelMaps[1]);
       lightbox.popup(Texts.globalIntro, ["continue"]);
     },
   }
