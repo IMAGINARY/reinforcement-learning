@@ -84,7 +84,6 @@ var app = new Vue({
   el: '#app',
   data: {
     appState: null,
-    maze: maze,
     machine: machine,
     views: infoViews,
     width: 0,
