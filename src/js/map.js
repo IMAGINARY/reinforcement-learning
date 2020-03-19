@@ -2,7 +2,7 @@ import Konva from 'konva';
 
 import { tile } from './tile';
 import { maze, } from "./rl.js";
-import { dirToMovement } from './dir';
+import { dir, dirToMovement } from './dir';
 import { areEqual, areAdjacent } from './coord';
 
 export const TileStrokeColor = "#DDDDDD";
@@ -33,6 +33,7 @@ export class MapView {
   constructor(containerId, machine, maze, environment, tileSize, infoViews, onCellTouch) {
     this.TileSize = tileSize;
     this.HalfTile = this.TileSize/2;
+    this.QuarterTile = this.TileSize/4;
     this.machine = machine;
     this.environment = environment;
     this.machine.setStateChangeCallback((oldState, newState) => this.onStateChange(oldState, newState));
@@ -50,6 +51,38 @@ export class MapView {
     });
 
     this.setMaze(maze);
+  }
+
+  createMoveButtons() {
+    this.buttonsLayer = new Konva.Layer();
+
+    const create = (rotation) => new Konva.Image(
+      { x: 0, y: 0,
+        image: null,
+        visible: true,
+        width: this.HalfTile,
+        height: this.HalfTile,
+        rotation: rotation,
+        offset: {
+          x: this.QuarterTile,
+          y: this.QuarterTile
+        }
+       } );
+    const moveButtons = {
+      up: create(0),
+      right: create(90),
+      down: create(180),
+      left: create(270),
+    };
+    asyncLoadImage("img/arrow_button.png", image => {
+      Object.keys(moveButtons).forEach( button => {
+        moveButtons[button].image(image);
+        this.buttonsLayer.add(moveButtons[button]);
+      } )
+    });
+    this.moveButtons = moveButtons;
+    this.stage.add(this.buttonsLayer);
+    this.buttonsLayer.draw();
   }
   
   loadLevel(levelMap) {
@@ -77,6 +110,9 @@ export class MapView {
     this.createGreedyLayer();
     this.createObjectsLayer();
     this.createFogLayer();
+    this.createMoveButtons();
+
+    this.updateMoveButtons(this.environment.startState);
     this.updateFog();
     this.updateVisibilities();
   }
@@ -315,6 +351,7 @@ export class MapView {
     this.updateQValue(oldState);
     this.updateGreedyPath(oldState);
     this.setRobotPosition(this.environment.state2position(newState));
+    this.updateMoveButtons(newState);
     this.updateFog();
   }
 
@@ -331,9 +368,28 @@ export class MapView {
     this.qLayer.draw();
   }
 
+  updateMoveButtons(state) {
+    const actions = this.environment.actions(state);
+    const coord = this.environment.state2position(state);
+    this.moveButtons.up.x(coord.x * this.TileSize + this.HalfTile);
+    this.moveButtons.up.y(coord.y * this.TileSize - this.QuarterTile);
+//    this.moveButtons.up.visible(actions.contains(dir.UP));
+    this.moveButtons.right.x(coord.x * this.TileSize + this.TileSize + this.QuarterTile);
+    this.moveButtons.right.y(coord.y * this.TileSize + this.HalfTile);
+//    this.moveButtons.right.visible(actions.contains(dir.RIGHT));
+    this.moveButtons.down.x(coord.x * this.TileSize + this.HalfTile);
+    this.moveButtons.down.y(coord.y * this.TileSize + this.TileSize + this.QuarterTile);
+//    this.moveButtons.down.visible(actions.contains(dir.DOWN));
+    this.moveButtons.left.x(coord.x * this.TileSize - this.QuarterTile);
+    this.moveButtons.left.y(coord.y * this.TileSize + this.HalfTile);
+//    this.moveButtons.left.visible(actions.contains(dir.LEFT));
+    this.buttonsLayer.draw();
+  }
+
   setRobotPosition(coord) {
     this.robot.x(coord.x * this.TileSize);
     this.robot.y(coord.y * this.TileSize);
     this.objectsLayer.draw();
+    this.buttonsLayer.draw();
   }
 }
