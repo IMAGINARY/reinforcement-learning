@@ -55,24 +55,24 @@ export class MapView {
 
   createMoveButtons() {
     this.buttonsLayer = new Konva.Layer();
-
-    const create = (rotation) => new Konva.Image(
+    const create = (rotation, action) => {
+      const button = new Konva.Image(
       { x: 0, y: 0,
         image: null,
         visible: true,
         width: this.HalfTile,
         height: this.HalfTile,
         rotation: rotation,
-        offset: {
-          x: this.QuarterTile,
-          y: this.QuarterTile
-        }
+        offset: { x: this.QuarterTile, y: this.QuarterTile }
        } );
+       button.on('mousedown tap', () => this.machine.attemptStep(this.machine.state, action) );
+      return button;
+    };
     const moveButtons = {
-      up: create(0),
-      right: create(90),
-      down: create(180),
-      left: create(270),
+      up: create(0, dir.UP),
+      right: create(90, dir.RIGHT),
+      down: create(180, dir.DOWN),
+      left: create(270, dir.LEFT),
     };
     asyncLoadImage("img/arrow_button.png", image => {
       Object.keys(moveButtons).forEach( button => {
