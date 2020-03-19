@@ -68,8 +68,8 @@ export class MapView {
     this.createMazeLayer();
     this.createQLayer();
     this.createGreedyLayer();
-    this.createFogLayer();
     this.createObjectsLayer();
+    this.createFogLayer();
     this.updateFog();
     this.updateVisibilities();
   }
@@ -118,7 +118,7 @@ export class MapView {
   
   visibleInFog(coord) {
     const robotPosition = this.environment.state2position(this.machine.state);
-    return areAdjacent(robotPosition, coord) || areEqual(robotPosition, coord) || this.isEndPosition(coord);
+    return areAdjacent(robotPosition, coord) || areEqual(robotPosition, coord);
   }
 
   isEndPosition(coord) {
