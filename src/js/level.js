@@ -1,6 +1,9 @@
 
 
 export const Levels = {
+  Null: [
+    [2]
+  ],
   Goal: [
     [8, 0, 0, 0, 0],
     [1, 1, 1, 1, 0],

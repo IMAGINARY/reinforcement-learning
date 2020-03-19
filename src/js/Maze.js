@@ -60,6 +60,10 @@ export class Maze {
     return areEqual(this.startPosition, coord);
   }
 
+  hasEndPosition() {
+    return this.endPosition != undefined;
+  }
+
   isInside(coord) {
     return coord.x >= 0 && coord.x < this.width && coord.y >= 0 && coord.y < this.height;
   }

@@ -90,7 +90,8 @@ export class MapView {
     this.maze.allCoordinates.forEach( coord => {
       this.mapTiles[coord.y][coord.x].fill(this.getTileColor(coord));
     });
-    this.placeImageOverTile(this.station, this.maze.endPosition);
+    if (this.maze.hasEndPosition())
+      this.placeImageOverTile(this.station, this.maze.endPosition);
     this.mapLayer.draw();
   }
 
@@ -247,9 +248,11 @@ export class MapView {
   createObjectsLayer() {
     this.objectsLayer = new Konva.Layer();
     this.robot = this.createImageAtTile("img/robot.png", this.maze.startPosition);
-    this.station = this.createImageAtTile("img/station.png", this.maze.endPosition);
+    if (this.maze.hasEndPosition()) {
+      this.station = this.createImageAtTile("img/station.png", this.maze.endPosition);
+      this.objectsLayer.add(this.station);
+    }
     this.objectsLayer.add(this.robot);
-    this.objectsLayer.add(this.station);
     this.objectsLayer.batchDraw();
     this.stage.add(this.objectsLayer);
   }
