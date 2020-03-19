@@ -21,9 +21,20 @@ const TileSize = 80;
 export const StateMgr = {
   init: {
     onEnterState: function () {
-      this.views.fog = true;
-      lightbox.popup(Texts.intro, ["next"]).then((r) => this.changeState("goal"));
+      lightbox.popup(Texts.intro, ["next"]).then((r) => this.changeState("stateAction"));
     },
+  },
+  stateAction: {
+    components: ["global", "navi"],
+    navigation: {
+      "continue": null
+    },
+    onEnterState: function () {
+      this.navigation.continue = () => this.changeState("goal");
+      this.views.fog = false;
+      mapView.loadLevel(Levels.StateAction);
+      lightbox.popup(Texts.stateAction, ["next"]);
+    }
   },
   goal: {
     components: ["global", "navi"],
@@ -32,6 +43,7 @@ export const StateMgr = {
     },
     onEnterState: function () {
       this.navigation.continue = () => this.changeState("bestWay");
+      this.views.fog = true;
       mapView.loadLevel(Levels.Goal);
       lightbox.popup(Texts.goal, ["next"]);
     }
