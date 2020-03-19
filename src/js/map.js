@@ -373,16 +373,16 @@ export class MapView {
     const coord = this.environment.state2position(state);
     this.moveButtons.up.x(coord.x * this.TileSize + this.HalfTile);
     this.moveButtons.up.y(coord.y * this.TileSize - this.QuarterTile);
-//    this.moveButtons.up.visible(actions.contains(dir.UP));
+    this.moveButtons.up.visible(actions.includes(dir.UP));
     this.moveButtons.right.x(coord.x * this.TileSize + this.TileSize + this.QuarterTile);
     this.moveButtons.right.y(coord.y * this.TileSize + this.HalfTile);
-//    this.moveButtons.right.visible(actions.contains(dir.RIGHT));
+    this.moveButtons.right.visible(actions.includes(dir.RIGHT));
     this.moveButtons.down.x(coord.x * this.TileSize + this.HalfTile);
     this.moveButtons.down.y(coord.y * this.TileSize + this.TileSize + this.QuarterTile);
-//    this.moveButtons.down.visible(actions.contains(dir.DOWN));
+    this.moveButtons.down.visible(actions.includes(dir.DOWN));
     this.moveButtons.left.x(coord.x * this.TileSize - this.QuarterTile);
     this.moveButtons.left.y(coord.y * this.TileSize + this.HalfTile);
-//    this.moveButtons.left.visible(actions.contains(dir.LEFT));
+    this.moveButtons.left.visible(actions.includes(dir.LEFT));
     this.buttonsLayer.draw();
   }
 
