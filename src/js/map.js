@@ -1,7 +1,7 @@
 import Konva from 'konva';
 
 import { tile } from './tile';
-import { maze, } from "./rl.js";
+import { maze, RewardsMap, } from "./rl.js";
 import { dir, dirToMovement } from './dir';
 import { areEqual, areAdjacent } from './coord';
 
@@ -13,6 +13,14 @@ const MainYellow = "#FFEC02";
 const MainViolet = "#8F1A81";
 const DangerousColor = "#665F25";
 const Magenta = "#FF00FF";
+
+const ColorMapShades = 64;
+let colormap = require('colormap')
+const qColorMap = colormap({
+  colormap: 'jet',
+  nshades: 64,
+  format: 'hex',
+})
 
 function asyncLoadImage(imagesrc, setFunction) {
   const image = new window.Image();
@@ -200,6 +208,13 @@ export class MapView {
     };
   }
 
+  createTileRect(coord, props) {
+    return new Konva.Rect({
+      ...this.tileRect(coord),
+      ...props
+    });
+  }
+
   createGreedyLayer() {
     const ArrowProperties = {
       strokeWidth: 5,
@@ -258,8 +273,7 @@ export class MapView {
     this.mapLayer = new Konva.Layer();
     this.mapTiles = createMatrixFromMaze(this.maze);
     this.maze.allCoordinates.forEach( coord => {
-      const rect = new Konva.Rect({
-        ...this.tileRect(coord),
+      const rect = this.createTileRect(coord, {
         fill: this.getTileColor(coord)
       });
       rect.on('mousedown tap', () => this.onCellTouch(coord) );
@@ -294,16 +308,18 @@ export class MapView {
   }
   
   createQLayer() {
-    this.qLayer = new Konva.Layer();
+    this.qLayer = new Konva.Layer({
+      opacity: 0.25
+    });
     this.qTexts = createMatrixFromMaze(this.maze);
     this.maze.allCoordinates.forEach( coord => {
-      this.qTexts[coord.y][coord.x] = new Konva.Text({
-        text: '',
-        x: coord.x * this.TileSize + 5,
-        y: coord.y * this.TileSize + 5,
-        width: this.TileSize,
-        height: this.TileSize,
-        color: 'black'
+      const tilePos = this.tilePos(coord);
+      this.qTexts[coord.y][coord.x] = new Konva.Rect({
+        x: tilePos.x + this.QuarterTile,
+        y: tilePos.y + this.QuarterTile,
+        width: this.HalfTile,
+        height: this.HalfTile,
+        fill: WallColor,
       });
       this.qLayer.add(this.qTexts[coord.y][coord.x]);
     });
@@ -314,8 +330,7 @@ export class MapView {
     this.fogLayer = new Konva.Layer();
     this.fogTiles = createMatrixFromMaze(maze);
     this.maze.allCoordinates.forEach( coord => {
-      const fog = new Konva.Rect({
-        ...this.tileRect(coord),
+      const fog = this.createTileRect(coord, {
         fill: TileFogColor
       });
       this.fogTiles[coord.y][coord.x] = fog;
@@ -362,9 +377,21 @@ export class MapView {
     this.fogLayer.draw();
   }
 
+  colorForQValue(state) {
+    var maxQ = this.machine.qTable.getMaxValue(state);
+    if (maxQ < 0)
+      maxQ = 0;
+    else if (maxQ > RewardsMap[tile.end])
+      maxQ = RewardsMap[tile.end];
+
+    const normalized = maxQ / RewardsMap[tile.end];
+
+    return qColorMap[normalized * ColorMapShades];
+  }
+  
   updateQValue(state) {
     const coord = this.environment.state2position(state);
-    this.qTexts[coord.y][coord.x].text('Q: ' + this.machine.qTable.getMaxValue(state).toFixed(2));
+    this.qTexts[coord.y][coord.x].fill(this.colorForQValue(state));
     this.qLayer.draw();
   }
 

@@ -27,10 +27,12 @@ export const StateMgr = {
   stateAction: {
     components: ["global", "navi"],
     navigation: {
-      "continue": null
+      "continue": null,
+      "playground": null,
     },
     onEnterState: function () {
       this.navigation.continue = () => this.changeState("goal");
+      this.navigation.playground = () => this.changeState("global");
       this.views.fog = false;
       mapView.loadLevel(Levels.StateAction);
       lightbox.popup(Texts.stateAction, ["next"]);
@@ -39,10 +41,12 @@ export const StateMgr = {
   goal: {
     components: ["global", "navi"],
     navigation: {
-      "continue": null
+      "continue": null,
+      "playground": null,
     },
     onEnterState: function () {
       this.navigation.continue = () => this.changeState("bestWay");
+      this.navigation.playground = () => this.changeState("global");
       this.views.fog = true;
       mapView.loadLevel(Levels.Goal);
       lightbox.popup(Texts.goal, ["next"]);
@@ -51,11 +55,13 @@ export const StateMgr = {
   bestWay: {
     components: ["global", "navi", "score"],
     navigation: {
-      "continue": null
+      "continue": null,
+      "playground": null,
     },
     onEnterState: function () {
       this.views.fog = false;
       this.navigation.continue = () => this.changeState("local");
+      this.navigation.playground = () => this.changeState("global");
       mapView.loadLevel(Levels.BestWay);
       lightbox.popup(Texts.bestway, ["next"]);
     }
@@ -65,10 +71,12 @@ export const StateMgr = {
     navigation: {
       "reset robot": () => machine.reset_machine(),
       "continue": null,
+      "playground": null,
     },
     onEnterState: function () {
       this.views.fog = true;
       this.navigation.continue = () => this.changeState("global");
+      this.navigation.playground = () => this.changeState("global");
       mapView.loadLevel(LevelMaps[0]);
       lightbox.popup(Texts.localIntro, ["next"]);
     },
