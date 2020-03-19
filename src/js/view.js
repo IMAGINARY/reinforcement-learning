@@ -28,9 +28,10 @@ export const StateMgr = {
   goal: {
     components: ["global", "navi"],
     navigation: {
-      "continue": () => this.changeState("local")
+      "continue": null
     },
     onEnterState: function () {
+      this.navigation.continue = () => this.changeState("local");
       lightbox.popup(Texts.goal, ["next"]);
     }
   },
