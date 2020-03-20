@@ -45,6 +45,7 @@ export const StateMgr = {
       "playground": null,
     },
     onEnterState: function () {
+      machine.reset_machine();
       this.navigation.continue = () => this.changeState("bestWay");
       this.navigation.playground = () => this.changeState("global");
       this.views.fog = true;
@@ -59,6 +60,7 @@ export const StateMgr = {
       "playground": null,
     },
     onEnterState: function () {
+      machine.reset_machine();
       this.views.fog = false;
       this.navigation.continue = () => this.changeState("local");
       this.navigation.playground = () => this.changeState("global");
@@ -74,6 +76,7 @@ export const StateMgr = {
       "playground": null,
     },
     onEnterState: function () {
+      machine.reset_machine();
       this.views.fog = true;
       this.navigation.continue = () => this.changeState("global");
       this.navigation.playground = () => this.changeState("global");
@@ -91,6 +94,7 @@ export const StateMgr = {
       "reset machine": () => machine.reset_machine(),
     },
     onEnterState: function () {
+      machine.reset_machine();
       this.views.fog = false;
       mapView.loadLevel(LevelMaps[1]);
       lightbox.popup(Texts.globalIntro, ["continue"]);

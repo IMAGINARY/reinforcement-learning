@@ -236,7 +236,7 @@ export class MapView {
     this.stage.add(this.greedyTilesLayer);
   }
 
-  updateGreedyPath(oldState) {
+  updateGreedy(oldState) {
     const oldCoord = this.environment.state2position(oldState);
     const bestAction = this.machine.qTable.getBestAction(oldState);
     const hasBestAction = bestAction != undefined;
@@ -336,20 +336,18 @@ export class MapView {
     this.greedyTilesLayer.getChildren().forEach( child => {
       child.visible(false);
     });
-    this.greedyPath.points([]);
   }
 
   onReset() {
     this.resetGreedy();
     this.greedyTilesLayer.draw();
-    this.greedyPathLayer.draw();
     this.qLayer.draw();
     this.updateFog();
   }
 
   onStateChange(oldState, newState) {
     this.updateQValue(oldState);
-    this.updateGreedyPath(oldState);
+    this.updateGreedy(oldState);
     this.setRobotPosition(this.environment.state2position(newState));
     this.updateMoveButtons(newState);
     this.updateFog();
