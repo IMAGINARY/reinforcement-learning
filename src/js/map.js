@@ -86,11 +86,11 @@ export class MapView {
       Object.keys(moveButtons).forEach( button => {
         moveButtons[button].image(image);
         this.buttonsLayer.add(moveButtons[button]);
+        this.buttonsLayer.batchDraw();
       } )
     });
     this.moveButtons = moveButtons;
     this.stage.add(this.buttonsLayer);
-    this.buttonsLayer.draw();
   }
   
   loadLevel(levelMap) {
@@ -398,17 +398,18 @@ export class MapView {
   updateMoveButtons(state) {
     const actions = this.environment.actions(state);
     const coord = this.environment.state2position(state);
-    this.moveButtons.up.x(coord.x * this.TileSize + this.HalfTile);
-    this.moveButtons.up.y(coord.y * this.TileSize - this.QuarterTile);
+    const base = this.tilePos(coord);
+    this.moveButtons.up.x(base.x + this.HalfTile);
+    this.moveButtons.up.y(base.y - this.QuarterTile);
     this.moveButtons.up.visible(actions.includes(dir.UP));
-    this.moveButtons.right.x(coord.x * this.TileSize + this.TileSize + this.QuarterTile);
-    this.moveButtons.right.y(coord.y * this.TileSize + this.HalfTile);
+    this.moveButtons.right.x(base.x + this.TileSize + this.QuarterTile);
+    this.moveButtons.right.y(base.y + this.HalfTile);
     this.moveButtons.right.visible(actions.includes(dir.RIGHT));
-    this.moveButtons.down.x(coord.x * this.TileSize + this.HalfTile);
-    this.moveButtons.down.y(coord.y * this.TileSize + this.TileSize + this.QuarterTile);
+    this.moveButtons.down.x(base.x + this.HalfTile);
+    this.moveButtons.down.y(base.y + this.TileSize + this.QuarterTile);
     this.moveButtons.down.visible(actions.includes(dir.DOWN));
-    this.moveButtons.left.x(coord.x * this.TileSize - this.QuarterTile);
-    this.moveButtons.left.y(coord.y * this.TileSize + this.HalfTile);
+    this.moveButtons.left.x(base.x - this.QuarterTile);
+    this.moveButtons.left.y(base.y + this.HalfTile);
     this.moveButtons.left.visible(actions.includes(dir.LEFT));
     this.buttonsLayer.draw();
   }
@@ -417,6 +418,5 @@ export class MapView {
     this.robot.x(coord.x * this.TileSize);
     this.robot.y(coord.y * this.TileSize);
     this.objectsLayer.draw();
-    this.buttonsLayer.draw();
   }
 }
