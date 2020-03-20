@@ -255,7 +255,7 @@ export class RL_machine {
       if (action == undefined)
         break;
       state = this.environment.transition(state, action);
-    }  while (state != undefined && !(state in states) && !this.environment.isEndState(state));
+    }  while (state != undefined && !(states.includes(state)) && !this.environment.isEndState(state));
     return states;
   }
 
