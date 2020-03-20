@@ -121,6 +121,11 @@ class QTable {
   getStateValues() {
     return Object.keys(this.stateAction).map( state => this.getMaxValue(state) );
   }
+
+  normalizedQValue(state) {
+    const qValue = this.getMaxValue(state);
+    return (qValue - this.qBounds.min) / (this.qBounds.max - this.qBounds.min);
+  }
 }
 
 export class RL_machine {
@@ -278,6 +283,8 @@ export class RL_machine {
     const max = this.qTable.qBounds.max;
     const min = this.qTable.qBounds.min;
     const value = this.qTable.getMaxValue(state);
+    if (max == min)
+      return 0.5;
     return (value - min) / (max - min);
   }
 }

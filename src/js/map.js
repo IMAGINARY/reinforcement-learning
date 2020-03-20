@@ -301,19 +301,20 @@ export class MapView {
   
   createQLayer() {
     this.qLayer = new Konva.Layer({
-      opacity: 0.25
+      opacity: 0.5
     });
     this.qValues = createMatrixFromMaze(this.maze);
     this.maze.allCoordinates.forEach( coord => {
       const tilePos = this.tilePos(coord);
-      this.qValues[coord.y][coord.x] = new Konva.Rect({
+      const qv = new Konva.Rect({
         x: tilePos.x + this.QuarterTile,
         y: tilePos.y + this.QuarterTile,
         width: this.HalfTile,
         height: this.HalfTile,
         fill: WallColor,
       });
-      this.qLayer.add(this.qValues[coord.y][coord.x]);
+      this.qLayer.add(qv);
+      this.qValues[coord.y][coord.x] = qv;
     });
     this.stage.add(this.qLayer);
   }
@@ -361,19 +362,13 @@ export class MapView {
   }
 
   colorForQValue(state) {
-    var maxQ = this.machine.qTable.getMaxValue(state);
-    if (maxQ < 0)
-      maxQ = 0;
-    else if (maxQ > RewardsMap[tile.end])
-      maxQ = RewardsMap[tile.end];
-
-    const normalized = maxQ / RewardsMap[tile.end];
-
-    return qColorMap[normalized * ColorMapShades];
+    var qValue = Math.pow(this.machine.qTable.normalizedQValue(state), 1/4);
+    return qColorMap[Math.floor(qValue * (ColorMapShades - 1))];
   }
   
   updateQValue(state) {
     const coord = this.environment.state2position(state);
+    this.qValues[coord.y][coord.x].visible(true);
     this.qValues[coord.y][coord.x].fill(this.colorForQValue(state));
     this.qLayer.draw();
   }
