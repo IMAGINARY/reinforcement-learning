@@ -303,17 +303,17 @@ export class MapView {
     this.qLayer = new Konva.Layer({
       opacity: 0.25
     });
-    this.qTexts = createMatrixFromMaze(this.maze);
+    this.qValues = createMatrixFromMaze(this.maze);
     this.maze.allCoordinates.forEach( coord => {
       const tilePos = this.tilePos(coord);
-      this.qTexts[coord.y][coord.x] = new Konva.Rect({
+      this.qValues[coord.y][coord.x] = new Konva.Rect({
         x: tilePos.x + this.QuarterTile,
         y: tilePos.y + this.QuarterTile,
         width: this.HalfTile,
         height: this.HalfTile,
         fill: WallColor,
       });
-      this.qLayer.add(this.qTexts[coord.y][coord.x]);
+      this.qLayer.add(this.qValues[coord.y][coord.x]);
     });
     this.stage.add(this.qLayer);
   }
@@ -376,7 +376,7 @@ export class MapView {
   
   updateQValue(state) {
     const coord = this.environment.state2position(state);
-    this.qTexts[coord.y][coord.x].fill(this.colorForQValue(state));
+    this.qValues[coord.y][coord.x].fill(this.colorForQValue(state));
     this.qLayer.draw();
   }
 
