@@ -140,11 +140,13 @@ export class MapView {
   }
 
   updateVisibilities() {
-    this.objectsLayer.visible(!this.editorMode);
-    this.qLayer.visible(this.infoViews.qvalue && !this.editorMode && !this.machine.running);
-    this.greedyPathLayer.visible(this.infoViews.greedy && !this.editorMode && !this.machine.running);
-    this.greedyTilesLayer.visible(this.infoViews.greedy && !this.editorMode && !this.machine.running);
-    this.fogLayer.visible(this.infoViews.fog && !this.editorMode);
+    const editing = this.editorMode;
+    const running = this.machine.batchRunning;
+    this.objectsLayer.visible(!editing);
+    this.qLayer.visible(this.infoViews.qvalue && !editing && !running);
+    this.greedyPathLayer.visible(this.infoViews.greedy && !editing && !running);
+    this.greedyTilesLayer.visible(this.infoViews.greedy && !editing && !running);
+    this.fogLayer.visible(this.infoViews.fog && !editing);
 
     this.objectsLayer.draw();
     this.qLayer.draw();

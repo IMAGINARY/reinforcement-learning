@@ -169,7 +169,7 @@ export class RL_machine {
   reset_machine(){
     this.qTable.reset();
     this.episode = 0;
-    this.running = false;
+    this.batchRunning = false;
     this.score_history = [];
     this.resetState();
     this.onReset.call();
@@ -187,7 +187,7 @@ export class RL_machine {
       this.resetState();
     }
     // add_new_episode_callback
-    if (!this.running && this.onNewEpisode) {
+    if (!this.batchRunning && this.onNewEpisode) {
       this.onNewEpisode(reason).then((p) => reset());
     } else {
       reset();
@@ -260,7 +260,7 @@ export class RL_machine {
   }
 
   run(episodes, max_steps_per_episode=10000){
-    this.running = true;
+    this.batchRunning = true;
     this.onRunStart.call();
     for (var i = 0; i < episodes; i++) {
       for (var j = 0; j < max_steps_per_episode; j++) {
@@ -270,7 +270,7 @@ export class RL_machine {
       }
       this.resetState();
     }
-    this.running = false;
+    this.batchRunning = false;
     this.onRunEnd.call();
   }
 
