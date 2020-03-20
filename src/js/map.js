@@ -144,13 +144,11 @@ export class MapView {
     const running = this.machine.batchRunning;
     this.objectsLayer.visible(!editing);
     this.qLayer.visible(this.infoViews.qvalue && !editing && !running);
-    this.greedyPathLayer.visible(this.infoViews.greedy && !editing && !running);
     this.greedyTilesLayer.visible(this.infoViews.greedy && !editing && !running);
     this.fogLayer.visible(this.infoViews.fog && !editing);
 
     this.objectsLayer.draw();
     this.qLayer.draw();
-    this.greedyPathLayer.draw();
     this.greedyTilesLayer.draw();
     this.fogLayer.draw();
   }
@@ -224,14 +222,6 @@ export class MapView {
       lineJoin: 'round'
     };
 
-    this.greedyPathLayer = new Konva.Layer();
-    this.greedyPath = new Konva.Line({
-      ...ArrowProperties,
-      stroke: MainViolet,
-    });
-    this.greedyPathLayer.add(this.greedyPath);
-    this.stage.add(this.greedyPathLayer);
-
     this.greedyTilesLayer = new Konva.Layer();
     this.greedyTiles = createMatrixFromMaze(this.maze);
     maze.allCoordinates.forEach( coord => {
@@ -258,17 +248,17 @@ export class MapView {
     this.greedyTiles[oldCoord.y][oldCoord.x].visible(hasBestAction);
 
     const path = this.machine.getGreedyPath(this.environment.startState);
+
     if (path.lenght < 2)
       return;
     
-    var lineCoordinates = [];
-    path.map( state => this.environment.state2position(state) ).forEach( coord => {
-      lineCoordinates.push(coord.x * this.TileSize + this.HalfTile);
-      lineCoordinates.push(coord.y * this.TileSize + this.HalfTile);
+    this.maze.allCoordinates.forEach( coord  => {
+      const state = this.environment.position2state(coord);
+      this.greedyTiles[coord.y][coord.x].stroke(
+          (path.includes(state)) ? MainViolet : MainYellow
+          );
     });
-    this.greedyPath.points(lineCoordinates);
-    this.greedyTilesLayer.draw();
-    this.greedyPathLayer.draw();
+   this.greedyTilesLayer.draw();
   }
 
   createMazeLayer() {
