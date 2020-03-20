@@ -332,12 +332,6 @@ export class MapView {
     this.stage.add(this.fogLayer);
   }
 
-  resetQTexts() {
-    this.qLayer.getChildren().forEach( child => {
-      child.text("");
-    });
-  }
-
   resetGreedy() {
     this.greedyTilesLayer.getChildren().forEach( child => {
       child.visible(false);
@@ -346,7 +340,6 @@ export class MapView {
   }
 
   onReset() {
-    this.resetQTexts();
     this.resetGreedy();
     this.greedyTilesLayer.draw();
     this.greedyPathLayer.draw();
