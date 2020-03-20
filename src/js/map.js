@@ -300,6 +300,16 @@ export class MapView {
   }
   
   createQLayer() {
+    var tooltip = new Konva.Text({
+      text: '',
+      fontFamily: 'Calibri',
+      fontSize: 14,
+      padding: 5,
+      textFill: 'white',
+      fill: 'magenta',
+      visible: false
+    });
+
     this.qLayer = new Konva.Layer({
       opacity: 0.5
     });
@@ -312,10 +322,33 @@ export class MapView {
         width: this.HalfTile,
         height: this.HalfTile,
         fill: WallColor,
+        visible: false,
       });
+      qv.on('mousemove', () => {
+        const mousePos = this.stage.getPointerPosition();
+        tooltip.show();
+        tooltip.position({
+          x: mousePos.x + 5,
+          y: mousePos.y + 5
+        });
+        const state = this.environment.position2state(coord);
+        const text = "q @ " + JSON.stringify(coord) + ": " + this.machine.qTable.getMaxValue(state).toFixed(4) +
+                    "\nnormalized: " + this.machine.qTable.normalizedQValue(state).toFixed(4) +
+                    "\nbest action: " + this.machine.qTable.getBestAction(state) +
+                    "\ncolor: " + this.colorForQValue(state)
+                    ;
+        tooltip.text(text);
+        this.qLayer.batchDraw();
+      });
+      qv.on('mouseout', () => {
+        tooltip.hide();
+        this.qLayer.draw();
+      });
+      
       this.qLayer.add(qv);
       this.qValues[coord.y][coord.x] = qv;
     });
+    this.qLayer.add(tooltip);
     this.stage.add(this.qLayer);
   }
 
