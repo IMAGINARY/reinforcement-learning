@@ -3,6 +3,8 @@
 $box-background: #F0F0F0;
 $topmost-top: 2vh;
 $side-margin: 2vw;
+$column-width: 22vw;
+$box-padding: 10px;
 
 *{
   margin: 0;
@@ -39,14 +41,14 @@ span.parameter {
   text-align: center;
 
   background-color: $box-background;
-  padding: 5px;
+  padding: $box-padding;
 }
 
-button{
+button {
   margin: 0.3em;
 }
 
-.absolute{
+.absolute {
   position: absolute;
   top:0;
   left:0;
@@ -61,9 +63,10 @@ div.editor-palette {
   position: absolute;
   left: $side-margin;
   top: 42vh;
-  width: 20vw;
+  width: $column-width;
   height: 40vh;
   background-color: $box-background;
+  padding: $box-padding;
 }
 
 div#editor-current-type {
@@ -96,44 +99,44 @@ div#editor-current-type {
   background-color: #665F25;
  }
 
-.stage{
+.stage {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
 
-div.sliders{
+div.sliders {
   position: absolute;
   top: 10vh;
   left: $side-margin;
-  width: 20vw;
+  width: $column-width;
   background-color: $box-background;
   border-color: black;
-  padding: 10px;
+  padding: $box-padding;
 }
 
-#formula{
+#formula {
   position: absolute;
   bottom: 8vh;
   width: 50vw;
   left: 25vw;
 }
 
-.score{
+.score {
   position: absolute;
   top: $topmost-top;
   left: $side-margin;
-  width: 20vw;
+  width: $column-width;
   background-color: #FFF0F0;
-  padding: 10px;
+  padding: $box-padding;
 }
 
 #map_data {
   position: absolute;
   right: $side-margin;
   top: 54vh;
-  width: 20vw;
+  width: $column-width;
   height: 40vh;
 }
 
@@ -146,12 +149,12 @@ div#map_container {
   background-color: #F8F8F8;
 }
 
-.lightbox{
-  padding: 2em;
+.lightbox {
+  padding: $box-padding;
   position: absolute;
   top: $topmost-top;
   right: $side-margin;
-  width: 22vw;
+  width: $column-width;
   height: 70vh;
   background-color: #BBB;
 }
