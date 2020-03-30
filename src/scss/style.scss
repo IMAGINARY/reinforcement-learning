@@ -1,4 +1,9 @@
 // compileCompressed
+
+$box-background: #F0F0F0;
+$topmost-top: 2vh;
+$side-margin: 2vw;
+
 *{
   margin: 0;
   padding: 0;
@@ -33,7 +38,7 @@ span.parameter {
   left: 5vw;
   text-align: center;
 
-  background-color: #F0F0F0;
+  background-color: $box-background;
   padding: 5px;
 }
 
@@ -49,11 +54,11 @@ button{
 
 div.editor-palette {
   position: absolute;
-  left: 2vw;
+  left: $side-margin;
   top: 42vh;
   width: 20vw;
   height: 40vh;
-  background-color: #F0F0F0;
+  background-color: $box-background;
 }
 
 div#editor-current-type {
@@ -67,7 +72,7 @@ div#editor-current-type {
 }
 
 .regular {
-  background-color: #F0F0F0;
+  background-color: $box-background;
 }
 
 .end {
@@ -96,9 +101,9 @@ div#editor-current-type {
 div.sliders{
   position: absolute;
   top: 10vh;
-  left: 2vw;
+  left: $side-margin;
   width: 20vw;
-  background-color: #F0F0F0;
+  background-color: $box-background;
   border-color: black;
   padding: 10px;
 }
@@ -112,8 +117,8 @@ div.sliders{
 
 .score{
   position: absolute;
-  top: 2vh;
-  left: 2vw;
+  top: $topmost-top;
+  left: $side-margin;
   width: 20vw;
   background-color: #FFF0F0;
   padding: 10px;
@@ -121,7 +126,7 @@ div.sliders{
 
 #map_data {
   position: absolute;
-  right: 2vw;
+  right: $side-margin;
   top: 54vh;
   width: 20vw;
   height: 40vh;
@@ -129,7 +134,7 @@ div.sliders{
 
 div#map_container {
   position: absolute;
-  top: 2vh;
+  top: $topmost-top;
   left: 26vw;
   width: 800px;
   height: 800px;
@@ -139,8 +144,8 @@ div#map_container {
 .lightbox{
   padding: 2em;
   position: absolute;
-  top: 2vh;
-  right: 2vw;
+  top: $topmost-top;
+  right: $side-margin;
   width: 22vw;
   height: 70vh;
   background-color: #BBB;
