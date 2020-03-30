@@ -22,7 +22,7 @@ function isModalDialogVisible() {
 export function setKeyboardActionCallback(callback) {
   document.addEventListener('keydown', (e) => {
     var action = key2Action(e.keyCode);
-    if (action != undefined && isModalDialogVisible()) {
+    if (action != undefined) {
       callback(action);
     }
   });
