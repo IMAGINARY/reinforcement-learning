@@ -91,14 +91,6 @@ div#editor-current-type {
   height: 100vh;
 }
 
-.plot {
-  position: absolute;
-  top: 2vh;
-  right: 2vw;
-  width: 20vw;
-  height: 10vw;
-}
-
 div.sliders {
   position: absolute;
   top: 20vh;
@@ -144,17 +136,11 @@ div#map_container {
 .lightbox {
   padding: 2em;
   position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%) translateY(-100%);
-  z-index: 10;
-  max-width: 50%;
+  top: 2vh;
+  right: 2vw;
+  width: 22vw;
+  height: 70vh;
   background-color: #BBB;
-  transition: all 1s;
-}
-.lightbox.active {
-  top: 20%;
-  transform: translateX(-50%) translateY(-50%);
 }
 
 /* exo-2-regular - latin */
