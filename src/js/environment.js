@@ -60,4 +60,23 @@ export class Environment {
         return state - 1;
     }
   }
+
+  getRawMapData() {
+    return JSON.stringify(this.maze.map);
+  }
+
+  setRawMapData(rawMapData) {
+    try {
+      const newMap = JSON.parse(rawMapData);
+      this.maze.setLevelMap(newMap);
+      this.setMaze(maze);
+    } catch (e) {
+      // Ignore on purpose
+    }   
+  }
+
+  setCell(coord, type) {
+    this.maze.setTileType(coord, type);
+    this.setMaze(this.maze);
+  }
 }

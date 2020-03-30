@@ -138,6 +138,15 @@ var app = new Vue({
   destroyed() { },
 
   computed: {
+    raw_map_data: {
+      get: function() {
+        return environment.getRawMapData();
+      },
+      set: function(rawMapData) {
+        environment.setRawMapData(rawMapData);
+        mapView.redrawMap();
+      }
+    },
     score: function() {
       return machine.score;
     },
@@ -241,10 +250,10 @@ var app = new Vue({
 function onCellTouch(coord) {
   if (!editor.enabled)
     return;
-
-  maze.setTileType(coord, tile[editor.current_type]);
-  environment.setMaze(maze);
+  
+  environment.setCell(coord, tile[editor.current_type]);
   mapView.redrawMap();
+  app.raw_map_data = environment.getRawMapData();
 }
 
 const mapView = new MapView(MapContainerDivId, machine, maze, environment, TileSize, infoViews, onCellTouch);
