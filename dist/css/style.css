@@ -34,7 +34,7 @@ span.parameter {
   left: 5vw;
   text-align: center;
   background-color: #F0F0F0;
-  padding: 5px;
+  padding: 10px;
 }
 
 button {
@@ -47,13 +47,19 @@ button {
   left: 0;
 }
 
+.options {
+  position: absolute;
+  bottom: 5%;
+}
+
 div.editor-palette {
   position: absolute;
   left: 2vw;
   top: 42vh;
-  width: 20vw;
+  width: 22vw;
   height: 40vh;
   background-color: #F0F0F0;
+  padding: 10px;
 }
 
 div#editor-current-type {
@@ -97,7 +103,7 @@ div.sliders {
   position: absolute;
   top: 10vh;
   left: 2vw;
-  width: 20vw;
+  width: 22vw;
   background-color: #F0F0F0;
   border-color: black;
   padding: 10px;
@@ -114,7 +120,7 @@ div.sliders {
   position: absolute;
   top: 2vh;
   left: 2vw;
-  width: 20vw;
+  width: 22vw;
   background-color: #FFF0F0;
   padding: 10px;
 }
@@ -123,7 +129,7 @@ div.sliders {
   position: absolute;
   right: 2vw;
   top: 54vh;
-  width: 20vw;
+  width: 22vw;
   height: 40vh;
 }
 
@@ -137,7 +143,7 @@ div#map_container {
 }
 
 .lightbox {
-  padding: 2em;
+  padding: 10px;
   position: absolute;
   top: 2vh;
   right: 2vw;
