@@ -52,6 +52,11 @@ button{
   left:0;
 }
 
+.options {
+  position: absolute;
+  bottom: 5%;
+}
+
 div.editor-palette {
   position: absolute;
   left: $side-margin;
