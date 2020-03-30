@@ -47,8 +47,8 @@ button {
 
 div.editor-palette {
   position: absolute;
-  right: 2vw;
-  top: 12vh;
+  left: 2vw;
+  top: 52vh;
   width: 20vw;
   height: 40vh;
   background-color: #F0F0F0;
@@ -122,6 +122,14 @@ div.sliders {
   width: 20vw;
   background-color: #FFF0F0;
   padding: 10px;
+}
+
+#map_data {
+  position: absolute;
+  right: 2vw;
+  top: 54vh;
+  width: 20vw;
+  height: 40vh;
 }
 
 div#map_container {
