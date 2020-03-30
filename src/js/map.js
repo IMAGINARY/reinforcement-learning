@@ -60,38 +60,6 @@ export class MapView {
 
     this.setMaze(maze);
   }
-
-  createMoveButtons() {
-    this.buttonsLayer = new Konva.Layer();
-    const create = (rotation, action) => {
-      const button = new Konva.Image(
-      { x: 0, y: 0,
-        image: null,
-        visible: true,
-        width: this.HalfTile,
-        height: this.HalfTile,
-        rotation: rotation,
-        offset: { x: this.QuarterTile, y: this.QuarterTile }
-       } );
-       button.on('mousedown tap', () => this.machine.attemptStep(this.machine.state, action) );
-      return button;
-    };
-    const moveButtons = {
-      up: create(0, dir.UP),
-      right: create(90, dir.RIGHT),
-      down: create(180, dir.DOWN),
-      left: create(270, dir.LEFT),
-    };
-    asyncLoadImage("img/arrow_button.png", image => {
-      Object.keys(moveButtons).forEach( button => {
-        moveButtons[button].image(image);
-        this.buttonsLayer.add(moveButtons[button]);
-        this.buttonsLayer.batchDraw();
-      } )
-    });
-    this.moveButtons = moveButtons;
-    this.stage.add(this.buttonsLayer);
-  }
   
   loadLevel(levelMap) {
     this.maze.setLevelMap(levelMap);
@@ -118,11 +86,12 @@ export class MapView {
     this.createGreedyLayer();
     this.createObjectsLayer();
     this.createFogLayer();
-    this.createMoveButtons();
 
     this.updateMoveButtons(this.environment.startState);
     this.updateFog();
     this.updateVisibilities();
+
+    this.objectsLayer.draw();
   }
 
   update(coord) {
@@ -295,10 +264,41 @@ export class MapView {
       this.objectsLayer.add(this.station);
     }
     this.objectsLayer.add(this.robot);
-    this.objectsLayer.batchDraw();
+
+    this.buttonsGroup = new Konva.Group();
+    const create = (rotation, action, position) => {
+      const button = new Konva.Image(
+      { ...position,
+        image: null,
+        visible: true,
+        width: this.HalfTile,
+        height: this.HalfTile,
+        rotation: rotation,
+        offset: { x: this.QuarterTile, y: this.QuarterTile }
+       } );
+       button.on('mousedown tap', () => this.machine.attemptStep(this.machine.state, action) );
+      return button;
+    };
+    this.moveButtons = {
+      up: create(0, dir.UP, {x: this.HalfTile, y: -this.QuarterTile}),
+      right: create(90, dir.RIGHT, {x: this.TileSize + this.QuarterTile, y: this.HalfTile}),
+      down: create(180, dir.DOWN, {x: this.HalfTile, y: this.TileSize + this.QuarterTile}),
+      left: create(270, dir.LEFT, {x: - this.QuarterTile, y: this.HalfTile}),
+    };
+    asyncLoadImage("img/arrow_button.png", image => {
+      Object.keys(this.moveButtons).forEach( button => {
+        this.moveButtons[button].image(image);
+        this.buttonsGroup.add(this.moveButtons[button]);
+      } )
+      this.objectsLayer.batchDraw();
+    });
+    this.buttonsGroup.setAttrs(this.tilePos(this.maze.startPosition));
+    this.objectsLayer.add(this.buttonsGroup);
+
     this.stage.add(this.objectsLayer);
+    this.objectsLayer.batchDraw();
   }
-  
+
   createQLayer() {
     var tooltip = new Konva.Text({
       text: '',
@@ -385,6 +385,7 @@ export class MapView {
     this.setRobotPosition(this.environment.state2position(newState));
     this.updateMoveButtons(newState);
     this.updateFog();
+    this.objectsLayer.draw();
   }
 
   updateFog() {
@@ -409,25 +410,16 @@ export class MapView {
   updateMoveButtons(state) {
     const actions = this.environment.actions(state);
     const coord = this.environment.state2position(state);
-    const base = this.tilePos(coord);
-    this.moveButtons.up.x(base.x + this.HalfTile);
-    this.moveButtons.up.y(base.y - this.QuarterTile);
+    this.buttonsGroup.setAttrs(this.tilePos(coord));
     this.moveButtons.up.visible(actions.includes(dir.UP));
-    this.moveButtons.right.x(base.x + this.TileSize + this.QuarterTile);
-    this.moveButtons.right.y(base.y + this.HalfTile);
     this.moveButtons.right.visible(actions.includes(dir.RIGHT));
-    this.moveButtons.down.x(base.x + this.HalfTile);
-    this.moveButtons.down.y(base.y + this.TileSize + this.QuarterTile);
     this.moveButtons.down.visible(actions.includes(dir.DOWN));
-    this.moveButtons.left.x(base.x - this.QuarterTile);
-    this.moveButtons.left.y(base.y + this.HalfTile);
     this.moveButtons.left.visible(actions.includes(dir.LEFT));
-    this.buttonsLayer.draw();
+    this.buttonsGroup.draw();
   }
 
   setRobotPosition(coord) {
     this.robot.x(coord.x * this.TileSize);
     this.robot.y(coord.y * this.TileSize);
-    this.objectsLayer.draw();
   }
 }
