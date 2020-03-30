@@ -28,8 +28,11 @@ span.parameter {
 
 .navigation {
   position: absolute;
-  top: 1vh;
-  left: 2vw;
+  bottom: 1vh;
+  width: 90vw;
+  left: 5vw;
+  text-align: center;
+
   background-color: #F0F0F0;
   padding: 5px;
 }
@@ -47,7 +50,7 @@ button{
 div.editor-palette {
   position: absolute;
   left: 2vw;
-  top: 52vh;
+  top: 42vh;
   width: 20vw;
   height: 40vh;
   background-color: #F0F0F0;
@@ -92,7 +95,7 @@ div#editor-current-type {
 
 div.sliders{
   position: absolute;
-  top: 20vh;
+  top: 10vh;
   left: 2vw;
   width: 20vw;
   background-color: #F0F0F0;
@@ -102,13 +105,14 @@ div.sliders{
 
 #formula{
   position: absolute;
-  top: 71.5vh;
-  width: 90vw;
+  bottom: 8vh;
+  width: 50vw;
+  left: 25vw;
 }
 
 .score{
   position: absolute;
-  top: 12vh;
+  top: 2vh;
   left: 2vw;
   width: 20vw;
   background-color: #FFF0F0;
@@ -125,7 +129,7 @@ div.sliders{
 
 div#map_container {
   position: absolute;
-  top: 12vh;
+  top: 2vh;
   left: 26vw;
   width: 800px;
   height: 800px;
