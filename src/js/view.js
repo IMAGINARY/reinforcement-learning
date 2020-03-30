@@ -18,6 +18,8 @@ import './line-chart';
 
 const TileSize = 80;
 
+const MapContainerDivId = 'map_container';
+
 export const StateMgr = {
   init: {
     onEnterState: function () {
@@ -175,12 +177,10 @@ var app = new Vue({
     switchEditor: function() {
       this.editor.enabled = !this.editor.enabled;
       mapView.setEditorMode(this.editor.enabled);
-      console.log('editor enabled: ' + this.editor.enabled);
     },
 
     setTileType: function(tileType) {
       this.editor.current_type = tileType;
-      console.log('change current tile to ' + tileType);
     },
 
     onEnterState: function(){},
@@ -247,7 +247,7 @@ function onCellTouch(coord) {
   mapView.redrawMap();
 }
 
-const mapView = new MapView('map_container', machine, maze, environment, TileSize, infoViews, onCellTouch);
+const mapView = new MapView(MapContainerDivId, machine, maze, environment, TileSize, infoViews, onCellTouch);
 
 setKeyboardActionCallback( action => machine.attemptStep(machine.state, action) );
 
