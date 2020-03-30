@@ -10,6 +10,7 @@ import { MapView } from './map.js';
 import { renderEquation } from './equation.js';
 
 import { tile } from './tile.js';
+import {createColorScaleReference} from './color-scale-display';
 
 import './map.js';
 import './editor';
@@ -224,3 +225,4 @@ const mapView = new MapView(MapContainerDivId, machine, maze, environment, TileS
 
 setKeyboardActionCallback( action => machine.attemptStep(machine.state, action) );
 
+createColorScaleReference();

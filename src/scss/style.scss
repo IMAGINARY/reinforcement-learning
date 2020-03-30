@@ -69,6 +69,10 @@ div.editor-palette {
   padding: $box-padding;
 }
 
+div#color_scale {
+  display: inline-block;
+}
+
 div#editor-current-type {
   width: 40px;
   height: 40px;

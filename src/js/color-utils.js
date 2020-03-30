@@ -16,3 +16,20 @@ export function hexToRgb(hex) {
     b: parseInt(result[3], 16)
   } : null;
 }
+
+let colormap = require('colormap')
+
+const ColorMapShades = 64;
+const qColorMap = colormap({
+  colormap: 'jet',
+  nshades: 64,
+  format: 'hex',
+})
+
+/**
+ * 
+ * @param qValue A normalized value
+ */
+export function getQColor(qValue) {
+  return qColorMap[Math.floor(qValue * (ColorMapShades - 1))];
+}

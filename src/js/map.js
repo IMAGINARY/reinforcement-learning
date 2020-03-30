@@ -1,9 +1,10 @@
 import Konva from 'konva';
 
 import { tile } from './tile';
-import { maze, RewardsMap, } from "./rl.js";
+import { maze  } from "./rl.js";
 import { dir, dirToMovement } from './dir';
 import { areEqual, areAdjacent } from './coord';
+import { getQColor } from './color-utils';
 
 export const TileStrokeColor = "#DDDDDD";
 const TileFogColor = "#404040";
@@ -14,13 +15,6 @@ const MainViolet = "#8F1A81";
 const DangerousColor = "#665F25";
 const Magenta = "#FF00FF";
 
-const ColorMapShades = 64;
-let colormap = require('colormap')
-const qColorMap = colormap({
-  colormap: 'jet',
-  nshades: 64,
-  format: 'hex',
-})
 
 function asyncLoadImage(imagesrc, setFunction) {
   const image = new window.Image();
@@ -404,7 +398,7 @@ export class MapView {
 
   colorForQValue(state) {
     var qValue = Math.pow(this.machine.qTable.normalizedQValue(state), 1/4);
-    return qColorMap[Math.floor(qValue * (ColorMapShades - 1))];
+    return getQColor(qValue);
   }
   
   updateQValue(state) {
