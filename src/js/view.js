@@ -29,61 +29,57 @@ export const StateMgr = {
   stateAction: {
     components: ["global", "navi"],
     navigation: {
-      "continue": null,
       "playground": null,
     },
     onEnterState: function () {
-      this.navigation.continue = () => this.changeState("goal");
       this.navigation.playground = () => this.changeState("global");
       this.views.fog = false;
       mapView.loadLevel(Levels.StateAction);
-      lightbox.popup(Texts.stateAction, ["next"]);
+      lightbox.popup(Texts.stateAction, ["next"])
+        .then( () => this.changeState("goal") );
     }
   },
   goal: {
     components: ["global", "navi"],
     navigation: {
-      "continue": null,
       "playground": null,
     },
     onEnterState: function () {
       machine.reset_machine();
-      this.navigation.continue = () => this.changeState("bestWay");
       this.navigation.playground = () => this.changeState("global");
       this.views.fog = true;
       mapView.loadLevel(Levels.Goal);
-      lightbox.popup(Texts.goal, ["next"]);
+      lightbox.popup(Texts.goal, ["next"])
+        .then( () => this.changeState("bestWay") );
     }
   },
   bestWay: {
     components: ["global", "navi", "score"],
     navigation: {
-      "continue": null,
       "playground": null,
     },
     onEnterState: function () {
       machine.reset_machine();
       this.views.fog = false;
-      this.navigation.continue = () => this.changeState("local");
       this.navigation.playground = () => this.changeState("global");
       mapView.loadLevel(Levels.BestWay);
-      lightbox.popup(Texts.bestway, ["next"]);
+      lightbox.popup(Texts.bestway, ["next"])
+        .then( () => this.changeState("local") );
     }
   },
   local: {
     components: ["global", "navi", "score"],
     navigation: {
       "reset robot": () => machine.reset_machine(),
-      "continue": null,
       "playground": null,
     },
     onEnterState: function () {
       machine.reset_machine();
       this.views.fog = true;
-      this.navigation.continue = () => this.changeState("global");
       this.navigation.playground = () => this.changeState("global");
       mapView.loadLevel(LevelMaps[0]);
-      lightbox.popup(Texts.localIntro, ["next"]);
+      lightbox.popup(Texts.localIntro, ["next"])
+        .then( () => this.changeState("global") );
     },
   },
   global: {
@@ -99,7 +95,7 @@ export const StateMgr = {
       machine.reset_machine();
       this.views.fog = false;
       mapView.loadLevel(LevelMaps[1]);
-      lightbox.popup(Texts.globalIntro, ["continue"]);
+      lightbox.popup(Texts.globalIntro, []);
     },
   }
 };
