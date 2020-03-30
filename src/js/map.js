@@ -372,8 +372,15 @@ export class MapView {
     });
   }
 
+  resetQLayer() {
+    this.qLayer.getChildren().forEach( child => {
+      child.visible(false);
+    });
+  }
+
   onReset() {
     this.resetGreedy();
+    this.resetQLayer();
     this.greedyTilesLayer.draw();
     this.qLayer.draw();
     this.updateFog();
