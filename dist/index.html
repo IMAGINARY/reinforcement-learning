@@ -15,8 +15,6 @@
     <div id="app">
       <div id="map_container"></div>      
 
-      <line-chart css-classes="plot" :chart-data="datacollection" :options="plot_options"  v-show="isActive('plot')"></line-chart>
-
       <div class="sliders" v-show="isActive('sliders')">
         <span class="parameter">Learning Rate {{machine.learning_rate}}</span><br/>
         <input type="range" id="machine_learning_range" v-model="machine.learning_rate" min="0" max="1" step="0.01"><br/>

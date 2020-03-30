@@ -14,7 +14,6 @@ import { tile } from './tile.js';
 import './map.js';
 import './editor';
 import './navigation';
-import './line-chart';
 
 const TileSize = 80;
 
@@ -145,37 +144,6 @@ var app = new Vue({
     },
     score: function() {
       return machine.score;
-    },
-    datacollection: function() {
-      return {
-        labels: Array.from(Array(machine.score_history.length).keys()),
-        datasets: [{
-            label: 'Data One',
-            backgroundColor: 'rgb(0,0,0,0)',
-            data: machine.score_history,
-            fill: false,
-            borderColor: 'rgb(255, 159, 64)',
-            pointRadius: 1,
-          },
-        ]
-      }
-    },
-    plot_options: function() {
-      return {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          xAxes: [{
-            ticks: {
-              maxTicksLimit: 8,
-              maxRotation: 0,
-            }
-          }]
-        },
-        legend: {
-          display: false
-        }
-      }
     },
   },
   methods: {
