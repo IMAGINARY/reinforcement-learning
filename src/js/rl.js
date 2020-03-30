@@ -60,12 +60,15 @@ class QTable {
       return { action: undefined, value: 0 };
 
     var bestAction = actions[0];
+    var bestValue = actionValues.get(bestAction);
     actions.forEach( action => {
-      if (actionValues.get(action) > actionValues.get(bestAction)) {
+      const value = actionValues.get(action);
+      if (value > bestValue) {
         bestAction = action;
+        bestValue = value;
       }
     });
-    return { action: bestAction, value: actionValues.get(bestAction) };
+    return { action: bestAction, value: bestValue };
   }
 
   getMaxValue(state) {
@@ -292,7 +295,7 @@ export class RL_machine {
 export const RewardsMap = {
   [tile.regular]:-1,
   [tile.dangerous]:-10,
-  [tile.end]:10,
+  [tile.end]:50,
   [tile.start]:-1
 };
 
