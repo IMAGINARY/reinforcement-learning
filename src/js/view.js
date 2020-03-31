@@ -119,7 +119,6 @@ var infoViews = {
 var app = new Vue({
   el: '#app',
   data: {
-    appState: null,
     machine: machine,
     views: infoViews,
     width: 0,
@@ -128,13 +127,12 @@ var app = new Vue({
     evaluation: {},
     training: {},
     levels: Object.keys(StateMgr),
-    currentLevel: 0,
+    currentLevel: null,
     editor: editor
   },
 
   created() {
     machine.setNewEpisodeCallback(this.onNewEpisode);
-    this.appState = "init";
     renderEquation(machine);
     this.gotoLevel('init');
   },
@@ -173,26 +171,28 @@ var app = new Vue({
       return this.components.indexOf(what) >= 0;
     },
 
+    isCurrentLevel: function(level) {
+      return this.currentLevel == level;
+    },
+
     nextLevel: function() {
-      if (this.currentLevel < this.levels.length-1)
-        this.gotoLevel(this.levels[this.currentLevel + 1]);
+      const levelIndex = this.levels.indexOf(this.currentLevel);
+      if (levelIndex < this.levels.length - 1)
+        this.gotoLevel(this.levels[levelIndex + 1]);
     },
     prevLevel: function() {
-      if (this.currentLevel > 0)
-        this.gotoLevel(this.levels[this.currentLevel - 1]);
+      const levelIndex = this.levels.indexOf(this.currentLevel);
+      if (levelIndex > 0)
+        this.gotoLevel(this.levels[levelIndex - 1]);
     },
 
     gotoLevel: function(levelName) {
-      const levelIndex = this.levels.indexOf(levelName);
-      if (levelIndex == this.currentLevel)
-        return;
-
-      this.currentLevel = levelIndex;
+      this.onLeaveState();
       this.components = [];
       this.navigation = {};
-      this.onEnterState = function(){};
-      this.onLeaveState = function(){};
-      this.appState = levelName;
+      Object.assign(this, StateMgr[levelName]);
+      this.currentLevel = levelName;
+      this.onEnterState();
     },
 
     onNewEpisode: function(result){
@@ -225,11 +225,6 @@ var app = new Vue({
     },
     'views.fog':function(newValue) {
       mapView.setFogVisible(newValue);
-    },
-    appState: function(appState){
-      this.onLeaveState();
-      Object.assign(this, StateMgr[appState]);
-      this.onEnterState();
     },
   }
 })

@@ -10,12 +10,12 @@ Vue.component('buttonbar', {
 });
 
 Vue.component('navigationbar', {
-  props: ["levels"],
+  props: ["levels", "currentlevel"],
   template: `
   <nav class="buttonbar level-navigation">
-  <button v-on:click="$emit('prev-level')">Previous</button>
-    <div class="nav-circle" v-for="level in levels" v-on:click="$emit('goto-level', level)"></div>
-  <button v-on:click="$emit('next-level')">Next</button>
+  <button class="nav-button" v-on:click="$emit('prev-level')">Previous</button>
+    <div v-bind:class="{ 'nav-current-level': (currentlevel == level) }" class="nav-circle" v-for="level in levels" v-on:click="$emit('goto-level', level)"></div>
+  <button class="nav-button" v-on:click="$emit('next-level')">Next</button>
   </nav>
   `
 });
