@@ -7,6 +7,8 @@ $side-margin: 2vw;
 $column-width: 22vw;
 $box-padding: 10px;
 
+$yellow: #FFEC02;
+
 *{
   margin: 0;
   padding: 0;
@@ -32,6 +34,22 @@ span.energy {
 }
 span.parameter {
   font-size: 16px;
+}
+
+.nav-circle {
+  border-radius: 10px;
+  height: 20px;
+  width: 20px;
+  background-color: black;
+  display: inline-block;
+}
+
+.level-navigation {
+  width: 18vw;
+}
+
+.current-level {
+  background-color: $yellow;
 }
 
 .training {
@@ -106,7 +124,7 @@ div#editor-current-type {
 .start {
   background-image: url('../img/robot.png');
   background-size: contain;
-  background-color: #FFEC02;
+  background-color: $yellow;
 }
 
 .dangerous {
