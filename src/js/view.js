@@ -37,56 +37,71 @@ var infoViews = {
   fog: false
 };
 
-
 export const StateMgr = {
-  init: {
-    infoBox: {
-      title: 'Welcome!',
-      text: Texts.intro
-    },
-    levelMap: null,
-  },
-  stateAction: {
+  letsMove: {
     components: ["global"],
-    levelMap: Levels.StateAction,
+    levelMap: [
+      [0, 0, 0, 0],
+      [0, 2, 0, 0],
+      [0, 0, 1, 0],
+      [0, 0, 0, 0]
+    ],
     infoBox: {
-      title: 'State-Action',
-      text: Texts.stateAction,
+      ...Texts.letsMove,
       showState: true,
       showActions: true,
-      currentState: '',
-      currentActions: ''
     }
   },
-  goal: {
+  findPower: {
     components: ["global"],
     hasFog: true,
-    levelMap: Levels.Goal,
+    levelMap: [
+      [8, 0, 0, 0, 0],
+      [1, 1, 1, 1, 0],
+      [0, 0, 1, 0, 0],
+      [0, 1, 1, 0, 0],
+      [2, 0, 0, 0, 1],
+    ],
     infoBox: {
-      title: 'Goals',
-      text: Texts.goal
+      ...Texts.findPower,
+      showState: true,
+      showActions: true
     }
   },
-  bestWay: {
+  getRewarded: {
     components: ["global", "score"],
-    levelMap: Levels.BestWay,
+    levelMap: [
+      [0, 0, 0, 0, 0],
+      [0, 1, 1, 1, 0],
+      [0, 1, 0, 1, 8],
+      [0, 1, 1, 1, 0],
+      [2, 0, 0, 0, 0]
+    ],
     infoBox: {
-      title: 'Best path',
-      text: Texts.bestway
+      ...Texts.getRewarded,
+      showState: true,
+      showActions: true
     }
   },
-  local: {
+  accumulatedReward: {
     components: ["global", "score"],
     navigation: {
       "reset robot": () => machine.reset_machine(),
     },
-    levelMap: LevelMaps[0],
+    levelMap: [
+      [0, 0, 0, 0, 0],
+      [0, 1, 1, 1, 0],
+      [0, 1, 0, 1, 8],
+      [0, 1, 1, 1, 0],
+      [2, 0, 0, 0, 0]
+    ],
     infoBox: {
-      title: 'Incomplete knowledge',
-      text: Texts.localIntro
+      ...Texts.accumulatedReward,
+      showState: true,
+      showActions: true
     }
   },
-  global: {
+  playground: {
     components: ["global", "sliders", "plot", "training","evaluation", "score", "editor"],
     training: {
       "Train 1 episode": () => machine.train(1),
@@ -108,7 +123,7 @@ export const StateMgr = {
         machine.learning = true;
       },
     },
-    levelMap: LevelMaps[1],
+    levelMap: LevelMaps.FullMap,
     infoBox: {
       title: 'Learning',
       text: Texts.globalIntro
@@ -272,7 +287,7 @@ function onCellTouch(coord) {
 
 const mapView = new MapView(MapContainerDivId, machine, maze, environment, TileSize, infoViews, onCellTouch);
 
-app.gotoLevel('init');
+app.gotoLevel('letsMove');
 
 setKeyboardActionCallback( action => machine.attemptStep(machine.state, action) );
 
