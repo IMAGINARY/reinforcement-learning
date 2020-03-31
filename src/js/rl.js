@@ -187,7 +187,7 @@ export class RL_machine {
   }
 
   resetState() {
-    this.setState(this.environment.startState);
+    this.state = this.environment.startState;
     this.score = this.start_score;
   }
 
