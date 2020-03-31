@@ -27,11 +27,21 @@ span.parameter {
   font-size: 16px;
 }
 
-.navigation {
+.training {
+  position: absolute;
+  bottom: 2vh;
+  width: 50vw;
+  left: 2vw;
+}
+
+.evaluation {
   position: absolute;
   bottom: 1vh;
-  width: 90vw;
-  left: 5vw;
+  width: 40vw;
+  right: 5vw;
+}
+
+.buttonbar {
   text-align: center;
   background-color: #F0F0F0;
   padding: 10px;
@@ -55,7 +65,7 @@ button {
 div.editor-palette {
   position: absolute;
   left: 2vw;
-  top: 42vh;
+  top: 50vh;
   width: 22vw;
   height: 40vh;
   background-color: #F0F0F0;
