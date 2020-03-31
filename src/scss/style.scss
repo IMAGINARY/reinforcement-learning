@@ -50,7 +50,10 @@ $nav-element-half-height: $nav-element-height/2;
 }
 
 .level-navigation {
-  width: 30vw;
+  position: absolute;
+  bottom: 18vh;
+  right: $side-margin;
+  width: $column-width;
 }
 
 .nav-button {
