@@ -357,6 +357,7 @@ export class MapView {
       this.fogLayer.add(fog);
       fog.on('mousedown tap', () => this.onCellTouch(coord) );
     });
+    this.fogLayer.visible(false);
     this.stage.add(this.fogLayer);
   }
 

@@ -21,7 +21,6 @@ const MapContainerDivId = 'map_container';
 
 export const StateMgr = {
   init: {
-    onEnterState: function () {},
     infoBox: {
       title: 'Welcome!',
       text: Texts.intro
@@ -30,9 +29,6 @@ export const StateMgr = {
   },
   stateAction: {
     components: ["global"],
-    onEnterState: function () {
-      this.views.fog = false;
-    },
     levelMap: Levels.StateAction,
     infoBox: {
       title: 'State-Action',
@@ -45,9 +41,7 @@ export const StateMgr = {
   },
   goal: {
     components: ["global"],
-    onEnterState: function () {
-      this.views.fog = true;
-    },
+    hasFog: true,
     levelMap: Levels.Goal,
     infoBox: {
       title: 'Goals',
@@ -56,9 +50,6 @@ export const StateMgr = {
   },
   bestWay: {
     components: ["global", "score"],
-    onEnterState: function () {
-      this.views.fog = false;
-    },
     levelMap: Levels.BestWay,
     infoBox: {
       title: 'Best path',
@@ -69,9 +60,6 @@ export const StateMgr = {
     components: ["global", "score"],
     navigation: {
       "reset robot": () => machine.reset_machine(),
-    },
-    onEnterState: function () {
-      this.views.fog = true;
     },
     levelMap: LevelMaps[0],
     infoBox: {
@@ -100,9 +88,6 @@ export const StateMgr = {
         machine.greedy_step();
         machine.learning = true;
       },
-    },
-    onEnterState: function () {
-      this.views.fog = false;
     },
     levelMap: LevelMaps[1],
     infoBox: {
@@ -183,12 +168,8 @@ var app = new Vue({
       this.editor.current_type = tileType;
     },
 
-    onEnterState: function(){},
-
-    onLeaveState: function(){},
-
     isActive: function(what){
-      return this.components.indexOf(what) >= 0;
+      return this.components != null && this.components.indexOf(what) >= 0;
     },
 
     isCurrentLevel: function(level) {
@@ -207,15 +188,17 @@ var app = new Vue({
     },
 
     gotoLevel: function(levelName) {
-      this.onLeaveState();
-      this.components = [];
-      this.navigation = {};
-      Object.assign(this, StateMgr[levelName]);
+      const levelData = StateMgr[levelName];
+
+      this.infoBox = levelData.infoBox;
+      this.components = levelData.components;
+      this.navigation = levelData.navigation;
       this.currentLevel = levelName;
       this.machine.reset_machine();
-      if (this.levelMap != null)
-        mapView.loadLevel(this.levelMap);
-      this.onEnterState();
+      if (levelData.levelMap != null)
+        mapView.loadLevel(levelData.levelMap);
+
+      this.views.fog = levelData.hasFog != undefined && levelData.hasFog;
     },
 
     setInfoBox(title, text) {
@@ -250,7 +233,7 @@ var app = new Vue({
       renderEquation(machine);
     },
     'machine.discount_factor': function(new_val) {
-      machine.df = parseFloat(new_val);
+      machine.df = parsFloat(new_val);
       renderEquation(machine);
     },
     'machine.epsilon': function(new_val) {
