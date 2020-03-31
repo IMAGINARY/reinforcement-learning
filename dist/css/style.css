@@ -27,6 +27,10 @@ span.parameter {
   font-size: 16px;
 }
 
+.info-box {
+  background-color: #F0F0F0;
+}
+
 .nav-circle {
   border-radius: 15px;
   height: 24px;
@@ -55,6 +59,13 @@ span.parameter {
 
 .nav-current-level {
   background-color: #FFEC02;
+}
+
+.dynamic-info {
+  background-color: #FFEC02;
+  font-weight: bold;
+  padding: 2px 2px 2px 2px;
+  margin: 2px 2px 2px 2px;
 }
 
 .training {
@@ -186,13 +197,18 @@ div#map_container {
   background-color: #F8F8F8;
 }
 
-.lightbox {
-  padding: 10px;
+.info-title {
+  font-size: 20px;
+  margin: 0.5em 0 1em 0;
+}
+
+#info-box {
   position: absolute;
   top: 2vh;
   right: 2vw;
   width: 22vw;
   height: 70vh;
+  padding: 10px;
   background-color: #BBB;
 }
 
