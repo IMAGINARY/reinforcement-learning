@@ -87,12 +87,12 @@ export class MapView {
 
     this.objectsLayer.draw();
   }
-
+/*
   update(coord) {
     this.mapTiles[coord.y][coord.x].fill(this.getTileColor(coord));
     this.mapLayer.draw();
   }
-
+*/
   redrawMap() {
     this.maze.allCoordinates.forEach( coord => {
       this.mapTiles[coord.y][coord.x].fill(this.getTileColor(coord));
@@ -384,8 +384,12 @@ export class MapView {
   onStateChange(oldState, newState) {
     this.updateQValue(oldState);
     this.updateGreedy(oldState);
-    this.setRobotPosition(this.environment.state2position(newState));
-    this.updateMoveButtons(newState);
+    this.update(newState);
+  }
+
+  update(currentState) {
+    this.setRobotPosition(this.environment.state2position(currentState));
+    this.updateMoveButtons(currentState);
     this.updateFog();
     this.objectsLayer.draw();
   }

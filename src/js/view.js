@@ -16,8 +16,27 @@ import './editor';
 import './navigation';
 
 const TileSize = 80;
-
 const MapContainerDivId = 'map_container';
+
+var infoBox = {
+  title: '',
+  text: '',
+  currentState: '',
+  currentActions: ''
+};
+
+var editor = {
+  tile_types: Object.keys(tile),
+  current_type: 'regular',
+  enabled: false
+};
+
+var infoViews = {
+  qvalue: false,
+  greedy: false,
+  fog: false
+};
+
 
 export const StateMgr = {
   init: {
@@ -97,25 +116,6 @@ export const StateMgr = {
   }
 };
 
-var infoBox = {
-  title: '',
-  text: '',
-  currentState: '',
-  currentActions: ''
-};
-
-var editor = {
-  tile_types: Object.keys(tile),
-  current_type: 'regular',
-  enabled: false
-};
-
-var infoViews = {
-  qvalue: false,
-  greedy: false,
-  fog: false
-};
-
 var app = new Vue({
   el: '#app',
   data: {
@@ -139,7 +139,6 @@ var app = new Vue({
   created() {
     machine.setEpisodeEndCallback(this.onEpisodeEnd);
     renderEquation(machine);
-    this.gotoLevel('init');
   },
 
   destroyed() { },
@@ -199,6 +198,7 @@ var app = new Vue({
         mapView.loadLevel(levelData.levelMap);
 
       this.views.fog = levelData.hasFog != undefined && levelData.hasFog;
+      mapView.update(machine.state);
     },
 
     setInfoBox(title, text) {
@@ -252,7 +252,6 @@ var app = new Vue({
       const coord = environment.state2position(newState);
       this.infoBox.currentState = `(${coord.x + 1}, ${coord.y + 1})`;
       this.infoBox.currentActions = environment.actions(newState).join(', ');
-      mapView.redrawMap();
     }
   }
 })
@@ -267,6 +266,8 @@ function onCellTouch(coord) {
 }
 
 const mapView = new MapView(MapContainerDivId, machine, maze, environment, TileSize, infoViews, onCellTouch);
+
+app.gotoLevel('init');
 
 setKeyboardActionCallback( action => machine.attemptStep(machine.state, action) );
 
