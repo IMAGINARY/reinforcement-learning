@@ -150,7 +150,7 @@ export class RL_machine {
 
     this.stateChange = new CallBack();
     this.onReset = new CallBack();
-    this.onNewEpisode = new CallBack();
+    this.onEpisodeEnd = new CallBack();
     this.onRunStart = new CallBack();
     this.onRunEnd = new CallBack();
 
@@ -173,35 +173,33 @@ export class RL_machine {
     this.qTable.qCallback = qCallback;
   }
 
-  setNewEpisodeCallback(onNewEpisode){
-    this.onNewEpisode = onNewEpisode;
+  setEpisodeEndCallback(onEpisodeEnd){
+    this.onEpisodeEnd = onEpisodeEnd;
   }
 
   reset_machine(){
     this.qTable.reset();
     this.episode = 0;
     this.batchRunning = false;
-    this.score_history = [];
-    this.resetState();
+    this.resetEpisode();
     this.onReset.call();
   }
 
-  resetState() {
+  resetEpisode() {
     this.state = this.environment.startState;
     this.score = this.start_score;
   }
 
-  new_episode(reason = "failed"){
-    const reset = () => {
+  endEpisode(reason = "failed") {
+    const startNewEpisode = () => {
       this.episode++;
-      this.score_history.push(this.score);
-      this.resetState();
+      this.resetEpisode();
     }
-    // add_new_episode_callback
-    if (!this.batchRunning && this.onNewEpisode) {
-      this.onNewEpisode(reason).then((p) => reset());
+
+    if (!this.batchRunning && this.onEpisodeEnd) {
+      this.onEpisodeEnd(reason).then((p) => startNewEpisode());
     } else {
-      reset();
+      startNewEpisode();
     }
   }
 
@@ -242,11 +240,11 @@ export class RL_machine {
 
     // add_new_step_callback
     if (this.environment.isEndState(this.state)) {
-      this.new_episode("success");
+      this.endEpisode("success");
       return StepState.End;
     }
     if (this.score <= this.end_score){
-      this.new_episode("failed");
+      this.endEpisode("failed");
       return StepState.End;
     }
     return StepState.Continue;
@@ -282,7 +280,7 @@ export class RL_machine {
           break;
         }
       }
-      this.resetState();
+      this.resetEpisode();
     }
     this.batchRunning = false;
     this.learning = oldLearning;
@@ -300,7 +298,7 @@ export class RL_machine {
           break;
         }
       }
-      this.resetState();
+      this.resetEpisode();
     }
     this.batchRunning = false;
     this.learning = oldLearning;

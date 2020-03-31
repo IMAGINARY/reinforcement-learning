@@ -151,7 +151,7 @@ var app = new Vue({
   },
 
   created() {
-    machine.setNewEpisodeCallback(this.onNewEpisode);
+    machine.setEpisodeEndCallback(this.onEpisodeEnd);
     renderEquation(machine);
     this.gotoLevel('init');
   },
@@ -219,7 +219,7 @@ var app = new Vue({
       this.infoBox.text = text;
     },
 
-    onNewEpisode: function(result){
+    onEpisodeEnd: function(result){
       var text;
       if (result == "failed"){
         text = "Out of battery. The robot will be reset.";

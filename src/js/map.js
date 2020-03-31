@@ -59,7 +59,7 @@ export class MapView {
     this.maze.setLevelMap(levelMap);
     this.setMaze(maze);
     this.environment.setMaze(maze);
-    this.machine.resetState();
+    this.machine.resetEpisode();
   }
 
   setEditorMode(editorMode) {
