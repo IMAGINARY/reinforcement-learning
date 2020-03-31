@@ -21,7 +21,8 @@
         v-on:prev-level="prevLevel()"
         v-on:goto-level="gotoLevel($event)">
       ></navigationbar>
-      <div id="map_container"></div>      
+
+      <div v-show="isActive('global')" id="map_container"></div>      
 
       <div class="sliders" v-show="isActive('sliders')">
         <span class="parameter">Learning Rate {{machine.learning_rate}}</span><br/>
