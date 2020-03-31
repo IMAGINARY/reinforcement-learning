@@ -45,7 +45,6 @@ export const StateMgr = {
   goal: {
     components: ["global"],
     onEnterState: function () {
-      machine.reset_machine();
       this.views.fog = true;
       mapView.loadLevel(Levels.Goal);
     },
@@ -57,7 +56,6 @@ export const StateMgr = {
   bestWay: {
     components: ["global", "score"],
     onEnterState: function () {
-      machine.reset_machine();
       this.views.fog = false;
       mapView.loadLevel(Levels.BestWay);
     },
@@ -72,7 +70,6 @@ export const StateMgr = {
       "reset robot": () => machine.reset_machine(),
     },
     onEnterState: function () {
-      machine.reset_machine();
       this.views.fog = true;
       mapView.loadLevel(LevelMaps[0]);
     },
@@ -104,7 +101,6 @@ export const StateMgr = {
       },
     },
     onEnterState: function () {
-      machine.reset_machine();
       this.views.fog = false;
       mapView.loadLevel(LevelMaps[1]);
     },
@@ -215,6 +211,7 @@ var app = new Vue({
       this.navigation = {};
       Object.assign(this, StateMgr[levelName]);
       this.currentLevel = levelName;
+      this.machine.reset_machine();
       this.onEnterState();
     },
 
