@@ -73,6 +73,13 @@ $nav-element-half-height: $nav-element-height/2;
   background-color: $yellow;
 }
 
+.dynamic-info {
+  background-color: $yellow;
+  font-weight: bold;
+  padding: 2px 2px 2px 2px;
+  margin: 2px 2px 2px 2px;
+}
+
 .training {
   position: absolute;
   bottom: $bottommost-bottom;

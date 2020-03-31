@@ -35,7 +35,11 @@ export const StateMgr = {
     },
     infoBox: {
       title: 'State-Action',
-      text: Texts.stateAction
+      text: Texts.stateAction,
+      showState: true,
+      showActions: true,
+      currentState: '',
+      currentActions: ''
     }
   },
   goal: {
@@ -114,7 +118,8 @@ export const StateMgr = {
 var infoBox = {
   title: '',
   text: '',
-  currentState: ''
+  currentState: '',
+  currentActions: ''
 };
 
 var editor = {
@@ -246,6 +251,11 @@ var app = new Vue({
     'views.fog':function(newValue) {
       mapView.setFogVisible(newValue);
     },
+    'machine.state':function(newState) {
+      const coord = environment.state2position(newState);
+      this.infoBox.currentState = `(${coord.x + 1}, ${coord.y + 1})`;
+      this.infoBox.currentActions = environment.actions(newState).join(', ');
+    }
   }
 })
 
