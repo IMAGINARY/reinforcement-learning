@@ -15,10 +15,6 @@ function key2Action(keyCode) {
   return undefined;
 }
 
-function isModalDialogVisible() {
-  return document.querySelector(".lightbox.active") == null;
-}
-
 export function setKeyboardActionCallback(callback) {
   document.addEventListener('keydown', (e) => {
     var action = key2Action(e.keyCode);
