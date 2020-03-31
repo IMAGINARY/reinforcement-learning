@@ -2,6 +2,7 @@
 
 $box-background: #F0F0F0;
 $topmost-top: 2vh;
+$bottommost-bottom: 2vh;
 $side-margin: 2vw;
 $column-width: 22vw;
 $box-padding: 10px;
@@ -35,9 +36,9 @@ span.parameter {
 
 .training {
   position: absolute;
-  bottom: 1vh;
-  width: 40vw;
-  left: 5vw;
+  bottom: $bottommost-bottom;
+  width: 50vw;
+  left: $side-margin;
 }
 
 .evaluation {

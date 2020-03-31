@@ -75,9 +75,13 @@ export const StateMgr = {
   global: {
     components: ["global", "sliders", "plot", "training","evaluation", "score", "editor"],
     training: {
-      "Train 1 episode": () => machine.run(1),
-      "Train 20 episodes": () => machine.run(20),
+      "Train 1 episode": () => machine.train(1),
+      "Train 20 episodes": () => machine.train(20),
       "Unlearn all": () => machine.reset_machine(),
+      "Evaluate Robot": () => {
+        const evaluation = machine.evaluate(100);
+        console.log("Robot Evaluation: " + evaluation);
+      }
     },
     evaluation: {
       "Do 1 step": () => {
@@ -89,7 +93,7 @@ export const StateMgr = {
         machine.learning = false;
         machine.greedy_step();
         machine.learning = true;
-      }
+      },
     },
     onEnterState: function () {
       machine.reset_machine();

@@ -271,7 +271,9 @@ export class RL_machine {
     return states;
   }
 
-  run(episodes, max_steps_per_episode=10000){
+  train(episodes, max_steps_per_episode=1000) {
+    const oldLearning = this.learning;
+    this.learning = true;
     this.batchRunning = true;
     this.onRunStart.call();
     for (var i = 0; i < episodes; i++) {
@@ -283,7 +285,27 @@ export class RL_machine {
       this.resetState();
     }
     this.batchRunning = false;
+    this.learning = oldLearning;
     this.onRunEnd.call();
+  }
+
+  evaluate(episodes, max_steps_per_episode=1000) {
+    const oldLearning = this.learning;
+    this.learning = false;
+    this.batchRunning = true;
+    this.onRunStart.call();
+    for (var i = 0; i < episodes; i++) {
+      for (var j = 0; j < max_steps_per_episode; j++) {
+        if (this.auto_step() != StepState.Continue) {
+          break;
+        }
+      }
+      this.resetState();
+    }
+    this.batchRunning = false;
+    this.learning = oldLearning;
+    this.onRunEnd.call();
+
   }
 
   normalizedValue(state) {
