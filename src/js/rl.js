@@ -155,6 +155,9 @@ export class RL_machine {
     this.onRunEnd = new CallBack();
 
     this.qTable = new QTable(learning_rate, discount_factor);
+
+    this.learning = true;
+
     this.reset_machine();
   }
 
@@ -231,7 +234,8 @@ export class RL_machine {
   step(action) {
     const newState = this.environment.transition(this.state, action);
     const reward = this.environment.reward(newState);
-    this.qTable.update(this.state, action, newState, reward);
+    if (this.learning)
+      this.qTable.update(this.state, action, newState, reward);
 
     this.setState(newState);
     this.score += this.environment.reward(this.state);
