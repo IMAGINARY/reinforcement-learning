@@ -19,6 +19,7 @@
         <br/>
         <p v-show="infoBox.showState">Current state: <span class="dynamic-info">{{ infoBox.currentState }}</span></p>
         <p v-show="infoBox.showActions">Possible actions: <span class="dynamic-info">{{ infoBox.currentActions }}</span></p>
+        <p v-show="infoBox.showReward">Last Reinforcement: <span class="dynamic-info">{{ infoBox.currentReward }}</span></p>
         <div v-show="(message.text != null)">
           <p class="dynamic-info"> {{ message.text }}</p>
           <button v-on:click="message.action">Ok</button>
