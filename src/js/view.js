@@ -138,6 +138,7 @@ var app = new Vue({
 
   created() {
     machine.setEpisodeEndCallback(this.onEpisodeEnd);
+    machine.setEpisodeStartCallback(this.forceRefresh);
     renderEquation(machine);
   },
 
@@ -198,6 +199,10 @@ var app = new Vue({
         mapView.loadLevel(levelData.levelMap);
 
       this.views.fog = levelData.hasFog != undefined && levelData.hasFog;
+      this.forceRefresh();
+    },
+
+    forceRefresh: function() {
       mapView.update(machine.state);
     },
 

@@ -151,6 +151,7 @@ export class RL_machine {
     this.stateChange = new CallBack();
     this.onReset = new CallBack();
     this.onEpisodeEnd = new CallBack();
+    this.onEpisodeStart = new CallBack();
     this.onRunStart = new CallBack();
     this.onRunEnd = new CallBack();
 
@@ -176,6 +177,9 @@ export class RL_machine {
   setEpisodeEndCallback(onEpisodeEnd){
     this.onEpisodeEnd = onEpisodeEnd;
   }
+  setEpisodeStartCallback(onEpisodeStart){
+    this.onEpisodeStart = onEpisodeStart;
+  }
 
   reset_machine(){
     this.qTable.reset();
@@ -188,6 +192,7 @@ export class RL_machine {
   resetEpisode() {
     this.state = this.environment.startState;
     this.score = this.start_score;
+    this.onEpisodeStart.call();
   }
 
   endEpisode(reason = "failed") {
