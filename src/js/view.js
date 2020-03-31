@@ -25,14 +25,15 @@ export const StateMgr = {
     infoBox: {
       title: 'Welcome!',
       text: Texts.intro
-    }
+    },
+    levelMap: null,
   },
   stateAction: {
     components: ["global"],
     onEnterState: function () {
       this.views.fog = false;
-      mapView.loadLevel(Levels.StateAction);
     },
+    levelMap: Levels.StateAction,
     infoBox: {
       title: 'State-Action',
       text: Texts.stateAction,
@@ -46,8 +47,8 @@ export const StateMgr = {
     components: ["global"],
     onEnterState: function () {
       this.views.fog = true;
-      mapView.loadLevel(Levels.Goal);
     },
+    levelMap: Levels.Goal,
     infoBox: {
       title: 'Goals',
       text: Texts.goal
@@ -57,8 +58,8 @@ export const StateMgr = {
     components: ["global", "score"],
     onEnterState: function () {
       this.views.fog = false;
-      mapView.loadLevel(Levels.BestWay);
     },
+    levelMap: Levels.BestWay,
     infoBox: {
       title: 'Best path',
       text: Texts.bestway
@@ -71,8 +72,8 @@ export const StateMgr = {
     },
     onEnterState: function () {
       this.views.fog = true;
-      mapView.loadLevel(LevelMaps[0]);
     },
+    levelMap: LevelMaps[0],
     infoBox: {
       title: 'Incomplete knowledge',
       text: Texts.localIntro
@@ -102,8 +103,8 @@ export const StateMgr = {
     },
     onEnterState: function () {
       this.views.fog = false;
-      mapView.loadLevel(LevelMaps[1]);
     },
+    levelMap: LevelMaps[1],
     infoBox: {
       title: 'Learning',
       text: Texts.globalIntro
@@ -212,6 +213,8 @@ var app = new Vue({
       Object.assign(this, StateMgr[levelName]);
       this.currentLevel = levelName;
       this.machine.reset_machine();
+      if (this.levelMap != null)
+        mapView.loadLevel(this.levelMap);
       this.onEnterState();
     },
 
