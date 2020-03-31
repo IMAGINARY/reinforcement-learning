@@ -24,9 +24,6 @@ export const StateMgr = {
   init: {
     onEnterState: function () {
       lightbox.popup(Texts.intro, ["next"]).then((r) => this.gotoLevel("stateAction"));
-    },
-    nextLevel: function() {
-      this.gotoLevel("stateAction");
     }
   },
   stateAction: {
@@ -177,14 +174,20 @@ var app = new Vue({
     },
 
     nextLevel: function() {
-      this.gotoLevel("stateAction");
+      if (this.currentLevel < this.levels.length-1)
+        this.gotoLevel(this.levels[this.currentLevel + 1]);
     },
     prevLevel: function() {
-      this.gotoLevel("init");
+      if (this.currentLevel > 0)
+        this.gotoLevel(this.levels[this.currentLevel - 1]);
     },
 
     gotoLevel: function(levelName) {
-      this.currentLevel = levelName;
+      const levelIndex = this.levels.indexOf(levelName);
+      if (levelIndex == this.currentLevel)
+        return;
+
+      this.currentLevel = levelIndex;
       this.components = [];
       this.navigation = {};
       this.onEnterState = function(){};
