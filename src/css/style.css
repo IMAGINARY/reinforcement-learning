@@ -57,21 +57,3 @@ nav {
     left: 2vw;
     width: 20vw;
 }
-
-.lightbox {
-    padding: 2em;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%) translateY(-100%);
-    z-index: 10;
-    width: 50%;
-    height: 40%;
-    background-color: #BBB;
-    transition: all 1s;
-}
-
-.lightbox.active {
-    top: 50%;
-    transform: translateX(-50%) translateY(-50%);
-}

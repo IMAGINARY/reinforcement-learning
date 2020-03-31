@@ -2,7 +2,6 @@ import Vue from 'vue';
 
 import { machine, maze, environment } from "./rl.js";
 import { setKeyboardActionCallback } from "./controls.js";
-import { lightbox } from './lightbox.js';
 import { Texts } from "./language.js";
 import { LevelMaps, Levels } from './level';
 
@@ -22,29 +21,33 @@ const MapContainerDivId = 'map_container';
 
 export const StateMgr = {
   init: {
-    onEnterState: function () {
-      lightbox.popup(Texts.intro, ["next"]).then((r) => this.gotoLevel("stateAction"));
+    onEnterState: function () {},
+    infoBox: {
+      title: 'Welcome!',
+      text: Texts.intro
     }
   },
   stateAction: {
     components: ["global"],
     onEnterState: function () {
-      this.navigation.playground = () => this.gotoLevel("global");
       this.views.fog = false;
       mapView.loadLevel(Levels.StateAction);
-      lightbox.popup(Texts.stateAction, ["next"])
-        .then( () => this.gotoLevel("goal") );
+    },
+    infoBox: {
+      title: 'State-Action',
+      text: Texts.stateAction
     }
   },
   goal: {
     components: ["global"],
     onEnterState: function () {
       machine.reset_machine();
-      this.navigation.playground = () => this.gotoLevel("global");
       this.views.fog = true;
       mapView.loadLevel(Levels.Goal);
-      lightbox.popup(Texts.goal, ["next"])
-        .then( () => this.gotoLevel("bestWay") );
+    },
+    infoBox: {
+      title: 'Goals',
+      text: Texts.goal
     }
   },
   bestWay: {
@@ -52,10 +55,11 @@ export const StateMgr = {
     onEnterState: function () {
       machine.reset_machine();
       this.views.fog = false;
-      this.navigation.playground = () => this.gotoLevel("global");
       mapView.loadLevel(Levels.BestWay);
-      lightbox.popup(Texts.bestway, ["next"])
-        .then( () => this.gotoLevel("local") );
+    },
+    infoBox: {
+      title: 'Best path',
+      text: Texts.bestway
     }
   },
   local: {
@@ -66,11 +70,12 @@ export const StateMgr = {
     onEnterState: function () {
       machine.reset_machine();
       this.views.fog = true;
-      this.navigation.playground = () => this.gotoLevel("global");
       mapView.loadLevel(LevelMaps[0]);
-      lightbox.popup(Texts.localIntro, ["next"])
-        .then( () => this.gotoLevel("global") );
     },
+    infoBox: {
+      title: 'Incomplete knowledge',
+      text: Texts.localIntro
+    }
   },
   global: {
     components: ["global", "sliders", "plot", "training","evaluation", "score", "editor"],
@@ -80,7 +85,6 @@ export const StateMgr = {
       "Unlearn all": () => machine.reset_machine(),
       "Evaluate Robot": () => {
         const evaluation = machine.evaluate(100);
-        console.log("Robot Evaluation: " + evaluation);
       }
     },
     evaluation: {
@@ -99,9 +103,18 @@ export const StateMgr = {
       machine.reset_machine();
       this.views.fog = false;
       mapView.loadLevel(LevelMaps[1]);
-      lightbox.popup(Texts.globalIntro, []);
     },
+    infoBox: {
+      title: 'Learning',
+      text: Texts.globalIntro
+    }
   }
+};
+
+var infoBox = {
+  title: '',
+  text: '',
+  currentState: ''
 };
 
 var editor = {
@@ -121,6 +134,7 @@ var app = new Vue({
   data: {
     machine: machine,
     views: infoViews,
+    infoBox: infoBox,
     width: 0,
     height: 0,
     components: [],
@@ -195,6 +209,11 @@ var app = new Vue({
       this.onEnterState();
     },
 
+    setInfoBox(title, text) {
+      this.infoBox.title = title;
+      this.infoBox.text = text;
+    },
+
     onNewEpisode: function(result){
       var text;
       if (result == "failed"){
@@ -202,7 +221,8 @@ var app = new Vue({
       } else if (result == "success"){
         text = "You reached the goal. The robot will be reset.";
       }
-      return lightbox.popup(text, ["ok"]);
+      // TODO: implement a popup/dialog instead of this
+//      return lightbox.popup(text, ["ok"]);
     }
   },
   watch: {

@@ -11,9 +11,13 @@
     <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
-    <div id="popup">
-    </div>
     <div id="app">
+
+      <div class="info-box" id="info-box">
+        <p class="info-title">{{ infoBox.title }}</p>
+        <p>{{ infoBox.text }}</p>
+      </div>
+
       <navigationbar
         :levels="levels"
         :currentLevel="currentLevel"

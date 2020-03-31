@@ -36,6 +36,10 @@ span.parameter {
   font-size: 16px;
 }
 
+.info-box {
+  background-color: $box-background;
+}
+
 $nav-element-height: 24px;
 $nav-element-half-height: $nav-element-height/2;
 
@@ -198,13 +202,18 @@ div#map_container {
   background-color: #F8F8F8;
 }
 
-.lightbox {
-  padding: $box-padding;
+.info-title {
+  font-size: 20px;
+  margin: 0.5em 0 1em 0;
+}
+
+#info-box {
   position: absolute;
   top: $topmost-top;
   right: $side-margin;
   width: $column-width;
   height: 70vh;
+  padding: $box-padding;
   background-color: #BBB;
 }
 
