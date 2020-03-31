@@ -27,10 +27,7 @@ export const StateMgr = {
     },
   },
   stateAction: {
-    components: ["global", "navi"],
-    navigation: {
-      "playground": null,
-    },
+    components: ["global"],
     onEnterState: function () {
       this.navigation.playground = () => this.changeState("global");
       this.views.fog = false;
@@ -40,10 +37,7 @@ export const StateMgr = {
     }
   },
   goal: {
-    components: ["global", "navi"],
-    navigation: {
-      "playground": null,
-    },
+    components: ["global"],
     onEnterState: function () {
       machine.reset_machine();
       this.navigation.playground = () => this.changeState("global");
@@ -54,10 +48,7 @@ export const StateMgr = {
     }
   },
   bestWay: {
-    components: ["global", "navi", "score"],
-    navigation: {
-      "playground": null,
-    },
+    components: ["global", "score"],
     onEnterState: function () {
       machine.reset_machine();
       this.views.fog = false;
@@ -68,10 +59,9 @@ export const StateMgr = {
     }
   },
   local: {
-    components: ["global", "navi", "score"],
+    components: ["global", "score"],
     navigation: {
       "reset robot": () => machine.reset_machine(),
-      "playground": null,
     },
     onEnterState: function () {
       machine.reset_machine();
@@ -83,13 +73,23 @@ export const StateMgr = {
     },
   },
   global: {
-    components: ["global", "sliders", "plot", "navi", "score", "editor"],
-    navigation: {
-      "run 1 episode!": () => machine.run(1),
-      "run 100 episodes!": () => machine.run(100),
-      "auto step!": () => machine.auto_step(),
-      "greedy step!": () => machine.greedy_step(),
-      "reset machine": () => machine.reset_machine(),
+    components: ["global", "sliders", "plot", "training","evaluation", "score", "editor"],
+    training: {
+      "Train 1 episode": () => machine.run(1),
+      "Train 20 episodes": () => machine.run(20),
+      "Unlearn all": () => machine.reset_machine(),
+    },
+    evaluation: {
+      "Do 1 step": () => {
+        machine.learning = false;
+        machine.auto_step();
+        machine.learning = true;
+      },
+      "Do 1 greedy step": () => {
+        machine.learning = false;
+        machine.greedy_step();
+        machine.learning = true;
+      }
     },
     onEnterState: function () {
       machine.reset_machine();
@@ -121,7 +121,8 @@ var app = new Vue({
     width: 0,
     height: 0,
     components: [],
-    navigation: {},
+    evaluation: {},
+    training: {},
     editor: editor
   },
 

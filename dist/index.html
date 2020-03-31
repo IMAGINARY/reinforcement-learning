@@ -26,9 +26,9 @@
         <input type="range" id="machine_epsilon" v-model="machine.epsilon" min="0" max="1" step="0.01">&nbsp; {{(Math.ceil(machine.epsilon*100))}}%<br/>
         <br/>
         <label><input type="checkbox" v-model="views.qvalue">Show value for each position</label><br/>
-          &#x1F44E;<div id="color_scale"></div>&#x1F44D;
-        <br/>
-        <label><input type="checkbox" v-model="views.greedy">Show best action from each position</label>
+         &#x1F44E;<div id="color_scale"></div>&#x1F44D;<br/>
+        <label><input type="checkbox" v-model="views.greedy">Show best action from each position</label><br/>
+        <label><input type="checkbox" v-model="machine.learning">Learn from actions</label>
       </div>
       <div id="formula"></div>
       <div class="score" v-show="isActive('score')">
@@ -45,7 +45,8 @@
       <div id="map_raw" v-show="editor.enabled">
         <textarea v-model="raw_map_data" id="map_data"></textarea>
       </div>
-      <navi-gation class="navigation" :options="navigation" v-show="isActive('navi')"></navi-gation>
+      <buttonbar class="buttonbar training" :options="training" :title="'Training'" v-show="isActive('training')"></buttonbar>
+      <buttonbar class="buttonbar evaluation" :options="evaluation" :title="'Evaluation'" v-show="isActive('evaluation')"></buttonbar>
     </div>
 
     <script src="main.js"></script>
