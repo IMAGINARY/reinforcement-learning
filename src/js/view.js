@@ -22,7 +22,8 @@ var infoBox = {
   title: '',
   text: '',
   currentState: '',
-  currentActions: ''
+  currentActions: '',
+  currentReward: ''
 };
 
 var editor = {
@@ -69,7 +70,7 @@ export const StateMgr = {
     }
   },
   getRewarded: {
-    components: ["global", "score"],
+    components: ["global"],
     levelMap: [
       [0, 0, 0, 0, 0],
       [0, 1, 1, 1, 0],
@@ -80,7 +81,8 @@ export const StateMgr = {
     infoBox: {
       ...Texts.getRewarded,
       showState: true,
-      showActions: true
+      showActions: true,
+      showReward: true
     }
   },
   accumulatedReward: {
@@ -98,7 +100,8 @@ export const StateMgr = {
     infoBox: {
       ...Texts.accumulatedReward,
       showState: true,
-      showActions: true
+      showActions: true,
+      showReward: true
     }
   },
   playground: {
@@ -126,7 +129,10 @@ export const StateMgr = {
     levelMap: LevelMaps.FullMap,
     infoBox: {
       title: 'Learning',
-      text: Texts.globalIntro
+      text: Texts.globalIntro,
+      showState: true,
+      showActions: true,
+      showReward: true
     }
   }
 };
@@ -272,6 +278,7 @@ var app = new Vue({
       const coord = environment.state2position(newState);
       this.infoBox.currentState = `(${coord.x + 1}, ${coord.y + 1})`;
       this.infoBox.currentActions = environment.actions(newState).join(', ');
+      this.infoBox.currentReward = machine.qTable.lastQUpdate.reward;
     }
   }
 })

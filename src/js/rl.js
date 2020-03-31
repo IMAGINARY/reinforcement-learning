@@ -17,7 +17,15 @@ class QTable {
   constructor(learningRate, discountFactor) {
     this.learningRate = learningRate;
     this.discountFactor = discountFactor;
-    this.qCallback = undefined;
+    this.lastQUpdate =  {
+      state : 0,
+      action: '',
+      newState: 0,
+      currentValue: 0,
+      reward: 0,
+      maxQ: 0,
+      newQ: 0
+    };;
     /*
     Array implicitely state-indexed, where each element is a Map of action/values
 
@@ -98,17 +106,15 @@ class QTable {
 
     const newQ = (1 - this.learningRate) * currentValue + this.learningRate * (reward + this.discountFactor * maxQ);
 
-    if (this.qCallback != undefined) {
-      this.qCallback({
-        state : state,
-        action: action,
-        newState: newState,
-        currentValue: currentValue,
-        reward: reward,
-        maxQ: maxQ,
-        newQ: newQ
-      });
-    }
+    this.lastQUpdate = {
+      state : state,
+      action: action,
+      newState: newState,
+      currentValue: currentValue,
+      reward: reward,
+      maxQ: maxQ,
+      newQ: newQ
+    };
     this.updateStateAction(state, action, newQ);
 
     return newState;
@@ -168,10 +174,6 @@ export class RL_machine {
 
   setStateChangeCallback(stateChangeCallback) {
     this.stateChange.set(stateChangeCallback);
-  }
-
-  setQCallback(qCallback) {
-    this.qTable.qCallback = qCallback;
   }
 
   setEpisodeEndCallback(onEpisodeEnd){
