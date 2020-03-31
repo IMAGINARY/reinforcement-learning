@@ -27,6 +27,25 @@ span.parameter {
   font-size: 16px;
 }
 
+<<<<<<< HEAD
+=======
+.nav-circle {
+  border-radius: 10px;
+  height: 20px;
+  width: 20px;
+  background-color: black;
+  display: inline-block;
+}
+
+.level-navigation {
+  width: 18vw;
+}
+
+.current-level {
+  background-color: #FFEC02;
+}
+
+>>>>>>> feature/level-navigation
 .training {
   position: absolute;
   bottom: 2vh;

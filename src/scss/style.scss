@@ -7,6 +7,8 @@ $side-margin: 2vw;
 $column-width: 22vw;
 $box-padding: 10px;
 
+$yellow: #FFEC02;
+
 *{
   margin: 0;
   padding: 0;
@@ -32,6 +34,39 @@ span.energy {
 }
 span.parameter {
   font-size: 16px;
+}
+
+$nav-element-height: 24px;
+$nav-element-half-height: $nav-element-height/2;
+
+.nav-circle {
+  border-radius: 15px;
+  height: $nav-element-height;
+  width: $nav-element-height;
+  background-color: white;
+  display: inline-block;
+  border: 4px solid #F0F0F0;
+  margin: 2px;
+}
+
+.level-navigation {
+  position: absolute;
+  bottom: 18vh;
+  right: $side-margin;
+  width: $column-width;
+}
+
+.nav-button {
+  width: 80px;
+  height: $nav-element-height;
+  border-radius: 5px;
+  border: 2px solid #808080;
+  vertical-align: middle;
+  padding: 0px;
+}
+
+.nav-current-level {
+  background-color: $yellow;
 }
 
 .training {
@@ -106,7 +141,7 @@ div#editor-current-type {
 .start {
   background-image: url('../img/robot.png');
   background-size: contain;
-  background-color: #FFEC02;
+  background-color: $yellow;
 }
 
 .dangerous {

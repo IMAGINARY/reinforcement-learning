@@ -23,28 +23,28 @@ const MapContainerDivId = 'map_container';
 export const StateMgr = {
   init: {
     onEnterState: function () {
-      lightbox.popup(Texts.intro, ["next"]).then((r) => this.changeState("stateAction"));
-    },
+      lightbox.popup(Texts.intro, ["next"]).then((r) => this.gotoLevel("stateAction"));
+    }
   },
   stateAction: {
     components: ["global"],
     onEnterState: function () {
-      this.navigation.playground = () => this.changeState("global");
+      this.navigation.playground = () => this.gotoLevel("global");
       this.views.fog = false;
       mapView.loadLevel(Levels.StateAction);
       lightbox.popup(Texts.stateAction, ["next"])
-        .then( () => this.changeState("goal") );
+        .then( () => this.gotoLevel("goal") );
     }
   },
   goal: {
     components: ["global"],
     onEnterState: function () {
       machine.reset_machine();
-      this.navigation.playground = () => this.changeState("global");
+      this.navigation.playground = () => this.gotoLevel("global");
       this.views.fog = true;
       mapView.loadLevel(Levels.Goal);
       lightbox.popup(Texts.goal, ["next"])
-        .then( () => this.changeState("bestWay") );
+        .then( () => this.gotoLevel("bestWay") );
     }
   },
   bestWay: {
@@ -52,10 +52,10 @@ export const StateMgr = {
     onEnterState: function () {
       machine.reset_machine();
       this.views.fog = false;
-      this.navigation.playground = () => this.changeState("global");
+      this.navigation.playground = () => this.gotoLevel("global");
       mapView.loadLevel(Levels.BestWay);
       lightbox.popup(Texts.bestway, ["next"])
-        .then( () => this.changeState("local") );
+        .then( () => this.gotoLevel("local") );
     }
   },
   local: {
@@ -66,10 +66,10 @@ export const StateMgr = {
     onEnterState: function () {
       machine.reset_machine();
       this.views.fog = true;
-      this.navigation.playground = () => this.changeState("global");
+      this.navigation.playground = () => this.gotoLevel("global");
       mapView.loadLevel(LevelMaps[0]);
       lightbox.popup(Texts.localIntro, ["next"])
-        .then( () => this.changeState("global") );
+        .then( () => this.gotoLevel("global") );
     },
   },
   global: {
@@ -119,7 +119,6 @@ var infoViews = {
 var app = new Vue({
   el: '#app',
   data: {
-    appState: null,
     machine: machine,
     views: infoViews,
     width: 0,
@@ -127,13 +126,15 @@ var app = new Vue({
     components: [],
     evaluation: {},
     training: {},
+    levels: Object.keys(StateMgr),
+    currentLevel: null,
     editor: editor
   },
 
   created() {
     machine.setNewEpisodeCallback(this.onNewEpisode);
-    this.appState = "init";
     renderEquation(machine);
+    this.gotoLevel('init');
   },
 
   destroyed() { },
@@ -170,12 +171,28 @@ var app = new Vue({
       return this.components.indexOf(what) >= 0;
     },
 
-    changeState: function(appState){
+    isCurrentLevel: function(level) {
+      return this.currentLevel == level;
+    },
+
+    nextLevel: function() {
+      const levelIndex = this.levels.indexOf(this.currentLevel);
+      if (levelIndex < this.levels.length - 1)
+        this.gotoLevel(this.levels[levelIndex + 1]);
+    },
+    prevLevel: function() {
+      const levelIndex = this.levels.indexOf(this.currentLevel);
+      if (levelIndex > 0)
+        this.gotoLevel(this.levels[levelIndex - 1]);
+    },
+
+    gotoLevel: function(levelName) {
+      this.onLeaveState();
       this.components = [];
       this.navigation = {};
-      this.onEnterState = function(){};
-      this.onLeaveState = function(){};
-      this.appState = appState;
+      Object.assign(this, StateMgr[levelName]);
+      this.currentLevel = levelName;
+      this.onEnterState();
     },
 
     onNewEpisode: function(result){
@@ -208,11 +225,6 @@ var app = new Vue({
     },
     'views.fog':function(newValue) {
       mapView.setFogVisible(newValue);
-    },
-    appState: function(appState){
-      this.onLeaveState();
-      Object.assign(this, StateMgr[appState]);
-      this.onEnterState();
     },
   }
 })

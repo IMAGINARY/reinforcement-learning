@@ -11,8 +11,16 @@
     <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
-    <div id="popup"></div>
+    <div id="popup">
+    </div>
     <div id="app">
+      <navigationbar
+        :levels="levels"
+        :currentLevel="currentLevel"
+        v-on:next-level="nextLevel()"
+        v-on:prev-level="prevLevel()"
+        v-on:goto-level="gotoLevel($event)">
+      ></navigationbar>
       <div id="map_container"></div>      
 
       <div class="sliders" v-show="isActive('sliders')">
