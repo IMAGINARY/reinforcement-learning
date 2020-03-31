@@ -147,7 +147,11 @@ var app = new Vue({
     training: {},
     levels: Object.keys(StateMgr),
     currentLevel: null,
-    editor: editor
+    editor: editor,
+    message: {
+      text: null,
+      action: () => {}
+    }
   },
 
   created() {
@@ -226,8 +230,18 @@ var app = new Vue({
       } else if (result == "success"){
         text = "You reached the goal. The robot will be reset.";
       }
-      // TODO: implement a popup/dialog instead of this
-//      return lightbox.popup(text, ["ok"]);
+      return new Promise( (resolve) => {
+        this.showMessage(text, resolve);
+      });
+    },
+
+    showMessage(messageText, buttonAction) {
+      this.message.text = messageText;
+      this.message.action = () => {
+        this.message.text = null;
+        this.message.action = () => {};
+        buttonAction();
+      }
     }
   },
   watch: {
@@ -255,6 +269,7 @@ var app = new Vue({
       const coord = environment.state2position(newState);
       this.infoBox.currentState = `(${coord.x + 1}, ${coord.y + 1})`;
       this.infoBox.currentActions = environment.actions(newState).join(', ');
+      mapView.redrawMap();
     }
   }
 })
