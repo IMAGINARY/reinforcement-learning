@@ -428,4 +428,44 @@ export class MapView {
     this.robot.x(coord.x * this.TileSize);
     this.robot.y(coord.y * this.TileSize);
   }
+
+  showReward(coord, reward) {
+    const pos = this.tilePos(coord);
+
+    const group = new Konva.Group();
+    const rect = new Konva.Rect({
+      x: pos.x + this.QuarterTile,
+      y: pos.y + this.QuarterTile,
+      width: this.HalfTile,
+      height: this.HalfTile,
+      fill: MainViolet,
+    });
+    const text = new Konva.Text({
+      x: pos.x + this.HalfTile,
+      y: pos.y + this.HalfTile,
+      offset: { x: this.QuarterTile, y: this.QuarterTile },
+      text: "" + reward,
+      fontFamily: 'Calibri',
+      fontSize: 30,
+      padding: 5,
+      fill: 'white',
+      visible: true
+    });
+    group.add(rect);
+    group.add(text);
+    this.objectsLayer.add(group);
+    this.objectsLayer.draw();
+
+    const tween = new Konva.Tween({
+      node: group,
+      duration: 1.25,
+      opacity: 0,
+      width: this.TileSize,
+      height: this.TileSize,
+      onFinish: () => {
+        group.destroy();
+      }
+    });
+    tween.play();
+  }
 }
