@@ -86,7 +86,8 @@ export const Levels = {
     }
   },
   accumulatedReward: {
-    components: ["global", "score"],
+    components: ["global", "score", "sliders"],
+    controls: ["learningRate", "discountFactor"],
     levelMap: [
       [0, 0, 0, 0, 0],
       [0, 1, 1, 1, 0],
@@ -98,7 +99,8 @@ export const Levels = {
       ...Texts.accumulatedReward,
       showState: true,
       showActions: true,
-      showReward: true
+      showReward: true,
+      showAccumulated: true
     }
   },
   playground: {
@@ -130,7 +132,8 @@ export const Levels = {
       text: Texts.globalIntro,
       showState: true,
       showActions: true,
-      showReward: true
+      showReward: true,
+      showAccumulated: true
     },
   }
 };

@@ -22,7 +22,8 @@ var infoBox = {
   text: '',
   currentState: '',
   currentActions: '',
-  currentReward: ''
+  currentReward: '',
+  accumulated: 0
 };
 
 var editor = {
@@ -35,7 +36,8 @@ var infoViews = {
   qvalue: false,
   greedy: false,
   fog: false,
-  reward: false
+  reward: false,
+  accumulated: false
 };
 
 var app = new Vue({
@@ -129,6 +131,8 @@ var app = new Vue({
 
       this.views.fog = levelData.hasFog != undefined && levelData.hasFog;
       this.views.reward = this.infoBox.showReward != undefined && this.infoBox.showReward;
+      this.views.accumulated = this.infoBox.showAccumulated != undefined && this.infoBox.showAccumulated;
+      this.infoBox.accumulated = 0;
       this.forceRefresh();
     },
 
@@ -188,6 +192,7 @@ var app = new Vue({
       this.infoBox.currentState = `(${coord.x + 1}, ${coord.y + 1})`;
       this.infoBox.currentActions = environment.actions(newState).join(', ');
       this.infoBox.currentReward = machine.qTable.lastQUpdate.reward;
+      this.infoBox.accumulated = machine.accumulated.toFixed(2);
     }
   }
 })

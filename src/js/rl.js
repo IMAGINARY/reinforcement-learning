@@ -149,6 +149,8 @@ export class RL_machine {
     this.df = discount_factor;
     this.epsilon = epsilon;
 
+    this.accumulated = 0;
+
     this.environment = environment;
 
     this.start_score = start_score;
@@ -186,6 +188,7 @@ export class RL_machine {
   reset_machine(){
     this.qTable.reset();
     this.episode = 0;
+    this.accumulated = 0;
     this.batchRunning = false;
     this.resetEpisode();
     this.onReset.call();
@@ -194,6 +197,7 @@ export class RL_machine {
   resetEpisode() {
     this.state = this.environment.startState;
     this.score = this.start_score;
+    this.accumulated = 0;
     this.onEpisodeStart.call();
   }
 
@@ -244,6 +248,7 @@ export class RL_machine {
 
     this.setState(newState);
     this.score += this.environment.reward(this.state);
+    this.accumulated += reward;
 
     // add_new_step_callback
     if (this.environment.isEndState(this.state)) {
