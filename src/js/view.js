@@ -35,7 +35,8 @@ var editor = {
 var infoViews = {
   qvalue: false,
   greedy: false,
-  fog: false
+  fog: false,
+  reward: false
 };
 
 export const StateMgr = {
