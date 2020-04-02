@@ -10,8 +10,10 @@ function cloneMatrix(matrix) {
   return newMatrix;
 }
 
+const NullMap = [[2]];
+
 export class Maze {
-  constructor(levelMap) {
+  constructor(levelMap = NullMap) {
     this.setLevelMap(levelMap);
   }
 

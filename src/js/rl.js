@@ -1,5 +1,4 @@
 import { Maze } from "./maze";
-import { LevelMaps } from './level';
 import { tile } from './tile';
 import { Environment } from "./environment";
 import { CallBack } from "./callback";
@@ -339,7 +338,7 @@ const InitialLearningRate = 0.75;
 const InitialDiscountFactor = 0.8;
 const InitialEpsilon = 0.2;
 
-export var maze = new Maze(LevelMaps.Null);
+export var maze = new Maze();
 
 export const environment = new Environment(maze, RewardsMap);
 
