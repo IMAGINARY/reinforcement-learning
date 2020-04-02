@@ -87,9 +87,6 @@ export const StateMgr = {
   },
   accumulatedReward: {
     components: ["global", "score"],
-    navigation: {
-      "reset robot": () => machine.reset_machine(),
-    },
     levelMap: [
       [0, 0, 0, 0, 0],
       [0, 1, 1, 1, 0],
@@ -213,7 +210,7 @@ var app = new Vue({
 
       this.infoBox = levelData.infoBox;
       this.components = levelData.components;
-      this.navigation = levelData.navigation;
+      this.training = levelData.training;
       this.currentLevel = levelName;
       this.machine.reset_machine();
       if (levelData.levelMap != null)
