@@ -52,7 +52,7 @@ export const StateMgr = {
       ...Texts.letsMove,
       showState: true,
       showActions: true,
-    }
+    },
   },
   findPower: {
     components: ["global"],
@@ -104,6 +104,7 @@ export const StateMgr = {
   },
   playground: {
     components: ["global", "sliders", "plot", "training","evaluation", "score", "editor"],
+    controls: ["learningRate", "discountFactor", "epsilon", "qvalue", "greedy"],
     training: {
       "Train 1 episode": () => machine.train(1),
       "Train 20 episodes": () => machine.train(20),
@@ -131,7 +132,7 @@ export const StateMgr = {
       showState: true,
       showActions: true,
       showReward: true
-    }
+    },
   }
 };
 
@@ -141,6 +142,7 @@ var app = new Vue({
     machine: machine,
     views: infoViews,
     infoBox: infoBox,
+    controls: [],
     width: 0,
     height: 0,
     components: [],
@@ -191,6 +193,10 @@ var app = new Vue({
       return this.components != null && this.components.indexOf(what) >= 0;
     },
 
+    showControl: function(name) {
+      return this.controls != null && this.controls.includes(name);
+    },
+
     isCurrentLevel: function(level) {
       return this.currentLevel == level;
     },
@@ -213,6 +219,8 @@ var app = new Vue({
       this.components = levelData.components;
       this.training = levelData.training;
       this.currentLevel = levelName;
+      this.controls = levelData.controls;
+
       this.machine.reset_machine();
       if (levelData.levelMap != null)
         mapView.loadLevel(levelData.levelMap);

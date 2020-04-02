@@ -37,23 +37,23 @@
       <div v-show="isActive('global')" id="map_container"></div>      
 
       <div class="sliders" v-show="isActive('sliders')">
-        <div class="slider-section" v-show="true">
+        <div class="slider-section" v-show="showControl('learningRate')">
           <span class="parameter">Learning Rate {{machine.learning_rate}}</span><br/>
           <input type="range" id="machine_learning_range" v-model="machine.learning_rate" min="0" max="1" step="0.01"><br/>
         </div>
-        <div class="slider-section" v-show="true">
+        <div class="slider-section" v-show="showControl('discountFactor')">
           <span class="parameter">Discount Factor {{machine.discount_factor}}</span><br/>
           <input type="range" id="machine_discount_factor" v-model="machine.discount_factor" min="0" max="1" step="0.01"><br/>
         </div>
-        <div class="slider-section" v-show="true">
+        <div class="slider-section" v-show="showControl('epsilon')">
           <span class="parameter">Chance of random action when learning</span><br/>
           <input type="range" id="machine_epsilon" v-model="machine.epsilon" min="0" max="1" step="0.01">&nbsp; {{(Math.ceil(machine.epsilon*100))}}%<br/>
         </div>
-        <div class="slider-section" v-show="true">
+        <div class="slider-section" v-show="showControl('qvalue')">
           <label><input type="checkbox" v-model="views.qvalue">Show value for each position</label><br/>
           &#x1F44E;<div id="color_scale"></div>&#x1F44D;<br/>
         </div>
-        <div class="slider-section" v-show="true">
+        <div class="slider-section" v-show="showControl('greedy')">
           <label><input type="checkbox" v-model="views.greedy">Show best action from each position</label><br/>
         </div>
         <div class="slider-section" v-show="true">
