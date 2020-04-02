@@ -275,26 +275,21 @@ export class RL_machine {
     return states;
   }
 
-  train(episodes, max_steps_per_episode = 1000) {
-    const oldLearning = this.learning;
-    this.learning = true;
-    this.batchRunning = true;
-    this.onRunStart.call();
-    for (var i = 0; i < episodes; i++)
-      this.runEpisode(max_steps_per_episode);
-
-    this.batchRunning = false;
-    this.learning = oldLearning;
-    this.onRunEnd.call();
+  train(episodes, maxSteps = 1000) {
+    this.runEpisodes(episodes, maxSteps, true);
   }
 
-  evaluate(episodes, max_steps_per_episode = 1000) {
+  evaluate(episodes, maxSteps = 1000) {
+    this.runEpisodes(episodes, maxSteps, false);
+  }
+
+  runEpisodes(numEpisodes = 1, maxSteps = 1000, learning = true) {
     const oldLearning = this.learning;
-    this.learning = false;
+    this.learning = learning;
     this.batchRunning = true;
     this.onRunStart.call();
-    for (var i = 0; i < episodes; i++)
-      this.runEpisode(max_steps_per_episode);
+    for (var i = 0; i < numEpisodes; i++)
+      this.runEpisode(maxSteps);
 
     this.batchRunning = false;
     this.learning = oldLearning;
