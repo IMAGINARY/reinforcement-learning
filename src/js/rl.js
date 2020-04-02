@@ -201,15 +201,10 @@ export class RL_machine {
   }
 
   endEpisode(reason = "failed") {
-    const startNewEpisode = () => {
-      this.episode++;
-      this.resetEpisode();
-    }
-
     if (!this.batchRunning && this.onEpisodeEnd) {
-      this.onEpisodeEnd(reason).then((p) => startNewEpisode());
+      this.onEpisodeEnd(reason).then((p) => this.resetEpisode());
     } else {
-      startNewEpisode();
+      this.resetEpisode();
     }
   }
 
@@ -280,41 +275,37 @@ export class RL_machine {
     return states;
   }
 
-  train(episodes, max_steps_per_episode=1000) {
+  train(episodes, max_steps_per_episode = 1000) {
     const oldLearning = this.learning;
     this.learning = true;
     this.batchRunning = true;
     this.onRunStart.call();
-    for (var i = 0; i < episodes; i++) {
-      for (var j = 0; j < max_steps_per_episode; j++) {
-        if (this.auto_step() != StepState.Continue) {
-          break;
-        }
-      }
-      this.resetEpisode();
-    }
+    for (var i = 0; i < episodes; i++)
+      this.runEpisode(max_steps_per_episode);
+
     this.batchRunning = false;
     this.learning = oldLearning;
     this.onRunEnd.call();
   }
 
-  evaluate(episodes, max_steps_per_episode=1000) {
+  evaluate(episodes, max_steps_per_episode = 1000) {
     const oldLearning = this.learning;
     this.learning = false;
     this.batchRunning = true;
     this.onRunStart.call();
-    for (var i = 0; i < episodes; i++) {
-      for (var j = 0; j < max_steps_per_episode; j++) {
-        if (this.auto_step() != StepState.Continue) {
-          break;
-        }
-      }
-      this.resetEpisode();
-    }
+    for (var i = 0; i < episodes; i++)
+      this.runEpisode(max_steps_per_episode);
+
     this.batchRunning = false;
     this.learning = oldLearning;
     this.onRunEnd.call();
+  }
 
+  runEpisode(maxSteps = 1000) {
+    this.resetEpisode();
+    do {
+      //
+    } while (this.auto_step() == StepState.Continue && maxSteps-- > 0);
   }
 
   normalizedValue(state) {
