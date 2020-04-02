@@ -164,6 +164,10 @@ div.sliders {
   padding: 10px;
 }
 
+div.slider-section {
+  margin: 0.5em 0 0 0;
+}
+
 #formula {
   position: absolute;
   bottom: 8vh;
