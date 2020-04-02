@@ -13,9 +13,9 @@ function pickRandom(array) {
 };
 
 class QTable {
-  constructor(learningRate, discountFactor) {
-    this.learningRate = learningRate;
-    this.discountFactor = discountFactor;
+  constructor(learningParams) {
+    this.params = learningParams;
+
     this.lastQUpdate =  {
       state : 0,
       action: '',
@@ -103,7 +103,7 @@ class QTable {
     const currentValue = this.getCurrentValue(state, action);
     const maxQ = this.getMaxValue(newState);
 
-    const newQ = (1 - this.learningRate) * currentValue + this.learningRate * (reward + this.discountFactor * maxQ);
+    const newQ = (1 - this.params.learningRate) * currentValue + this.params.learningRate * (reward + this.params.discountFactor * maxQ);
 
     this.lastQUpdate = {
       state : state,
@@ -140,13 +140,9 @@ export class RL_machine {
   constructor(environment,
               start_score,
               end_score,
-              learning_rate,
-              discount_factor,
-              epsilon=0) {
+              learningParameters) {
 
-    this.lr = learning_rate;
-    this.df = discount_factor;
-    this.epsilon = epsilon;
+    this.params = learningParameters;
 
     this.accumulated = 0;
 
@@ -162,7 +158,7 @@ export class RL_machine {
     this.onRunStart = new CallBack();
     this.onRunEnd = new CallBack();
 
-    this.qTable = new QTable(learning_rate, discount_factor);
+    this.qTable = new QTable(this.params);
 
     this.learning = true;
 
@@ -213,7 +209,7 @@ export class RL_machine {
   }
 
   auto_step() {
-    return (Math.random() < this.epsilon) ? this.random_step() : this.greedy_step();
+    return (Math.random() < this.params.epsilon) ? this.random_step() : this.greedy_step();
   }
 
   random_step() {
@@ -328,9 +324,10 @@ export var maze = new Maze();
 
 export const environment = new Environment(maze, RewardsMap);
 
-export var machine = new RL_machine(environment,
-                            50,
-                            0,
-                            InitialLearningRate,
-                            InitialDiscountFactor,
-                            InitialEpsilon);
+export var learningParameters = {
+    learningRate: InitialLearningRate,
+    discountFactor: InitialDiscountFactor,
+    epsilon: InitialEpsilon
+};
+
+export var machine = new RL_machine(environment, 50, 0, learningParameters);

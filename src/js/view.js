@@ -64,7 +64,7 @@ var app = new Vue({
   created() {
     machine.setEpisodeEndCallback(this.onEpisodeEnd);
     machine.setEpisodeStartCallback(this.forceRefresh);
-    renderEquation(machine);
+    renderEquation(machine.params);
   },
 
   destroyed() { },
@@ -168,15 +168,15 @@ var app = new Vue({
   },
   watch: {
     'machine.learning_rate': function(new_val) {
-      machine.lr = parseFloat(new_val);
-      renderEquation(machine);
+      machine.params.learningRate = parseFloat(new_val);
+      renderEquation(machine.params);
     },
     'machine.discount_factor': function(new_val) {
-      machine.df = parsFloat(new_val);
-      renderEquation(machine);
+      machine.params.discountFactor = parseFloat(new_val);
+      renderEquation(machine.params);
     },
     'machine.epsilon': function(new_val) {
-      machine.epsilon = parseFloat(new_val);
+      machine.params.epsilon = parseFloat(new_val);
     },
     'views.qvalue':function(newValue) {
       mapView.setQValuesVisible(newValue);
