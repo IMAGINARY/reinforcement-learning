@@ -216,7 +216,8 @@ export class MapView {
           (path.includes(state)) ? MainViolet : MainYellow
           );
     });
-   this.greedyTilesLayer.draw();
+    if (!this.machine.batchRunning)
+      this.greedyTilesLayer.draw();
   }
 
   createMazeLayer() {
@@ -408,7 +409,8 @@ export class MapView {
     const coord = this.environment.state2position(state);
     this.qValues[coord.y][coord.x].visible(true);
     this.qValues[coord.y][coord.x].fill(this.colorForQValue(state));
-    this.qLayer.draw();
+    if (!this.machine.batchRunning)
+      this.qLayer.draw();
   }
 
   updateMoveButtons(state) {
@@ -419,7 +421,8 @@ export class MapView {
     this.moveButtons.right.visible(actions.includes(dir.RIGHT));
     this.moveButtons.down.visible(actions.includes(dir.DOWN));
     this.moveButtons.left.visible(actions.includes(dir.LEFT));
-    this.buttonsGroup.draw();
+    if (!this.machine.batchRunning)
+      this.buttonsGroup.draw();
   }
 
   setRobotPosition(coord) {
@@ -428,6 +431,9 @@ export class MapView {
   }
 
   showReward(coord, reward) {
+    if (this.machine.batchRunning)
+      return;
+
     const pos = this.tilePos(coord);
 
     const group = new Konva.Group();
