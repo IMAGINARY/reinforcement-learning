@@ -218,6 +218,7 @@ var app = new Vue({
         mapView.loadLevel(levelData.levelMap);
 
       this.views.fog = levelData.hasFog != undefined && levelData.hasFog;
+      this.views.reward = this.infoBox.showReward != undefined && this.infoBox.showReward;
       this.forceRefresh();
     },
 
