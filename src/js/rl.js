@@ -7,6 +7,14 @@ const StepState = {
   Continue: 1,
   End: 2
 };
+Object.freeze(StepState);
+
+export const FinalState = {
+  ReachedEnd: 1,
+  OutOfSteps: 2
+};
+
+Object.freeze(FinalState);
 
 function pickRandom(array) {
     return array[array.length * Math.random() << 0];
@@ -196,7 +204,7 @@ export class RL_machine {
     this.onEpisodeStart.call();
   }
 
-  endEpisode(reason = "failed") {
+  endEpisode(reason = FinalState.OutOfSteps) {
     if (!this.batchRunning && this.onEpisodeEnd) {
       this.onEpisodeEnd(reason).then((p) => this.resetEpisode());
     } else {
@@ -242,11 +250,11 @@ export class RL_machine {
 
     // add_new_step_callback
     if (this.environment.isEndState(this.state)) {
-      this.endEpisode("success");
+      this.endEpisode(FinalState.ReachedEnd);
       return StepState.End;
     }
     if (this.score <= this.end_score){
-      this.endEpisode("failed");
+      this.endEpisode(FinalState.OutOfSteps);
       return StepState.End;
     }
     return StepState.Continue;

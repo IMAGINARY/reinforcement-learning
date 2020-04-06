@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-import { machine, maze, environment } from "./rl.js";
+import { machine, maze, environment, FinalState } from "./rl.js";
 import { setKeyboardActionCallback } from "./controls.js";
 import { Levels } from './level';
 
@@ -148,9 +148,9 @@ var app = new Vue({
 
     onEpisodeEnd: function(result){
       var text;
-      if (result == "failed"){
+      if (result == FinalState.OutOfSteps) {
         text = Texts.outOfBattery;
-      } else if (result == "success"){
+      } else if (result == FinalState.ReachedEnd) {
         text = Texts.goalReached;
       }
       return new Promise( (resolve) => {
