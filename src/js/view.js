@@ -13,6 +13,7 @@ import {createColorScaleReference} from './color-scale-display';
 import './map.js';
 import './editor';
 import './navigation';
+import { Texts } from './language';
 
 const TileSize = 80;
 const MapContainerDivId = 'map_container';
@@ -148,9 +149,9 @@ var app = new Vue({
     onEpisodeEnd: function(result){
       var text;
       if (result == "failed"){
-        text = "Out of battery. The robot will be reset.";
+        text = Texts.outOfBattery;
       } else if (result == "success"){
-        text = "You reached the goal. The robot will be reset.";
+        text = Texts.goalReached;
       }
       return new Promise( (resolve) => {
         this.showMessage(text, resolve);

@@ -36,7 +36,9 @@ const AllTexts = {
 
     
 
-    Reinforcement Learning uses the concept of a "Q-function", which keeps track of how "good" it expects it to be to take a specific action 'a' from a specific location 's'. This is written as Q(s, a). It also uses a "policy", which determines the best action to take in a given state, and is written as π(s). The robot must learn those functions while it navigates the maze. With each step, the functions are modified by a little bit, until eventually they give it the best strategy to solve the maze.`
+    Reinforcement Learning uses the concept of a "Q-function", which keeps track of how "good" it expects it to be to take a specific action 'a' from a specific location 's'. This is written as Q(s, a). It also uses a "policy", which determines the best action to take in a given state, and is written as π(s). The robot must learn those functions while it navigates the maze. With each step, the functions are modified by a little bit, until eventually they give it the best strategy to solve the maze.`,
+    goalReached: 'The Robot reached the goal',
+    outOfBattery: "The Robot has run out of battery",
   },
   "de": {}
 }
