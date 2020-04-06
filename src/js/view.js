@@ -134,6 +134,7 @@ var app = new Vue({
       this.views.reward = this.infoBox.showReward != undefined && this.infoBox.showReward;
       this.views.accumulated = this.infoBox.showAccumulated != undefined && this.infoBox.showAccumulated;
       this.views.qvalue = this.infoBox.showQValue != undefined && this.infoBox.showQValue;
+      this.views.greedy = this.infoBox.showGreedy != undefined && this.infoBox.showGreedy;
       this.infoBox.accumulated = 0;
       this.forceRefresh();
     },

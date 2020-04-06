@@ -32,6 +32,10 @@ const AllTexts = {
 
       We update the V values by moving around and learning. Can you observe how the V values change?`
     },
+    qLearning: {
+      title: 'Q-Learning',
+      text: 'How can we now, having V values or an approximation of them, find the best way to move? The instructions on how to move is called a policy. It shows which is the action to take in each state.'
+    },
     playground: {
       title: 'Learning',
       text:  `As a human, you keep track of where you are and how you got there without thinking, which helps you think about what actions you should take next to reach your destination. And you can also just look around! How can then the robot 'think' of the maze, to know which action is the best at every moment? And how can it learn that? It must somehow keep track of where it is, and remember how good or bad was each action at each place in the maze, try new things, and update it's "mental image" of what was a good decision and what not.

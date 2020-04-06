@@ -67,7 +67,7 @@ export const Levels = {
     }
   },
   valueFunction: {
-    components: ["global", "score", "sliders"],
+    components: ["global", "score", "sliders", "training"],
     controls: ["discountFactor", "qvalue"],
     training: {
       [Texts.training.unlearn]: () => machine.reset_machine(),
@@ -87,6 +87,30 @@ export const Levels = {
       showReward: true,
       showAccumulated: true,
       showQValue: true
+    },
+  },
+  qLearning: {
+    components: ["global", "score", "sliders", "training"],
+    controls: ["discountFactor", "qvalue", "greedy"],
+    training: {
+      [Texts.training.oneEpisode]: () => machine.train(1),
+      [Texts.training.unlearn]: () => machine.reset_machine(),
+    },
+    levelMap: [
+      [0, 0, 0, 0, 0, 0],
+      [0, 1, 0, 1, 0, 8],
+      [0, 0, 0, 0, 0, 0],
+      [0, 0, 1, 0, 0, 1],
+      [0, 0, 0, 0, 0, 0],
+      [2, 0, 0, 1, 0, 1]
+    ],
+    infoBox: {
+      ...Texts.qLearning,
+      showState: true,
+      showActions: true,
+      showReward: true,
+      showQValue: true,
+      showGreedy: true
     },
   },
   playground: {
