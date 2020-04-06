@@ -15,6 +15,8 @@ const MainViolet = "#8F1A81";
 const DangerousColor = "#665F25";
 const Magenta = "#FF00FF";
 
+const MaxWidth = 800;
+const MaxHeight = 800;
 
 function asyncLoadImage(imagesrc, setFunction) {
   const image = new window.Image();
@@ -48,8 +50,8 @@ export class MapView {
 
     this.stage = new Konva.Stage({
       container: containerId,
-      width: 0,
-      height: 0
+      width: MaxWidth,
+      height: MaxHeight
     });
 
     this.setMaze(maze);
@@ -72,9 +74,8 @@ export class MapView {
     if (this.stage.hasChildren())
       this.stage.destroyChildren();
 
-    this.stage.width(this.TileSize * maze.width);
-    this.stage.height(this.TileSize * maze.height);
-
+    this.stage.offset({ x: ((this.TileSize * maze.width) - MaxWidth)/2,
+                        y: ((this.TileSize * maze.height) - MaxHeight)/2});
     this.createMazeLayer();
     this.createQLayer();
     this.createGreedyLayer();
