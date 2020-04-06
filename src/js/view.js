@@ -133,6 +133,7 @@ var app = new Vue({
       this.views.fog = levelData.hasFog != undefined && levelData.hasFog;
       this.views.reward = this.infoBox.showReward != undefined && this.infoBox.showReward;
       this.views.accumulated = this.infoBox.showAccumulated != undefined && this.infoBox.showAccumulated;
+      this.views.qvalue = this.infoBox.showQValue != undefined && this.infoBox.showQValue;
       this.infoBox.accumulated = 0;
       this.forceRefresh();
     },

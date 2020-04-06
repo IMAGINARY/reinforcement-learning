@@ -85,7 +85,8 @@ export const Levels = {
       showState: true,
       showActions: true,
       showReward: true,
-      showAccumulated: true
+      showAccumulated: true,
+      showQValue: true
     },
   },
   playground: {
