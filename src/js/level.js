@@ -70,20 +70,17 @@ export const Levels = {
     components: ["global", "sliders", "plot", "training","evaluation", "score", "editor"],
     controls: ["learningRate", "discountFactor", "epsilon", "qvalue", "greedy"],
     training: {
-      "Train 1 episode": () => machine.train(1),
-      "Train 20 episodes": () => machine.train(20),
-      "Unlearn all": () => machine.reset_machine(),
-      "Evaluate Robot": () => {
-        const evaluation = machine.evaluate(100);
-      }
+      [Texts.training.oneEpisode]: () => machine.train(1),
+      [Texts.training.twentyEpisodes]: () => machine.train(20),
+      [Texts.training.unlearn]: () => machine.reset_machine(),
     },
     evaluation: {
-      "Do 1 step": () => {
+      [Texts.evaluation.oneStep]: () => {
         machine.learning = false;
         machine.auto_step();
         machine.learning = true;
       },
-      "Do 1 greedy step": () => {
+      [Texts.evaluation.greedyStep]: () => {
         machine.learning = false;
         machine.greedy_step();
         machine.learning = true;
@@ -101,8 +98,7 @@ export const Levels = {
       [2, 0, 0, 0, 1, 0, 1, 0, 0, 1]
     ],
     infoBox: {
-      title: 'Learning',
-      text: Texts.globalIntro,
+      ...Texts.playground,
       showState: true,
       showActions: true,
       showReward: true,
