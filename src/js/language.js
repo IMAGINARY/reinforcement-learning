@@ -26,6 +26,12 @@ const AllTexts = {
       
       Note, that we consider near reinforcements as higher than ones far in the future. We use a discount factor for this. The higher it is, the more future rewards are taking into account.`
     },
+    valueFunction: {
+      title: 'Value function',
+      text: `Instead of summing up rewards to get the return, we can approximate it on a step by step basis. The concept behind it it simple and powerful: for each step we just take the current reinforcement and add the estimated return of the successor state(s) to it. The obtained values are called V values. We can do this update for each state with the already estimated returns (updating them step by step while moving around). You can say, the higher V the better it is to be in that state (on the long run).
+
+      We update the V values by moving around and learning. Can you observe how the V values change?`
+    },
     playground: {
       title: 'Learning',
       text:  `As a human, you keep track of where you are and how you got there without thinking, which helps you think about what actions you should take next to reach your destination. And you can also just look around! How can then the robot 'think' of the maze, to know which action is the best at every moment? And how can it learn that? It must somehow keep track of where it is, and remember how good or bad was each action at each place in the maze, try new things, and update it's "mental image" of what was a good decision and what not.

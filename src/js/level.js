@@ -50,7 +50,7 @@ export const Levels = {
   },
   accumulatedReward: {
     components: ["global", "score", "sliders"],
-    controls: ["learningRate", "discountFactor"],
+    controls: ["discountFactor"],
     levelMap: [
       [0, 0, 0, 0, 0],
       [0, 1, 1, 1, 0],
@@ -65,6 +65,28 @@ export const Levels = {
       showReward: true,
       showAccumulated: true
     }
+  },
+  valueFunction: {
+    components: ["global", "score", "sliders"],
+    controls: ["discountFactor", "qvalue"],
+    training: {
+      [Texts.training.unlearn]: () => machine.reset_machine(),
+    },
+    levelMap: [
+      [0, 0, 0, 0, 0, 0],
+      [0, 1, 0, 1, 0, 8],
+      [0, 0, 0, 0, 0, 0],
+      [0, 0, 1, 0, 0, 1],
+      [0, 0, 0, 0, 0, 0],
+      [2, 0, 0, 1, 0, 1]
+    ],
+    infoBox: {
+      ...Texts.valueFunction,
+      showState: true,
+      showActions: true,
+      showReward: true,
+      showAccumulated: true
+    },
   },
   playground: {
     components: ["global", "sliders", "plot", "training","evaluation", "score", "editor"],
