@@ -165,6 +165,10 @@ var app = new Vue({
         this.message.action = () => {};
         buttonAction();
       }
+    },
+
+    onKeyboardAction(action) {
+      machine.attemptStep(machine.state, action);
     }
   },
   watch: {
@@ -211,6 +215,6 @@ const mapView = new MapView(MapContainerDivId, machine, maze, environment, TileS
 
 app.gotoLevel('letsMove');
 
-setKeyboardActionCallback( action => machine.attemptStep(machine.state, action) );
+setKeyboardActionCallback( app.onKeyboardAction );
 
 createColorScaleReference();
