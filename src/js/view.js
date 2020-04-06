@@ -168,7 +168,8 @@ var app = new Vue({
     },
 
     onKeyboardAction(action) {
-      machine.attemptStep(machine.state, action);
+      if (this.message.text == null)
+        machine.attemptStep(machine.state, action);
     }
   },
   watch: {
