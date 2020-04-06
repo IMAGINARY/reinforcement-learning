@@ -246,7 +246,7 @@ export class RL_machine {
 
     this.setState(newState);
     this.score += this.environment.reward(this.state);
-    this.accumulated += reward;
+    this.accumulated = reward + this.accumulated * this.params.discountFactor;
 
     // add_new_step_callback
     if (this.environment.isEndState(this.state)) {
