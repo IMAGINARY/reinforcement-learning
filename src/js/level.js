@@ -85,7 +85,6 @@ export const Levels = {
       showState: true,
       showActions: true,
       showReward: true,
-      showAccumulated: true,
       showQValue: true
     },
   },
@@ -149,7 +148,6 @@ export const Levels = {
       showState: true,
       showActions: true,
       showReward: true,
-      showAccumulated: true
     },
   }
 };
