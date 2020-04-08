@@ -9,6 +9,10 @@ body {
   font-family: "Exo 2";
 }
 
+.range-slider {
+  width: 16.5vw;
+}
+
 #container {
   height: 100vh;
   position: relative;
