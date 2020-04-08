@@ -1,4 +1,5 @@
 import { dir } from './dir';
+import { tile } from './tile';
 
 export class Environment {
   constructor(maze, rewardsMap) {
@@ -78,5 +79,13 @@ export class Environment {
   setCell(coord, type) {
     this.maze.setTileType(coord, type);
     this.setMaze(this.maze);
+  }
+
+  switchWall(coord) {
+    const type = this.maze.getTileType(coord);
+    if (type == tile.wall)
+      this.maze.setTileType(coord, tile.regular);
+    else if (type == tile.regular)
+      this.maze.setTileType(coord, tile.wall);
   }
 }

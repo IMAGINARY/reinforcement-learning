@@ -4,8 +4,15 @@ Vue.component('editor-palette', {
   props: ["tile_types", "current_type", "enabled"],
   template: `
   <div class="editor-palette">
-    <button v-on:click="$emit('switch-editor')">Editor ON/OFF</button>
-    <div v-if="enabled" id="editor-current-type" :class="('palette_' + current_type)"></div>
-    <button v-if="enabled" v-for="(type) in tile_types" v-on:click="$emit('set-tile-type', type)">{{ type }}</button>
+    <button v-on:click="$emit('switch-editor')">Map Editor</button>
+    <div v-if="enabled" v-for="(desc, type) in tile_types" >
+      <div
+        class="tile-type-button"
+        v-bind:class="{ 'palette-selected': (current_type == type) }"
+        v-on:click="$emit('set-tile-type', type)">
+          <div class="editor-palette-sample" :class="'palette_' + type"></div>
+          {{ desc }}
+      </div>
+    </div>
   </div>`,
 });

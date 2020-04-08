@@ -141,10 +141,11 @@ div#color_scale {
   display: inline-block;
 }
 
-div#editor-current-type {
+.editor-palette-sample {
   width: 40px;
   height: 40px;
   border: 1px solid black;
+  margin: 0 5px 0 0;
 }
 
 .palette_wall {
@@ -153,6 +154,18 @@ div#editor-current-type {
 
 .palette_regular {
   background-color: $box-background;
+}
+
+.tile-type-button {
+  padding: 5px 5px 5px 5px;
+  display:flex;
+  width: auto;
+  height: 50px;
+}
+
+.palette-selected {
+  border: 1px black solid;
+  background-color: #E0E0E0;
 }
 
 .palette_end {

@@ -26,8 +26,15 @@ var infoBox = {
   accumulated: 0
 };
 
+const EditorTypes = {
+  "wall": 'Add or Remove Walls',
+  "start": 'Start Position',
+  "end": 'End Position',
+  "dangerous": "Dangerous spot"
+};
+
 var editor = {
-  tile_types: Object.keys(tile),
+  tile_types: EditorTypes,
   current_type: 'regular',
   enabled: false
 };
@@ -214,9 +221,13 @@ var app = new Vue({
 function onCellTouch(coord) {
   if (!editor.enabled)
     return;
-  
-  environment.setCell(coord, tile[editor.current_type]);
-  mapView.redrawMap();
+
+  if (editor.current_type == 'wall')
+    environment.switchWall(coord);
+  else
+    environment.setCell(coord, tile[editor.current_type]);
+
+    mapView.redrawMap();
   app.raw_map_data = environment.getRawMapData();
 }
 
