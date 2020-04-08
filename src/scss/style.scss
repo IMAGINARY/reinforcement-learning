@@ -21,6 +21,10 @@ body{
   font-family: 'Exo 2', ;
 }
 
+.range-slider {
+  width: ($column-width * 3/4);
+}
+
 #container{
   height: 100vh;
   position: relative;
