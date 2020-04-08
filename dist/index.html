@@ -52,7 +52,9 @@
         </div>
         <div class="slider-section" v-show="showControl('qvalue')">
           <label><input type="checkbox" v-model="views.qvalue">Show value for each position</label><br/>
-          &#x1F44E;<div id="color_scale"></div>&#x1F44D;<br/>
+          <div class="slider-gradient">
+            <span class="big-symbol">-</span><div id="color_scale"></div><span class="big-symbol">+</span><br/>
+          </div>
         </div>
         <div class="slider-section" v-show="showControl('greedy')">
           <label><input type="checkbox" v-model="views.greedy">Show best action from each position</label><br/>

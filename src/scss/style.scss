@@ -61,6 +61,17 @@ $nav-element-half-height: $nav-element-height/2;
   width: $info-box-width;
 }
 
+span.big-symbol {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 5px;
+}
+
+div.slider-gradient {
+  display:flex;
+  align-items:center;
+}
+
 .nav-button {
   width: 80px;
   height: $nav-element-height;
