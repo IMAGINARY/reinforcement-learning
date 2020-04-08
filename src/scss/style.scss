@@ -6,7 +6,7 @@ $bottommost-bottom: 2vh;
 $side-margin: 2vw;
 $column-width: 22vw;
 $box-padding: 10px;
-$info-box-width: 26vw;
+$info-box-width: $column-width;
 
 $yellow: #FFEC02;
 
@@ -54,10 +54,10 @@ $nav-element-half-height: $nav-element-height/2;
   margin: 2px;
 }
 
-.level-navigation {
+#level-navigation {
   position: absolute;
   bottom: 10vh;
-  right: $side-margin;
+  left: $side-margin;
   width: $info-box-width;
 }
 
@@ -95,8 +95,8 @@ div.slider-gradient {
 .training {
   position: absolute;
   bottom: $bottommost-bottom;
-  width: 50vw;
-  left: $side-margin;
+  width: $column-width;
+  right: $side-margin;
 }
 
 .evaluation {
@@ -127,12 +127,12 @@ button {
   bottom: 5%;
 }
 
-div.editor-palette {
+div#editor-palette {
   position: absolute;
-  left: $side-margin;
-  top: 50vh;
+  right: $side-margin;
+  top: 45vh;
   width: $column-width;
-  height: 40vh;
+  height: 26vh;
   background-color: $box-background;
   padding: $box-padding;
 }
@@ -178,10 +178,10 @@ div#editor-current-type {
   height: 100vh;
 }
 
-div.sliders {
+div#sliders {
   position: absolute;
   top: 10vh;
-  left: $side-margin;
+  right: $side-margin;
   width: $column-width;
   background-color: $box-background;
   border-color: black;
@@ -199,10 +199,10 @@ div.slider-section {
   left: 25vw;
 }
 
-.score {
+div#score {
   position: absolute;
   top: $topmost-top;
-  left: $side-margin;
+  right: $side-margin;
   width: $column-width;
   background-color: #FFF0F0;
   padding: $box-padding;
@@ -210,7 +210,7 @@ div.slider-section {
 
 #map_data {
   position: absolute;
-  right: $side-margin;
+  left: $side-margin;
   top: 54vh;
   width: $column-width;
   height: 40vh;
@@ -233,7 +233,7 @@ div#map_container {
 #info-box {
   position: absolute;
   top: $topmost-top;
-  right: $side-margin;
+  left: $side-margin;
   width: $info-box-width;
   height: 80vh;
   padding: $box-padding;
