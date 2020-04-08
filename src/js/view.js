@@ -99,6 +99,8 @@ var app = new Vue({
     switchEditor: function() {
       this.editor.enabled = !this.editor.enabled;
       mapView.setEditorMode(this.editor.enabled);
+      if (!this.editor.enabled)
+        machine.resetEpisode();
     },
 
     setTileType: function(tileType) {
