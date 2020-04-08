@@ -332,10 +332,14 @@ export var maze = new Maze();
 
 export const environment = new Environment(maze, RewardsMap);
 
-export var learningParameters = {
+export function defaultLearningParameters() {
+  return {
     learningRate: InitialLearningRate,
     discountFactor: InitialDiscountFactor,
     epsilon: InitialEpsilon
-};
+  };  
+}
+
+var learningParameters = defaultLearningParameters();
 
 export var machine = new RL_machine(environment, 50, 0, learningParameters);

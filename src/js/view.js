@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-import { machine, maze, environment, FinalState } from "./rl.js";
+import { machine, maze, environment, FinalState, defaultLearningParameters } from "./rl.js";
 import { setKeyboardActionCallback } from "./controls.js";
 import { Levels } from './level';
 
@@ -44,6 +44,11 @@ var infoViews = {
 var app = new Vue({
   el: '#app',
   data: {
+    slider: {
+      epsilon: 0.5,
+      learningRate: 0.5,
+      discountFactor: 0.5
+    },
     machine: machine,
     views: infoViews,
     infoBox: infoBox,
@@ -130,6 +135,8 @@ var app = new Vue({
       if (levelData.levelMap != null)
         mapView.loadLevel(levelData.levelMap);
 
+      this.slider = defaultLearningParameters();
+
       this.views.fog = levelData.hasFog != undefined && levelData.hasFog;
       this.views.reward = this.infoBox.showReward != undefined && this.infoBox.showReward;
       this.views.accumulated = this.infoBox.showAccumulated != undefined && this.infoBox.showAccumulated;
@@ -175,15 +182,15 @@ var app = new Vue({
     }
   },
   watch: {
-    'machine.learning_rate': function(new_val) {
+    'slider.learningRate': function(new_val) {
       machine.params.learningRate = parseFloat(new_val);
       renderEquation(machine.params);
     },
-    'machine.discount_factor': function(new_val) {
+    'slider.discountFactor': function(new_val) {
       machine.params.discountFactor = parseFloat(new_val);
       renderEquation(machine.params);
     },
-    'machine.epsilon': function(new_val) {
+    'slider.epsilon': function(new_val) {
       machine.params.epsilon = parseFloat(new_val);
     },
     'views.qvalue':function(newValue) {
