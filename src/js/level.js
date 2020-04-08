@@ -62,7 +62,6 @@ export const Levels = {
       ...Texts.accumulatedReward,
       showState: true,
       showActions: true,
-      showReward: true,
       showAccumulated: true
     }
   },
