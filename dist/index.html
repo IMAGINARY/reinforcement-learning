@@ -60,6 +60,9 @@
         <div class="slider-section" v-show="showControl('learning')">
           <label><input type="checkbox" v-model="machine.learning">Learn from actions</label>
         </div>
+        <div class="slider-section" v-show="showControl('fog')">
+          <label><input type="checkbox" v-model="views.fog">See only what the robot sees</label>
+        </div>
       </div>
       <div id="formula"></div>
       <div class="score" v-show="isActive('score')">

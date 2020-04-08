@@ -114,7 +114,7 @@ export const Levels = {
   },
   playground: {
     components: ["global", "sliders", "plot", "training","evaluation", "score", "editor"],
-    controls: ["learningRate", "discountFactor", "epsilon", "qvalue", "greedy"],
+    controls: ["learningRate", "discountFactor", "epsilon", "qvalue", "greedy", "fog"],
     training: {
       [Texts.training.oneEpisode]: () => machine.train(1),
       [Texts.training.twentyEpisodes]: () => machine.train(20),
