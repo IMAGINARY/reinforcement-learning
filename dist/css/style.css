@@ -41,11 +41,22 @@ span.parameter {
   margin: 2px;
 }
 
-.level-navigation {
+#level-navigation {
   position: absolute;
   bottom: 10vh;
-  right: 2vw;
-  width: 26vw;
+  left: 2vw;
+  width: 22vw;
+}
+
+span.big-symbol {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 5px;
+}
+
+div.slider-gradient {
+  display: flex;
+  align-items: center;
 }
 
 .nav-button {
@@ -71,8 +82,8 @@ span.parameter {
 .training {
   position: absolute;
   bottom: 2vh;
-  width: 50vw;
-  left: 2vw;
+  width: 22vw;
+  right: 2vw;
 }
 
 .evaluation {
@@ -103,12 +114,12 @@ button {
   bottom: 5%;
 }
 
-div.editor-palette {
+div#editor-palette {
   position: absolute;
-  left: 2vw;
-  top: 50vh;
+  right: 2vw;
+  top: 45vh;
   width: 22vw;
-  height: 40vh;
+  height: 26vh;
   background-color: #F0F0F0;
   padding: 10px;
 }
@@ -117,33 +128,46 @@ div#color_scale {
   display: inline-block;
 }
 
-div#editor-current-type {
+.editor-palette-sample {
   width: 40px;
   height: 40px;
   border: 1px solid black;
+  margin: 0 5px 0 0;
 }
 
-.wall {
+.palette_wall {
   background-color: #000000;
 }
 
-.regular {
+.palette_regular {
   background-color: #F0F0F0;
 }
 
-.end {
+.tile-type-button {
+  padding: 5px 5px 5px 5px;
+  display: flex;
+  width: auto;
+  height: 50px;
+}
+
+.palette-selected {
+  border: 1px black solid;
+  background-color: #E0E0E0;
+}
+
+.palette_end {
   background-image: url("../img/station.png");
   background-size: contain;
   background-color: #8F1A81;
 }
 
-.start {
+.palette_start {
   background-image: url("../img/robot.png");
   background-size: contain;
   background-color: #FFEC02;
 }
 
-.dangerous {
+.palette_dangerous {
   background-color: #665F25;
 }
 
@@ -154,10 +178,10 @@ div#editor-current-type {
   height: 100vh;
 }
 
-div.sliders {
+div#sliders {
   position: absolute;
   top: 10vh;
-  left: 2vw;
+  right: 2vw;
   width: 22vw;
   background-color: #F0F0F0;
   border-color: black;
@@ -170,15 +194,15 @@ div.slider-section {
 
 #formula {
   position: absolute;
-  bottom: 8vh;
+  bottom: 2vh;
   width: 50vw;
   left: 25vw;
 }
 
-.score {
+div#score {
   position: absolute;
   top: 2vh;
-  left: 2vw;
+  right: 2vw;
   width: 22vw;
   background-color: #FFF0F0;
   padding: 10px;
@@ -186,7 +210,7 @@ div.slider-section {
 
 #map_data {
   position: absolute;
-  right: 2vw;
+  left: 2vw;
   top: 54vh;
   width: 22vw;
   height: 40vh;
@@ -196,9 +220,8 @@ div#map_container {
   position: absolute;
   top: 2vh;
   left: 26vw;
-  width: 800px;
-  height: 800px;
-  background-color: #F8F8F8;
+  width: 900px;
+  height: 900px;
 }
 
 .info-title {
@@ -209,8 +232,8 @@ div#map_container {
 #info-box {
   position: absolute;
   top: 2vh;
-  right: 2vw;
-  width: 26vw;
+  left: 2vw;
+  width: 22vw;
   height: 80vh;
   padding: 10px;
   background-color: #BBB;
