@@ -147,27 +147,27 @@ div#editor-current-type {
   border: 1px solid black;
 }
 
-.wall {
+.palette_wall {
   background-color: #000000; 
 }
 
-.regular {
+.palette_regular {
   background-color: $box-background;
 }
 
-.end {
+.palette_end {
   background-image: url('../img/station.png');
   background-size: contain;
   background-color: #8F1A81;
 }
 
-.start {
+.palette_start {
   background-image: url('../img/robot.png');
   background-size: contain;
   background-color: $yellow;
 }
 
-.dangerous {
+.palette_dangerous {
   background-color: #665F25;
  }
 
