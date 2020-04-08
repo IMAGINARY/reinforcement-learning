@@ -319,7 +319,7 @@ export class RL_machine {
 
 export const RewardsMap = {
   [tile.regular]:-1,
-  [tile.dangerous]:-10,
+  [tile.dangerous]:-5,
   [tile.end]:50,
   [tile.start]:-1
 };
