@@ -105,6 +105,7 @@ export class MapView {
     this.qLayer.visible(this.infoViews.qvalue && !editing && !running);
     this.greedyTilesLayer.visible(this.infoViews.greedy && !editing && !running);
     this.fogLayer.visible(this.infoViews.fog && !editing);
+    this.redrawMap();
 
     this.objectsLayer.draw();
     this.qLayer.draw();
@@ -124,6 +125,7 @@ export class MapView {
 
   setFogVisible(visible) {
     this.infoViews.fog = visible;
+    this.station.visible(!visible);
     this.updateVisibilities();
   }
   
@@ -139,7 +141,7 @@ export class MapView {
   getTileColor(coord) {
     switch (this.maze.getTileType(coord)) {
       case tile.start: return MainYellow;
-      case tile.end: return MainViolet;
+      case tile.end: return this.infoViews.fog ? TransitableColor : MainViolet;
       case tile.regular: return TransitableColor;
       case tile.wall: return WallColor;
       case tile.dangerous: return DangerousColor;
