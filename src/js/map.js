@@ -15,8 +15,11 @@ const MainViolet = "#8F1A81";
 const DangerousColor = "#665F25";
 const Magenta = "#FF00FF";
 
-const MaxWidth = 800;
-const MaxHeight = 800;
+const MaxWidth = 900;
+const MaxHeight = 900;
+const TileSize = 80;
+const HalfTile = TileSize/2;
+const QuarterTile = TileSize/4;
 
 function asyncLoadImage(imagesrc, setFunction) {
   const image = new window.Image();
@@ -34,10 +37,7 @@ function createMatrixFromMaze(maze) {
 }
 
 export class MapView {
-  constructor(containerId, machine, maze, environment, tileSize, infoViews, onCellTouch) {
-    this.TileSize = tileSize;
-    this.HalfTile = this.TileSize/2;
-    this.QuarterTile = this.TileSize/4;
+  constructor(containerId, machine, maze, environment, infoViews, onCellTouch) {
     this.machine = machine;
     this.environment = environment;
     this.machine.setStateChangeCallback((oldState, newState) => this.onStateChange(oldState, newState));
@@ -74,8 +74,8 @@ export class MapView {
     if (this.stage.hasChildren())
       this.stage.destroyChildren();
 
-    this.stage.offset({ x: ((this.TileSize * maze.width) - MaxWidth)/2,
-                        y: ((this.TileSize * maze.height) - MaxHeight)/2});
+    this.stage.offset({ x: ((TileSize * maze.width) - MaxWidth)/2,
+                        y: ((TileSize * maze.height) - MaxHeight)/2});
     this.createMazeLayer();
     this.createQLayer();
     this.createGreedyLayer();
@@ -151,21 +151,21 @@ export class MapView {
 
   tilePos(coord) {
     return {
-      x: coord.x * this.TileSize,
-      y: coord.y * this.TileSize
+      x: coord.x * TileSize,
+      y: coord.y * TileSize
     }
   };
 
   placeImageOverTile(image, coord) {
-    image.x(coord.x * this.TileSize);
-    image.y(coord.y * this.TileSize);
+    image.x(coord.x * TileSize);
+    image.y(coord.y * TileSize);
   }
 
   tileRect(coord) {
     return {
       ...this.tilePos(coord),
-      width: this.TileSize,
-      height: this.TileSize,
+      width: TileSize,
+      height: TileSize,
     };
   }
 
@@ -204,7 +204,7 @@ export class MapView {
     if (hasBestAction) {
       const arrowDirection = dirToMovement(bestAction);
       this.greedyTiles[oldCoord.y][oldCoord.x].points(
-        [this.HalfTile, this.HalfTile, this.HalfTile + arrowDirection.x*this.HalfTile, this.HalfTile + arrowDirection.y*this.HalfTile]);
+        [HalfTile, HalfTile, HalfTile + arrowDirection.x*HalfTile, HalfTile + arrowDirection.y*HalfTile]);
     }
     this.greedyTiles[oldCoord.y][oldCoord.x].visible(hasBestAction);
     this.redrawGreedy();
@@ -267,19 +267,19 @@ export class MapView {
       { ...position,
         image: null,
         visible: true,
-        width: this.HalfTile,
-        height: this.HalfTile,
+        width: HalfTile,
+        height: HalfTile,
         rotation: rotation,
-        offset: { x: this.QuarterTile, y: this.QuarterTile }
+        offset: { x: QuarterTile, y: QuarterTile }
        } );
        button.on('mousedown tap', () => this.machine.attemptStep(this.machine.state, action) );
       return button;
     };
     this.moveButtons = {
-      up: create(0, dir.UP, {x: this.HalfTile, y: -this.QuarterTile}),
-      right: create(90, dir.RIGHT, {x: this.TileSize + this.QuarterTile, y: this.HalfTile}),
-      down: create(180, dir.DOWN, {x: this.HalfTile, y: this.TileSize + this.QuarterTile}),
-      left: create(270, dir.LEFT, {x: - this.QuarterTile, y: this.HalfTile}),
+      up: create(0, dir.UP, {x: HalfTile, y: -QuarterTile}),
+      right: create(90, dir.RIGHT, {x: TileSize + QuarterTile, y: HalfTile}),
+      down: create(180, dir.DOWN, {x: HalfTile, y: TileSize + QuarterTile}),
+      left: create(270, dir.LEFT, {x: - QuarterTile, y: HalfTile}),
     };
     asyncLoadImage("img/arrow_button.png", image => {
       Object.keys(this.moveButtons).forEach( button => {
@@ -303,10 +303,10 @@ export class MapView {
     this.maze.allCoordinates.forEach( coord => {
       const tilePos = this.tilePos(coord);
       const qv = new Konva.Rect({
-        x: tilePos.x + this.QuarterTile,
-        y: tilePos.y + this.QuarterTile,
-        width: this.HalfTile,
-        height: this.HalfTile,
+        x: tilePos.x + QuarterTile,
+        y: tilePos.y + QuarterTile,
+        width: HalfTile,
+        height: HalfTile,
         fill: WallColor,
         visible: false,
       });
@@ -400,8 +400,8 @@ export class MapView {
   }
 
   setRobotPosition(coord) {
-    this.robot.x(coord.x * this.TileSize);
-    this.robot.y(coord.y * this.TileSize);
+    this.robot.x(coord.x * TileSize);
+    this.robot.y(coord.y * TileSize);
     this.redrawGreedy();
   }
 
@@ -413,16 +413,16 @@ export class MapView {
 
     const group = new Konva.Group();
     const rect = new Konva.Rect({
-      x: pos.x + this.QuarterTile,
-      y: pos.y + this.QuarterTile,
-      width: this.HalfTile,
-      height: this.HalfTile,
+      x: pos.x + QuarterTile,
+      y: pos.y + QuarterTile,
+      width: HalfTile,
+      height: HalfTile,
       fill: MainViolet,
     });
     const text = new Konva.Text({
-      x: pos.x + this.HalfTile,
-      y: pos.y + this.HalfTile,
-      offset: { x: this.QuarterTile, y: this.QuarterTile },
+      x: pos.x + HalfTile,
+      y: pos.y + HalfTile,
+      offset: { x: QuarterTile, y: QuarterTile },
       text: "" + reward,
       fontFamily: 'Calibri',
       fontSize: 30,
@@ -439,8 +439,8 @@ export class MapView {
       node: group,
       duration: 1.25,
       opacity: 0,
-      width: this.TileSize,
-      height: this.TileSize,
+      width: TileSize,
+      height: TileSize,
       onFinish: () => {
         group.destroy();
       }

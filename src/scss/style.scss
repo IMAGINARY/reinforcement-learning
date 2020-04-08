@@ -194,7 +194,7 @@ div.slider-section {
 
 #formula {
   position: absolute;
-  bottom: 8vh;
+  bottom: $bottommost-bottom;
   width: 50vw;
   left: 25vw;
 }
@@ -220,9 +220,8 @@ div#map_container {
   position: absolute;
   top: $topmost-top;
   left: 26vw;
-  width: 800px;
-  height: 800px;
-  background-color: #F8F8F8;
+  width: 900px;
+  height: 900px;
 }
 
 .info-title {

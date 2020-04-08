@@ -15,7 +15,6 @@ import './editor';
 import './navigation';
 import { Texts } from './language';
 
-const TileSize = 80;
 const MapContainerDivId = 'map_container';
 
 var infoBox = {
@@ -221,7 +220,7 @@ function onCellTouch(coord) {
   app.raw_map_data = environment.getRawMapData();
 }
 
-const mapView = new MapView(MapContainerDivId, machine, maze, environment, TileSize, infoViews, onCellTouch);
+const mapView = new MapView(MapContainerDivId, machine, maze, environment, infoViews, onCellTouch);
 
 app.gotoLevel('letsMove');
 
