@@ -15,6 +15,8 @@ import './editor';
 import './navigation';
 import { Texts } from './language';
 
+import { setButtonTimeout } from './countdown-button';
+
 const MapContainerDivId = 'map_container';
 
 var infoBox = {
@@ -179,11 +181,13 @@ var app = new Vue({
 
     showMessage(messageText, buttonAction) {
       this.message.text = messageText;
+      const button = document.getElementById('info-message-button');
       this.message.action = () => {
         this.message.text = null;
         this.message.action = () => {};
         buttonAction();
       }
+      setButtonTimeout(button, 'Ok', 5000, this.message.action);
     },
 
     onKeyboardAction(action) {
