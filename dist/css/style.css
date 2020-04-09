@@ -63,6 +63,30 @@ div.slider-gradient {
   align-items: center;
 }
 
+.info-message-text {
+  font-size: 1.2em;
+  padding: 2px 2px 2px 2px;
+  margin: 2px 2px 2px 2px;
+}
+
+.info-message-box {
+  background-color: #F0F0F0;
+  border-radius: 5px;
+  animation: fade-in 1s;
+}
+
+#info-message-button {
+  font-size: 1.2em;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .nav-button {
   width: 80px;
   height: 24px;
