@@ -182,12 +182,10 @@ var app = new Vue({
     showMessage(messageText, buttonAction) {
       this.message.text = messageText;
       const button = document.getElementById('info-message-button');
-      this.message.action = () => {
+      setButtonTimeout(button, Texts.ok, 5000, () => {
         this.message.text = null;
-        this.message.action = () => {};
         buttonAction();
-      }
-      setButtonTimeout(button, Texts.ok, 5000, this.message.action);
+      });
     },
 
     onKeyboardAction(action) {

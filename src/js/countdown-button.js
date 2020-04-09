@@ -22,7 +22,7 @@ export function setButtonTimeout(element, text, timeout, onClick) {
   }
 
   element.innerText = text;
-  element.onClick = doClick;
+  element.onclick = doClick;
 
   refreshTimeout(timeout);
 }
