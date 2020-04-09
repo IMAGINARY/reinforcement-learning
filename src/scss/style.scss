@@ -9,6 +9,7 @@ $box-padding: 10px;
 $info-box-width: $column-width;
 
 $yellow: #FFEC02;
+$violet: #8F1A81;
 
 *{
   margin: 0;
@@ -74,6 +75,27 @@ span.big-symbol {
 div.slider-gradient {
   display:flex;
   align-items:center;
+}
+
+.info-message-text {
+  font-size: 1.2em;
+  padding: 2px 2px 2px 2px;
+  margin: 2px 2px 2px 2px;
+}
+
+.info-message-box {
+  background-color: $box-background;
+  border-radius: 5px;
+  animation: fade-in 1s;
+}
+
+.info-message-button {
+  font-size: 1.2em;
+}
+
+@keyframes fade-in {
+  from {opacity: 0}
+  to {opacity: 1}
 }
 
 .nav-button {
@@ -175,7 +197,7 @@ div#color_scale {
 .palette_end {
   background-image: url('../img/station.png');
   background-size: contain;
-  background-color: #8F1A81;
+  background-color: $violet;
 }
 
 .palette_start {
