@@ -317,29 +317,23 @@ export class RL_machine {
   }
 }
 
-export const RewardsMap = {
-  [tile.regular]:-1,
-  [tile.dangerous]:-5,
-  [tile.end]:50,
-  [tile.start]:-1
-};
-
-const InitialLearningRate = 0.75;
-const InitialDiscountFactor = 0.8;
-const InitialEpsilon = 0.2;
-
-export var maze = new Maze();
-
-export const environment = new Environment(maze, RewardsMap);
+export function defaultRewardsMap() {
+  return {
+    [tile.regular]:-1,
+    [tile.dangerous]:-5,
+    [tile.end]:50,
+    [tile.start]:-1
+  };
+}
 
 export function defaultLearningParameters() {
   return {
-    learningRate: InitialLearningRate,
-    discountFactor: InitialDiscountFactor,
-    epsilon: InitialEpsilon
+    learningRate: 0.75,
+    discountFactor: 0.8,
+    epsilon: 0.2
   };  
 }
 
-var learningParameters = defaultLearningParameters();
-
-export var machine = new RL_machine(environment, 50, 0, learningParameters);
+export var maze = new Maze();
+export const environment = new Environment(maze, defaultRewardsMap());
+export var machine = new RL_machine(environment, 50, 0, defaultLearningParameters());
