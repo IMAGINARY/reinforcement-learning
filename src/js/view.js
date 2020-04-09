@@ -151,6 +151,8 @@ var app = new Vue({
       this.views.qvalue = this.infoBox.showQValue != undefined && this.infoBox.showQValue;
       this.views.greedy = this.infoBox.showGreedy != undefined && this.infoBox.showGreedy;
       this.infoBox.accumulated = 0;
+
+      this.updateInfoBox(this.machine.state);
       this.forceRefresh();
     },
 
@@ -187,6 +189,14 @@ var app = new Vue({
     onKeyboardAction(action) {
       if (this.message.text == null)
         machine.attemptStep(machine.state, action);
+    },
+
+    updateInfoBox(state) {
+      const coord = environment.state2position(state);
+      this.infoBox.currentState = `(${coord.x + 1}, ${coord.y + 1})`;
+      this.infoBox.currentActions = environment.actions(state).join(', ');
+      this.infoBox.currentReward = machine.qTable.lastQUpdate.reward;
+      this.infoBox.accumulated = machine.accumulated.toFixed(2);
     }
   },
   watch: {
@@ -211,11 +221,7 @@ var app = new Vue({
       mapView.setFogVisible(newValue);
     },
     'machine.state':function(newState) {
-      const coord = environment.state2position(newState);
-      this.infoBox.currentState = `(${coord.x + 1}, ${coord.y + 1})`;
-      this.infoBox.currentActions = environment.actions(newState).join(', ');
-      this.infoBox.currentReward = machine.qTable.lastQUpdate.reward;
-      this.infoBox.accumulated = machine.accumulated.toFixed(2);
+      this.updateInfoBox(newState);
     }
   }
 })
