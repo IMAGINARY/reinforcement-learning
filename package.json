@@ -6,7 +6,8 @@
   "scripts": {
     "dist": "npx webpack",
     "sass": "sass src/scss:dist/css",
-    "watch:sass": "sass --watch src/scss:dist/css"
+    "watch:sass": "sass --watch src/scss:dist/css",
+    "server": "live-server ./dist"
   },
   "repository": {
     "type": "git",
