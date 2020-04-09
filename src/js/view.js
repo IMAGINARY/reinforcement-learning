@@ -61,6 +61,7 @@ var app = new Vue({
     views: infoViews,
     infoBox: infoBox,
     controls: [],
+    interactive: true,
     width: 0,
     height: 0,
     components: [],
@@ -175,8 +176,10 @@ var app = new Vue({
         text = Texts.goalReached;
       }
       return new Promise( (resolve) => {
+        this.interactive = false;
         this.showMessage(text, resolve);
-      }).then( () => mapView.fadeOutRobot() );
+      }).then( () => mapView.fadeOutRobot() )
+        .then( () => { this.interactive = true });
     },
 
     showMessage(messageText, buttonAction) {
@@ -189,7 +192,7 @@ var app = new Vue({
     },
 
     onKeyboardAction(action) {
-      if (this.message.text == null)
+      if (this.interactive)
         machine.attemptStep(machine.state, action);
     },
 
