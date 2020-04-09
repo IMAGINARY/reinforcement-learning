@@ -187,7 +187,7 @@ var app = new Vue({
         this.message.action = () => {};
         buttonAction();
       }
-      setButtonTimeout(button, 'Ok', 5000, this.message.action);
+      setButtonTimeout(button, Texts.ok, 5000, this.message.action);
     },
 
     onKeyboardAction(action) {

@@ -50,6 +50,8 @@ const AllTexts = {
     goalReached: 'The Robot reached the goal',
     outOfBattery: "The Robot has run out of battery",
 
+    ok: 'Ok',
+
     training: {
       oneEpisode: 'Train one episode',
       twentyEpisodes: 'Train 20 episodes',
