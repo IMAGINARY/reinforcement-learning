@@ -89,6 +89,23 @@ export class MapView {
     this.objectsLayer.draw();
   }
 
+  fadeOutRobot(duration = 1000) {
+    return new Promise( (resolve) => {
+      this.robot.opacity(1);
+      var anim = new Konva.Animation((frame) => {
+        if (frame.time >= duration) {
+          this.robot.opacity(0);
+          anim.stop();
+          resolve();
+        }
+  
+        this.robot.opacity(1 - (frame.time / duration));
+        console.log(this.robot.opacity);
+      }, this.objectsLayer);
+      anim.start();
+    });
+  }
+
   redrawMap() {
     this.maze.allCoordinates.forEach( coord => {
       this.mapTiles[coord.y][coord.x].fill(this.getTileColor(coord));

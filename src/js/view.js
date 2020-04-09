@@ -176,7 +176,7 @@ var app = new Vue({
       }
       return new Promise( (resolve) => {
         this.showMessage(text, resolve);
-      });
+      }).then( () => mapView.fadeOutRobot() );
     },
 
     showMessage(messageText, buttonAction) {
