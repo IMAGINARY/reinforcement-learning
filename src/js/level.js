@@ -17,7 +17,8 @@ export const Levels = {
     },
   },
   findPower: {
-    components: ["global"],
+    components: ["global", "sliders"],
+    controls: ["fog"],
     hasFog: true,
     levelMap: [
       [8, 0, 0, 0, 0],
@@ -33,7 +34,8 @@ export const Levels = {
     }
   },
   getRewarded: {
-    components: ["global"],
+    components: ["global", "sliders"],
+    controls: ["fog"],
     levelMap: [
       [0, 0, 0, 0, 0],
       [0, 1, 1, 1, 0],
@@ -50,7 +52,7 @@ export const Levels = {
   },
   accumulatedReward: {
     components: ["global", "score", "sliders"],
-    controls: ["discountFactor"],
+    controls: ["discountFactor", "fog"],
     levelMap: [
       [0, 0, 0, 0, 0],
       [0, 1, 1, 1, 0],
@@ -67,7 +69,7 @@ export const Levels = {
   },
   valueFunction: {
     components: ["global", "score", "sliders", "training"],
-    controls: ["discountFactor", "qvalue"],
+    controls: ["discountFactor", "qvalue", "fog"],
     training: {
       [Texts.training.unlearn]: () => machine.reset_machine(),
     },
@@ -89,7 +91,7 @@ export const Levels = {
   },
   qLearning: {
     components: ["global", "score", "sliders", "training"],
-    controls: ["discountFactor", "qvalue", "greedy"],
+    controls: ["discountFactor", "qvalue", "greedy", "fog"],
     training: {
       [Texts.training.oneEpisode]: () => machine.train(1),
       [Texts.training.unlearn]: () => machine.reset_machine(),
