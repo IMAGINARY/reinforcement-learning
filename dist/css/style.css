@@ -37,17 +37,17 @@ span.parameter {
 }
 
 .nav-circle {
-  border-radius: 15px;
-  height: 24px;
-  width: 24px;
+  border-radius: 11px;
+  height: 22px;
+  width: 22px;
   background-color: white;
   display: inline-block;
-  border: 4px solid #F0F0F0;
-  margin: 2px;
+  margin: 0 4px;
 }
 
 #level-navigation {
   width: 22vw;
+  background-color: #BBBBBB;
 }
 
 span.big-symbol {
@@ -87,7 +87,7 @@ div.slider-gradient {
 }
 .nav-button {
   width: 60px;
-  height: 24px;
+  height: 22px;
   border-radius: 5px;
   border: 2px solid #808080;
   vertical-align: middle;
@@ -103,6 +103,13 @@ div.slider-gradient {
   font-weight: bold;
   padding: 2px 2px 2px 2px;
   margin: 2px 2px 2px 2px;
+}
+
+#dynamic-info-box {
+  width: 22vw;
+  background-color: #F0F0F0;
+  padding: 10px;
+  margin: 1vh 0 0 0;
 }
 
 #training-bar {
@@ -162,9 +169,16 @@ button {
 }
 
 div#editor-palette {
-  height: 26vh;
   background-color: #F0F0F0;
   padding: 10px;
+}
+
+.hidden-box {
+  visibility: hidden;
+}
+
+.active-box {
+  border: 2px solid black;
 }
 
 div#color_scale {
@@ -224,7 +238,6 @@ div#color_scale {
 div#sliders {
   width: 22vw;
   background-color: #F0F0F0;
-  border-color: black;
   padding: 10px;
 }
 
@@ -246,8 +259,7 @@ div#score {
 
 #map_data {
   position: absolute;
-  left: 2vw;
-  top: 54vh;
+  top: 2vh;
   width: 22vw;
   height: 40vh;
 }
@@ -262,11 +274,13 @@ div#map_container {
   margin: 0.5em 0 1em 0;
 }
 
-#info-box {
+#text-info {
   width: 22vw;
   height: 80vh;
+  border-radius: 10px 10px 0 0;
   padding: 10px;
-  background-color: #BBB;
+  background-color: #BBBBBB;
+  text-align: justify;
 }
 
 /* exo-2-regular - latin */
