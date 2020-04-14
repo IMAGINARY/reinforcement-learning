@@ -236,7 +236,9 @@ function onCellTouch(coord) {
     return;
 
   if (editor.current_type == 'wall')
-    environment.switchWall(coord);
+    environment.switchTile(coord, tile.wall);
+  else if (editor.current_type == 'dangerous')
+    environment.switchTile(coord, tile.dangerous);
   else
     environment.setCell(coord, tile[editor.current_type]);
 

@@ -81,11 +81,11 @@ export class Environment {
     this.setMaze(this.maze);
   }
 
-  switchWall(coord) {
+  switchTile(coord, switchType) {
     const type = this.maze.getTileType(coord);
-    if (type == tile.wall)
+    if (type == switchType)
       this.maze.setTileType(coord, tile.regular);
     else if (type == tile.regular)
-      this.maze.setTileType(coord, tile.wall);
+      this.maze.setTileType(coord, switchType);
   }
 }
