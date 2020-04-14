@@ -121,6 +121,7 @@ export class MapView {
     this.qLayer.visible(this.infoViews.qvalue && !editing && !running);
     this.greedyTilesLayer.visible(this.infoViews.greedy && !editing && !running);
     this.fogLayer.visible(this.infoViews.fog && !editing);
+
     this.redrawMap();
 
     this.objectsLayer.draw();
@@ -320,20 +321,36 @@ export class MapView {
       opacity: 0.5
     });
     this.qValues = createMatrixFromMaze(this.maze);
+    this.qQuestionMarks = createMatrixFromMaze(this.maze);
     this.maze.allCoordinates.forEach( coord => {
       const tilePos = this.tilePos(coord);
-      const qv = new Konva.Rect({
+      const tileParams = {
         x: tilePos.x + QuarterTile,
         y: tilePos.y + QuarterTile,
         width: HalfTile,
-        height: HalfTile,
+        height: HalfTile};
+      const qv = new Konva.Rect({
+        ...tileParams,
         fill: WallColor,
         visible: false,
       });
+      const qm = new Konva.Image({
+        ...tileParams,
+        image: null,
+        visible: true,
+      })
       this.qLayer.add(qv);
+      this.qLayer.add(qm);
+      this.qQuestionMarks[coord.y][coord.x] = qm;
       this.qValues[coord.y][coord.x] = qv;
     });
-    this.stage.add(this.qLayer);
+    asyncLoadImage("img/question_mark.png", image => {
+      this.maze.allCoordinates.forEach( coord => {
+        this.qQuestionMarks[coord.y][coord.x].image(image);
+      } )
+      this.objectsLayer.batchDraw();
+    });
+  this.stage.add(this.qLayer);
   }
 
   createFogLayer() {
@@ -358,8 +375,9 @@ export class MapView {
   }
 
   resetQLayer() {
-    this.qLayer.getChildren().forEach( child => {
-      child.visible(false);
+    this.maze.allCoordinates.forEach( coord => {
+      this.qValues[coord.y][coord.x].visible(false);
+      this.qQuestionMarks[coord.y][coord.x].visible(true);
     });
   }
 
@@ -403,6 +421,7 @@ export class MapView {
     const coord = this.environment.state2position(state);
     this.qValues[coord.y][coord.x].visible(true);
     this.qValues[coord.y][coord.x].fill(this.colorForQValue(state));
+    this.qQuestionMarks[coord.y][coord.x].visible(false);
     if (!this.machine.batchRunning)
       this.qLayer.draw();
   }

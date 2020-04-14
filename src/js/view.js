@@ -167,6 +167,7 @@ var app = new Vue({
     },
 
     forceRefresh: function() {
+      mapView.updateVisibilities();
       mapView.update(machine.state);
     },
 
