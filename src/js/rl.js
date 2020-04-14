@@ -169,6 +169,7 @@ export class RL_machine {
     this.qTable = new QTable(this.params);
 
     this.learning = true;
+    this.checkScore = true;
 
     this.reset_machine();
   }
@@ -253,7 +254,7 @@ export class RL_machine {
       this.endEpisode(FinalState.ReachedEnd);
       return StepState.End;
     }
-    if (this.score <= this.end_score){
+    if (this.checkScore && this.score <= this.end_score){
       this.endEpisode(FinalState.OutOfSteps);
       return StepState.End;
     }

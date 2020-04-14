@@ -160,6 +160,8 @@ var app = new Vue({
       this.views.greedy = this.infoBox.showGreedy != undefined && this.infoBox.showGreedy;
       this.infoBox.accumulated = 0;
 
+      this.machine.checkScore = !(levelData.noScore);
+
       this.updateInfoBox(this.machine.state);
       this.forceRefresh();
     },

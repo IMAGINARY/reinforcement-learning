@@ -11,6 +11,7 @@ export const Levels = {
       [0, 0, 0, 0, 0],
       [1, 1, 0, 0, 0]
     ],
+    noScore: true,
     infoBox: {
       ...Texts.letsMove,
       showState: true,
