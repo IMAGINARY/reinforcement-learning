@@ -4,7 +4,7 @@ Vue.component('editor-palette', {
   props: ["tile_types", "current_type", "enabled"],
   template: `
   <div class="editor-palette">
-    <button v-on:click="$emit('switch-editor')">Map Editor</button>
+    <button v-on:click="$emit('switch-editor')">Map Editor</button> <button v-if="enabled" v-on:click="$emit('clear-maze')">Clear All</button>
     <div v-if="enabled" v-for="(desc, type) in tile_types" >
       <div
         class="tile-type-button"
@@ -14,6 +14,6 @@ Vue.component('editor-palette', {
           {{ desc }}
       </div>
     </div>
-    <button v-if="enabled" v-on:click="$emit('clear-maze')">Clear All</button>
+    
   </div>`,
 });
