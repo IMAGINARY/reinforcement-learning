@@ -215,28 +215,38 @@ var app = new Vue({
     'slider.learningRate': function(new_val) {
       machine.params.learningRate = parseFloat(new_val);
       renderEquation(machine.params);
+      clearFocus();
     },
     'slider.discountFactor': function(new_val) {
       machine.params.discountFactor = parseFloat(new_val);
       renderEquation(machine.params);
+      clearFocus();
     },
     'slider.epsilon': function(new_val) {
       machine.params.epsilon = parseFloat(new_val);
+      clearFocus();
     },
     'views.qvalue':function(newValue) {
       mapView.setQValuesVisible(newValue);
+      clearFocus();
     },
     'views.greedy':function(newValue) {
       mapView.setGreedyVisible(newValue);
+      clearFocus();
     },
     'views.fog':function(newValue) {
       mapView.setFogVisible(newValue);
+      clearFocus();
     },
     'machine.state':function(newState) {
       this.updateInfoBox(newState);
     }
   }
 })
+
+function clearFocus() {
+  document.activeElement.blur();
+}
 
 function onCellTouch(coord) {
   if (!editor.enabled)
