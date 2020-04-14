@@ -130,6 +130,10 @@ export class MapView {
     this.fogLayer.draw();
   }
 
+  setButtonsVisible(visible) {
+    this.buttonsGroup.visible(visible);
+  }
+  
   setQValuesVisible(visible) {
     this.infoViews.qvalue = visible;
     this.updateVisibilities();

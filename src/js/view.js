@@ -182,9 +182,11 @@ var app = new Vue({
       }
       return new Promise( (resolve) => {
         this.interactive = false;
+        mapView.setButtonsVisible(false);
         this.showMessage(text, resolve);
       }).then( () => mapView.fadeOutRobot() )
-        .then( () => { this.interactive = true });
+        .then( () => { this.interactive = true;
+                       mapView.setButtonsVisible(true); });
     },
 
     showMessage(messageText, buttonAction) {
