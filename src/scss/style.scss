@@ -118,6 +118,13 @@ div.slider-gradient {
   margin: 2px 2px 2px 2px;
 }
 
+#dynamic-info-box {
+  width: $column-width;
+  background-color: $box-background;
+  padding: $box-padding;
+  margin: 1vh 0 0 0;
+}
+
 #training-bar {
   width: ($column-width - 2vw);
 }
@@ -237,7 +244,6 @@ div#color_scale {
 div#sliders {
   width: $column-width;
   background-color: $box-background;
-  border-color: black;
   padding: $box-padding;
 }
 

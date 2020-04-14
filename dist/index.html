@@ -17,15 +17,6 @@
         <div class="info-box" id="info-box">
           <p class="info-title">{{ infoBox.title }}</p>
           <p>{{ infoBox.text }}</p>
-          <br/>
-          <p v-show="infoBox.showState">Current state: <span class="dynamic-info">{{ infoBox.currentState }}</span></p>
-          <p v-show="infoBox.showActions">Possible actions: <span class="dynamic-info">{{ infoBox.currentActions }}</span></p>
-          <p v-show="infoBox.showReward">Reinforcement: <span class="dynamic-info">{{ infoBox.currentReward }}</span></p>
-          <p v-show="infoBox.showAccumulated">Return: <span class="dynamic-info">{{ infoBox.accumulated }}</span></p>
-          <div v-show="(message.text != null)" class="info-message-box">
-            <p class="info-message-text"> {{ message.text }}</p>
-            <button id="info-message-button">Ok</button>
-          </div>
         </div>
   
         <navigationbar
@@ -51,6 +42,17 @@
       <div id="right-column">
         <div id="score" class="info-box" v-show="isActive('score')">
           <span class="energy">Current Energy {{score}}</span>
+        </div>
+
+        <div id="dynamic-info-box" class="info-box">
+          <p v-show="infoBox.showState">Current state: <span class="dynamic-info">{{ infoBox.currentState }}</span></p>
+          <p v-show="infoBox.showActions">Possible actions: <span class="dynamic-info">{{ infoBox.currentActions }}</span></p>
+          <p v-show="infoBox.showReward">Reinforcement: <span class="dynamic-info">{{ infoBox.currentReward }}</span></p>
+          <p v-show="infoBox.showAccumulated">Return: <span class="dynamic-info">{{ infoBox.accumulated }}</span></p>
+          <div v-show="(message.text != null)" class="info-message-box">
+            <p class="info-message-text"> {{ message.text }}</p>
+            <button id="info-message-button">Ok</button>
+          </div>
         </div>
 
         <div id="sliders" class="info-box" v-show="isActive('sliders')">
