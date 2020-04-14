@@ -100,7 +100,6 @@ export class MapView {
         }
   
         this.robot.opacity(1 - (frame.time / duration));
-        console.log(this.robot.opacity);
       }, this.objectsLayer);
       anim.start();
     });
@@ -133,7 +132,7 @@ export class MapView {
   setButtonsVisible(visible) {
     this.buttonsGroup.visible(visible);
   }
-  
+
   setQValuesVisible(visible) {
     this.infoViews.qvalue = visible;
     this.updateVisibilities();
