@@ -33,6 +33,7 @@ span.parameter {
 
 .info-box {
   background-color: #F0F0F0;
+  margin: 0 0 1vh 0;
 }
 
 .nav-circle {
@@ -46,9 +47,6 @@ span.parameter {
 }
 
 #level-navigation {
-  position: absolute;
-  bottom: 10vh;
-  left: 2vw;
   width: 22vw;
 }
 
@@ -88,7 +86,7 @@ div.slider-gradient {
   }
 }
 .nav-button {
-  width: 80px;
+  width: 60px;
   height: 24px;
   border-radius: 5px;
   border: 2px solid #808080;
@@ -107,11 +105,32 @@ div.slider-gradient {
   margin: 2px 2px 2px 2px;
 }
 
-.training {
+#training-bar {
+  width: 22vw;
+}
+
+#left-column {
   position: absolute;
-  bottom: 2vh;
+  top: 2vh;
+  width: 22vw;
+  left: 2vw;
+  height: 96vh;
+}
+
+#right-column {
+  position: absolute;
+  top: 2vh;
   width: 22vw;
   right: 2vw;
+  height: 96vh;
+}
+
+#center-column {
+  position: absolute;
+  left: 25vw;
+  top: 2vh;
+  height: 96vh;
+  width: 50vw;
 }
 
 .evaluation {
@@ -143,10 +162,6 @@ button {
 }
 
 div#editor-palette {
-  position: absolute;
-  right: 2vw;
-  top: 45vh;
-  width: 22vw;
   height: 26vh;
   background-color: #F0F0F0;
   padding: 10px;
@@ -207,9 +222,6 @@ div#color_scale {
 }
 
 div#sliders {
-  position: absolute;
-  top: 10vh;
-  right: 2vw;
   width: 22vw;
   background-color: #F0F0F0;
   border-color: black;
@@ -221,16 +233,12 @@ div.slider-section {
 }
 
 #formula {
-  position: absolute;
   bottom: 2vh;
   width: 50vw;
   left: 25vw;
 }
 
 div#score {
-  position: absolute;
-  top: 2vh;
-  right: 2vw;
   width: 22vw;
   background-color: #FFF0F0;
   padding: 10px;
@@ -245,9 +253,6 @@ div#score {
 }
 
 div#map_container {
-  position: absolute;
-  top: 2vh;
-  left: 26vw;
   width: 900px;
   height: 900px;
 }
@@ -258,9 +263,6 @@ div#map_container {
 }
 
 #info-box {
-  position: absolute;
-  top: 2vh;
-  left: 2vw;
   width: 22vw;
   height: 80vh;
   padding: 10px;
