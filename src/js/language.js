@@ -53,9 +53,9 @@ const AllTexts = {
     ok: 'Ok',
 
     training: {
-      oneEpisode: 'Train one episode',
-      twentyEpisodes: 'Train 20 episodes',
-      unlearn: 'Unlearn everything',
+      oneEpisode: '1 episode',
+      twentyEpisodes: '20 episodes',
+      unlearn: 'Unlearn',
       evaluate: 'Evaluate Robot'
     },
     evaluation: {
