@@ -45,10 +45,6 @@
           <p v-show="infoBox.showActions">Possible actions: <span class="dynamic-info">{{ infoBox.currentActions }}</span></p>
           <p v-show="infoBox.showReward">Reinforcement: <span class="dynamic-info">{{ infoBox.currentReward }}</span></p>
           <p v-show="infoBox.showAccumulated">Return: <span class="dynamic-info">{{ infoBox.accumulated }}</span></p>
-          <div v-show="(message.text != null)" class="info-message-box">
-            <p class="info-message-text"> {{ message.text }}</p>
-            <button id="info-message-button">Ok</button>
-          </div>
         </div>
 
         <div id="sliders" class="info-box" v-show="isActive('sliders')" v-bind:class="{ 'hidden-box': editor.enabled}">
@@ -84,7 +80,12 @@
             <label><input type="checkbox" v-model="views.fog">See only what the robot sees</label>
           </div>
         </div>
-  
+
+        <div v-show="(message.text != null)" class="info-message-box">
+          <p class="info-message-text"> {{ message.text }}</p>
+          <button id="info-message-button">Ok</button>
+        </div>
+
         <div id="map_raw" v-show="editor.enabled">
           <textarea v-model="raw_map_data" id="map_data"></textarea>
         </div>     
