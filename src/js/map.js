@@ -55,6 +55,18 @@ export class MapView {
     });
 
     this.setMaze(maze);
+    setInterval( () => this.redraw(), 100 );
+  }
+
+  redraw() {
+    if (this.machine.batchRunning)
+      return
+
+    this.mapLayer.draw();
+    this.objectsLayer.draw();
+    this.qLayer.draw();
+    this.greedyTilesLayer.draw();
+    this.fogLayer.draw();
   }
   
   loadLevel(levelMap) {
@@ -85,8 +97,6 @@ export class MapView {
     this.updateMoveButtons(this.environment.startState);
     this.updateFog();
     this.updateVisibilities();
-
-    this.objectsLayer.draw();
   }
 
   fadeOutRobot(duration = 1000) {
@@ -111,7 +121,6 @@ export class MapView {
     });
     if (this.maze.hasEndPosition())
       this.placeImageOverTile(this.station, this.maze.endPosition);
-    this.mapLayer.draw();
   }
 
   updateVisibilities() {
@@ -123,11 +132,6 @@ export class MapView {
     this.fogLayer.visible(this.infoViews.fog && !editing);
 
     this.redrawMap();
-
-    this.objectsLayer.draw();
-    this.qLayer.draw();
-    this.greedyTilesLayer.draw();
-    this.fogLayer.draw();
   }
 
   setButtonsVisible(visible) {
@@ -243,8 +247,6 @@ export class MapView {
           (path.includes(state)) ? MainViolet : MainYellow
           );
     });
-    if (!this.machine.batchRunning)
-      this.greedyTilesLayer.draw();
   }
 
   createMazeLayer() {
@@ -268,7 +270,6 @@ export class MapView {
     });
     asyncLoadImage(imageSource, image => {
       thisImage.image(image);
-      this.objectsLayer.draw();
     });
     return thisImage;
   }
@@ -384,8 +385,6 @@ export class MapView {
   onReset() {
     this.resetGreedy();
     this.resetQLayer();
-    this.greedyTilesLayer.draw();
-    this.qLayer.draw();
     this.updateFog();
   }
 
@@ -402,14 +401,13 @@ export class MapView {
     this.setRobotPosition(this.environment.state2position(currentState));
     this.updateMoveButtons(currentState);
     this.updateFog();
-    this.objectsLayer.draw();
+    this.redraw();
   }
 
   updateFog() {
     this.maze.allCoordinates.forEach( coord => {
       this.fogTiles[coord.y][coord.x].visible( !this.visibleInFog(coord) );
     });
-    this.fogLayer.draw();
   }
 
   colorForQValue(state) {
@@ -422,8 +420,6 @@ export class MapView {
     this.qValues[coord.y][coord.x].visible(true);
     this.qValues[coord.y][coord.x].fill(this.colorForQValue(state));
     this.qQuestionMarks[coord.y][coord.x].visible(false);
-    if (!this.machine.batchRunning)
-      this.qLayer.draw();
   }
 
   updateMoveButtons(state) {
@@ -434,8 +430,6 @@ export class MapView {
     this.moveButtons.right.visible(actions.includes(dir.RIGHT));
     this.moveButtons.down.visible(actions.includes(dir.DOWN));
     this.moveButtons.left.visible(actions.includes(dir.LEFT));
-    if (!this.machine.batchRunning)
-      this.buttonsGroup.draw();
   }
 
   setRobotPosition(coord) {
@@ -472,7 +466,6 @@ export class MapView {
     group.add(rect);
     group.add(text);
     this.objectsLayer.add(group);
-    this.objectsLayer.draw();
 
     const tween = new Konva.Tween({
       node: group,
