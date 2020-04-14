@@ -161,6 +161,8 @@ var app = new Vue({
       this.infoBox.accumulated = 0;
 
       this.machine.checkScore = !(levelData.noScore);
+      if (levelData.preTrain)
+        machine.runEpisodes(levelData.preTrain);
 
       this.updateInfoBox(this.machine.state);
       this.forceRefresh();
