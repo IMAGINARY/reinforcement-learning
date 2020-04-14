@@ -58,6 +58,7 @@
             <span class="parameter">Discount Factor {{machine.params.discountFactor}}</span><br/>
             <input class="range-slider" type="range" id="machine_discount_factor" v-model="slider.discountFactor" min="0" max="1" step="0.01"><br/>
           </div>
+
           <div class="slider-section" v-show="showControl('learningRate')">
             <span class="parameter">Learning Rate {{machine.params.learningRate}}</span><br/>
             <input class="range-slider" type="range" id="machine_learning_range" v-model="slider.learningRate" min="0" max="1" step="0.01"><br/>
@@ -66,6 +67,9 @@
             <span class="parameter">Exploration</span><br/>
             <input class="range-slider" type="range" id="machine_epsilon" v-model="slider.epsilon" min="0" max="1" step="0.01">&nbsp; {{(Math.ceil(machine.params.epsilon*100))}}%<br/>
           </div>
+
+          <buttonbar class="info-box" id="training-bar" :options="training" :title="'Training'" v-show="isActive('training')"></buttonbar>
+
           <div class="slider-section" v-show="showControl('qvalue')">
             <label><input type="checkbox" v-model="views.qvalue">Show value for each position</label><br/>
             <div class="slider-gradient">
@@ -83,7 +87,6 @@
           </div>
         </div>
   
-        <buttonbar class="info-box" id="training-bar" :options="training" :title="'Training'" v-show="isActive('training')"></buttonbar>
 
         <editor-palette
           id="editor-palette"

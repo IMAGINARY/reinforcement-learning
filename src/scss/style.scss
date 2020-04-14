@@ -119,7 +119,7 @@ div.slider-gradient {
 }
 
 #training-bar {
-  width: $column-width;
+  width: ($column-width - 2vw);
 }
 
 #left-column {
