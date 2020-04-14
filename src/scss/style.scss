@@ -8,6 +8,8 @@ $column-width: 22vw;
 $box-padding: 10px;
 $info-box-width: $column-width;
 
+$column-height: 100 - $topmost-top - $bottommost-bottom;
+
 $yellow: #FFEC02;
 $violet: #8F1A81;
 
@@ -60,9 +62,6 @@ $nav-element-half-height: $nav-element-height/2;
 }
 
 #level-navigation {
-  position: absolute;
-  bottom: 10vh;
-  left: $side-margin;
   width: $info-box-width;
 }
 
@@ -118,11 +117,30 @@ div.slider-gradient {
   margin: 2px 2px 2px 2px;
 }
 
-.training {
+#training-bar {
+  width: $column-width;
+}
+
+#left-column {
   position: absolute;
-  bottom: $bottommost-bottom;
+  top: $topmost-top;
+  width: $column-width;
+  left: $side-margin;
+  height: $column-height;
+}
+
+#right-column {
+  position: absolute;
+  top: $topmost-top;
   width: $column-width;
   right: $side-margin;
+  height: $column-height;
+}
+
+#center-column {
+  position: absolute;
+  top: $topmost-top;
+  height: $column-height;
 }
 
 .evaluation {
@@ -154,10 +172,6 @@ button {
 }
 
 div#editor-palette {
-  position: absolute;
-  right: $side-margin;
-  top: 45vh;
-  width: $column-width;
   height: 26vh;
   background-color: $box-background;
   padding: $box-padding;
@@ -218,9 +232,6 @@ div#color_scale {
 }
 
 div#sliders {
-  position: absolute;
-  top: 10vh;
-  right: $side-margin;
   width: $column-width;
   background-color: $box-background;
   border-color: black;
@@ -239,9 +250,6 @@ div.slider-section {
 }
 
 div#score {
-  position: absolute;
-  top: $topmost-top;
-  right: $side-margin;
   width: $column-width;
   background-color: #FFF0F0;
   padding: $box-padding;
@@ -269,9 +277,6 @@ div#map_container {
 }
 
 #info-box {
-  position: absolute;
-  top: $topmost-top;
-  left: $side-margin;
   width: $info-box-width;
   height: 80vh;
   padding: $box-padding;

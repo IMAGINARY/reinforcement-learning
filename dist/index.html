@@ -13,80 +13,90 @@
   <body>
     <div id="app">
 
-      <div class="info-box" id="info-box">
-        <p class="info-title">{{ infoBox.title }}</p>
-        <p>{{ infoBox.text }}</p>
-        <br/>
-        <p v-show="infoBox.showState">Current state: <span class="dynamic-info">{{ infoBox.currentState }}</span></p>
-        <p v-show="infoBox.showActions">Possible actions: <span class="dynamic-info">{{ infoBox.currentActions }}</span></p>
-        <p v-show="infoBox.showReward">Reinforcement: <span class="dynamic-info">{{ infoBox.currentReward }}</span></p>
-        <p v-show="infoBox.showAccumulated">Return: <span class="dynamic-info">{{ infoBox.accumulated }}</span></p>
-        <div v-show="(message.text != null)" class="info-message-box">
-          <p class="info-message-text"> {{ message.text }}</p>
-          <button id="info-message-button">Ok</button>
-        </div>
-      </div>
-
-      <navigationbar
-        id="level-navigation"
-        :levels="levels"
-        :currentLevel="currentLevel"
-        v-on:next-level="nextLevel()"
-        v-on:prev-level="prevLevel()"
-        v-on:goto-level="gotoLevel($event)">
-      ></navigationbar>
-
-      <div v-show="isActive('global')" id="map_container"></div>      
-
-      <div id="sliders" v-show="isActive('sliders')">
-        <div class="slider-section" v-show="showControl('discountFactor')">
-          <span class="parameter">Discount Factor {{machine.params.discountFactor}}</span><br/>
-          <input class="range-slider" type="range" id="machine_discount_factor" v-model="slider.discountFactor" min="0" max="1" step="0.01"><br/>
-        </div>
-        <div class="slider-section" v-show="showControl('learningRate')">
-          <span class="parameter">Learning Rate {{machine.params.learningRate}}</span><br/>
-          <input class="range-slider" type="range" id="machine_learning_range" v-model="slider.learningRate" min="0" max="1" step="0.01"><br/>
-        </div>
-        <div class="slider-section" v-show="showControl('epsilon')">
-          <span class="parameter">Exploration</span><br/>
-          <input class="range-slider" type="range" id="machine_epsilon" v-model="slider.epsilon" min="0" max="1" step="0.01">&nbsp; {{(Math.ceil(machine.params.epsilon*100))}}%<br/>
-        </div>
-        <div class="slider-section" v-show="showControl('qvalue')">
-          <label><input type="checkbox" v-model="views.qvalue">Show value for each position</label><br/>
-          <div class="slider-gradient">
-            <span class="big-symbol">-</span><div id="color_scale"></div><span class="big-symbol">+</span><br/>
+      <div id="left-column">
+        <div class="info-box" id="info-box">
+          <p class="info-title">{{ infoBox.title }}</p>
+          <p>{{ infoBox.text }}</p>
+          <br/>
+          <p v-show="infoBox.showState">Current state: <span class="dynamic-info">{{ infoBox.currentState }}</span></p>
+          <p v-show="infoBox.showActions">Possible actions: <span class="dynamic-info">{{ infoBox.currentActions }}</span></p>
+          <p v-show="infoBox.showReward">Reinforcement: <span class="dynamic-info">{{ infoBox.currentReward }}</span></p>
+          <p v-show="infoBox.showAccumulated">Return: <span class="dynamic-info">{{ infoBox.accumulated }}</span></p>
+          <div v-show="(message.text != null)" class="info-message-box">
+            <p class="info-message-text"> {{ message.text }}</p>
+            <button id="info-message-button">Ok</button>
           </div>
         </div>
-        <div class="slider-section" v-show="showControl('greedy')">
-          <label><input type="checkbox" v-model="views.greedy">Show best action from each position</label><br/>
+  
+        <navigationbar
+          id="level-navigation"
+          :levels="levels"
+          :currentLevel="currentLevel"
+          v-on:next-level="nextLevel()"
+          v-on:prev-level="prevLevel()"
+          v-on:goto-level="gotoLevel($event)">
+        ></navigationbar>
+  
+        <div id="map_raw" v-show="editor.enabled">
+          <textarea v-model="raw_map_data" id="map_data"></textarea>
         </div>
-        <div class="slider-section" v-show="showControl('learning')">
-          <label><input type="checkbox" v-model="machine.learning">Learn from actions</label>
-        </div>
-        <div class="slider-section" v-show="showControl('fog')">
-          <label><input type="checkbox" v-model="views.fog">See only what the robot sees</label>
-        </div>
+      
       </div>
-      <div id="formula"></div>
-      <div id="score" v-show="isActive('score')">
-        <span class="energy">Current Energy {{score}}</span>
-      </div>
-      <editor-palette
-        id="editor-palette"
-        v-show="isActive('editor')"
-        :enabled="editor.enabled"
-        :current_type="editor.current_type"
-        :tile_types="editor.tile_types"
-        v-on:set-tile-type="setTileType($event)"
-        v-on:clear-maze="clearMaze($event)"
-        v-on:switch-editor="switchEditor($event)">
-      </editor-palette>
-      <div id="map_raw" v-show="editor.enabled">
-        <textarea v-model="raw_map_data" id="map_data"></textarea>
-      </div>
-      <buttonbar class="buttonbar training" :options="training" :title="'Training'" v-show="isActive('training')"></buttonbar>
-    </div>
 
+      <div id="center-column">
+        <div v-show="isActive('global')" id="map_container"></div>      
+        <div id="formula"></div>
+      </div>
+
+      <div id="right-column">
+        <div id="score" v-show="isActive('score')">
+          <span class="energy">Current Energy {{score}}</span>
+        </div>
+
+        <div id="sliders" v-show="isActive('sliders')">
+          <div class="slider-section" v-show="showControl('discountFactor')">
+            <span class="parameter">Discount Factor {{machine.params.discountFactor}}</span><br/>
+            <input class="range-slider" type="range" id="machine_discount_factor" v-model="slider.discountFactor" min="0" max="1" step="0.01"><br/>
+          </div>
+          <div class="slider-section" v-show="showControl('learningRate')">
+            <span class="parameter">Learning Rate {{machine.params.learningRate}}</span><br/>
+            <input class="range-slider" type="range" id="machine_learning_range" v-model="slider.learningRate" min="0" max="1" step="0.01"><br/>
+          </div>
+          <div class="slider-section" v-show="showControl('epsilon')">
+            <span class="parameter">Exploration</span><br/>
+            <input class="range-slider" type="range" id="machine_epsilon" v-model="slider.epsilon" min="0" max="1" step="0.01">&nbsp; {{(Math.ceil(machine.params.epsilon*100))}}%<br/>
+          </div>
+          <div class="slider-section" v-show="showControl('qvalue')">
+            <label><input type="checkbox" v-model="views.qvalue">Show value for each position</label><br/>
+            <div class="slider-gradient">
+              <span class="big-symbol">-</span><div id="color_scale"></div><span class="big-symbol">+</span><br/>
+            </div>
+          </div>
+          <div class="slider-section" v-show="showControl('greedy')">
+            <label><input type="checkbox" v-model="views.greedy">Show best action from each position</label><br/>
+          </div>
+          <div class="slider-section" v-show="showControl('learning')">
+            <label><input type="checkbox" v-model="machine.learning">Learn from actions</label>
+          </div>
+          <div class="slider-section" v-show="showControl('fog')">
+            <label><input type="checkbox" v-model="views.fog">See only what the robot sees</label>
+          </div>
+        </div>
+  
+        <buttonbar id="training-bar" :options="training" :title="'Training'" v-show="isActive('training')"></buttonbar>
+
+        <editor-palette
+          id="editor-palette"
+          v-show="isActive('editor')"
+          :enabled="editor.enabled"
+          :current_type="editor.current_type"
+          :tile_types="editor.tile_types"
+          v-on:set-tile-type="setTileType($event)"
+          v-on:clear-maze="clearMaze($event)"
+          v-on:switch-editor="switchEditor($event)">
+        </editor-palette>
+      </div>
+    </div>
     <script src="main.js"></script>
   </body>
 </html>
