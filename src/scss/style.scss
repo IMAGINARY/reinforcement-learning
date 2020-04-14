@@ -12,6 +12,7 @@ $column-height: 100 - $topmost-top - $bottommost-bottom;
 
 $yellow: #FFEC02;
 $violet: #8F1A81;
+$info-grey: #BBBBBB;
 
 *{
   margin: 0;
@@ -49,21 +50,20 @@ span.parameter {
   margin: 0 0 1vh 0;
 }
 
-$nav-element-height: 24px;
-$nav-element-half-height: $nav-element-height/2;
+$nav-element-height: 22px;
 
 .nav-circle {
-  border-radius: 15px;
+  border-radius: ($nav-element-height/2);
   height: $nav-element-height;
   width: $nav-element-height;
   background-color: white;
   display: inline-block;
-  border: 4px solid #F0F0F0;
-  margin: 2px;
+  margin: 0 4px;
 }
 
 #level-navigation {
   width: $info-box-width;
+  background-color: $info-grey;
 }
 
 span.big-symbol {
@@ -281,11 +281,13 @@ div#map_container {
   margin: 0.5em 0 1em 0;
 }
 
-#info-box {
+#text-info {
   width: $info-box-width;
   height: 80vh;
+  border-radius: 10px 10px 0 0;
   padding: $box-padding;
-  background-color: #BBB;
+  background-color: $info-grey;
+  text-align: justify;
 }
 
 /* exo-2-regular - latin */
