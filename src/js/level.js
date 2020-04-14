@@ -5,10 +5,11 @@ export const Levels = {
   letsMove: {
     components: ["global"],
     levelMap: [
-      [0, 0, 0, 0],
-      [0, 2, 0, 0],
-      [0, 0, 1, 0],
-      [0, 0, 0, 0]
+      [0, 0, 0, 0, 0],
+      [0, 2, 0, 0, 0],
+      [0, 0, 1, 0, 0],
+      [0, 0, 0, 0, 0],
+      [1, 1, 0, 0, 0]
     ],
     infoBox: {
       ...Texts.letsMove,
