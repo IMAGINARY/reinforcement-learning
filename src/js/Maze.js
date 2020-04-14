@@ -25,6 +25,14 @@ export class Maze {
     this.updateStartAndEnd();
   }
 
+  clear() {
+    this.allCoordinates.forEach( coord => {
+      const type = this.map[coord.y][coord.x];
+      if (type != tile.start && type != tile.end)
+        this.map[coord.y][coord.x] = tile.regular;
+    });
+  }
+
   updateStartAndEnd() {
     this.startPosition = this.findFirstWithType(tile.start);
     this.endPosition = this.findFirstWithType(tile.end);

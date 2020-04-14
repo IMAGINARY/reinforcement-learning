@@ -14,5 +14,6 @@ Vue.component('editor-palette', {
           {{ desc }}
       </div>
     </div>
+    <button v-on:click="$emit('clear-maze')">Clear All</button>
   </div>`,
 });

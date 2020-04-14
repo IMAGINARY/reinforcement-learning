@@ -78,6 +78,7 @@
         :current_type="editor.current_type"
         :tile_types="editor.tile_types"
         v-on:set-tile-type="setTileType($event)"
+        v-on:clear-maze="clearMaze($event)"
         v-on:switch-editor="switchEditor($event)">
       </editor-palette>
       <div id="map_raw" v-show="editor.enabled">

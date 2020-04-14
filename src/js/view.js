@@ -105,6 +105,11 @@ var app = new Vue({
       if (!this.editor.enabled)
         machine.resetEpisode();
     },
+    clearMaze: function() {
+      maze.clear();
+      mapView.redrawMap();
+      app.raw_map_data = environment.getRawMapData();
+    },
 
     setTileType: function(tileType) {
       this.editor.current_type = tileType;
@@ -242,7 +247,7 @@ function onCellTouch(coord) {
   else
     environment.setCell(coord, tile[editor.current_type]);
 
-    mapView.redrawMap();
+  mapView.redrawMap();
   app.raw_map_data = environment.getRawMapData();
 }
 
