@@ -77,15 +77,32 @@ export class Environment {
   }
 
   setCell(coord, type) {
+    const currentType = this.maze.getTileType(coord);
+
+    // 'critical' tiles cannot be overriden, only placed somewhere else
+    if (currentType == tile.start || currentType == tile.end)
+      return;
+
+    // when setting a cell to a 'critical' type, make sure to clean up the previous occurence
+    if (type == tile.start)
+      this.maze.setTileType(this.maze.startPosition, tile.regular);
+    else if (type == tile.end)
+      this.maze.setTileType(this.maze.endPosition, tile.regular);
+    else {
+      if (type == currentType)
+        type = tile.regular;
+    }
+
     this.maze.setTileType(coord, type);
     this.setMaze(this.maze);
   }
 
   switchTile(coord, switchType) {
-    const type = this.maze.getTileType(coord);
+    if (type == tile.end || type == tile.start)
+      return;
     if (type == switchType)
       this.maze.setTileType(coord, tile.regular);
-    else if (type == tile.regular)
+    else
       this.maze.setTileType(coord, switchType);
   }
 }

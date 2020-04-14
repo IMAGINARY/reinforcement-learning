@@ -49,13 +49,9 @@ export class Maze {
     if (!this.isInside(coord))
       return;
 
-    if (type == tile.start)
-      this.map[this.startPosition.y][this.startPosition.x] = tile.regular;
-    else if (type == tile.end)
-      this.map[this.endPosition.y][this.endPosition.x] = tile.regular;
-
     this.map[coord.y][coord.x] = type;
-    this.updateStartAndEnd();
+    if (type == tile.end || type == tile.start)
+      this.updateStartAndEnd();
   }
 
   getTileType(pos) {

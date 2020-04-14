@@ -252,12 +252,7 @@ function onCellTouch(coord) {
   if (!editor.enabled)
     return;
 
-  if (editor.current_type == 'wall')
-    environment.switchTile(coord, tile.wall);
-  else if (editor.current_type == 'dangerous')
-    environment.switchTile(coord, tile.dangerous);
-  else
-    environment.setCell(coord, tile[editor.current_type]);
+  environment.setCell(coord, tile[editor.current_type]);
 
   mapView.redrawMap();
   app.raw_map_data = environment.getRawMapData();
