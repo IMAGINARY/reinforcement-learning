@@ -232,10 +232,10 @@ export class MapView {
         [HalfTile, HalfTile, HalfTile + arrowDirection.x*HalfTile, HalfTile + arrowDirection.y*HalfTile]);
     }
     this.greedyTiles[oldCoord.y][oldCoord.x].visible(hasBestAction);
-    this.redrawGreedy();
+    this.recalculateGreedy();
   }
 
-  redrawGreedy() {
+  recalculateGreedy() {
     const path = this.machine.getGreedyPath(this.machine.state);
 
     if (path.lenght < 2)
@@ -435,7 +435,7 @@ export class MapView {
   setRobotPosition(coord) {
     this.robot.x(coord.x * TileSize);
     this.robot.y(coord.y * TileSize);
-    this.redrawGreedy();
+    this.recalculateGreedy();
   }
 
   showReward(coord, reward) {
