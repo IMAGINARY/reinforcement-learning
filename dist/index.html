@@ -49,11 +49,11 @@
       </div>
 
       <div id="right-column">
-        <div id="score" v-show="isActive('score')">
+        <div id="score" class="info-box" v-show="isActive('score')">
           <span class="energy">Current Energy {{score}}</span>
         </div>
 
-        <div id="sliders" v-show="isActive('sliders')">
+        <div id="sliders" class="info-box" v-show="isActive('sliders')">
           <div class="slider-section" v-show="showControl('discountFactor')">
             <span class="parameter">Discount Factor {{machine.params.discountFactor}}</span><br/>
             <input class="range-slider" type="range" id="machine_discount_factor" v-model="slider.discountFactor" min="0" max="1" step="0.01"><br/>
@@ -83,7 +83,7 @@
           </div>
         </div>
   
-        <buttonbar id="training-bar" :options="training" :title="'Training'" v-show="isActive('training')"></buttonbar>
+        <buttonbar class="info-box" id="training-bar" :options="training" :title="'Training'" v-show="isActive('training')"></buttonbar>
 
         <editor-palette
           id="editor-palette"

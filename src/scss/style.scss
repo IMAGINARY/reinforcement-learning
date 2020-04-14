@@ -46,6 +46,7 @@ span.parameter {
 
 .info-box {
   background-color: $box-background;
+  margin: 0 0 1vh 0;
 }
 
 $nav-element-height: 24px;
@@ -139,8 +140,10 @@ div.slider-gradient {
 
 #center-column {
   position: absolute;
+  left: 25vw;
   top: $topmost-top;
   height: $column-height;
+  width: 50vw;
 }
 
 .evaluation {
@@ -243,7 +246,6 @@ div.slider-section {
 }
 
 #formula {
-  position: absolute;
   bottom: $bottommost-bottom;
   width: 50vw;
   left: 25vw;
@@ -264,9 +266,6 @@ div#score {
 }
 
 div#map_container {
-  position: absolute;
-  top: $topmost-top;
-  left: 26vw;
   width: 900px;
   height: 900px;
 }
