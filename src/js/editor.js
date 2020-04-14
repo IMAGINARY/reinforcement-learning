@@ -3,7 +3,8 @@ import Vue from 'vue';
 Vue.component('editor-palette', {
   props: ["tile_types", "current_type", "enabled"],
   template: `
-  <div class="editor-palette">
+  <div class="editor-palette"
+    v-bind:class="{ 'active-box': enabled}">
     <button v-on:click="$emit('switch-editor')">Map Editor</button> <button v-if="enabled" v-on:click="$emit('clear-maze')">Clear All</button>
     <div v-if="enabled" v-for="(desc, type) in tile_types" >
       <div

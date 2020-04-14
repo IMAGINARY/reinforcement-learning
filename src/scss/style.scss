@@ -186,6 +186,14 @@ div#editor-palette {
   padding: $box-padding;
 }
 
+.hidden-box {
+  visibility: hidden;
+}
+
+.active-box {
+  border: 2px solid black;
+}
+
 div#color_scale {
   display: inline-block;
 }
@@ -264,8 +272,7 @@ div#score {
 
 #map_data {
   position: absolute;
-  left: $side-margin;
-  top: 54vh;
+  top: $topmost-top;
   width: $column-width;
   height: 40vh;
 }
