@@ -71,20 +71,37 @@ const AllTexts = {
     goal: "The robot only knows where it is, and in which directions it can move. Can you help it find the charging station?",
     bestway: "Sometimes it is possible to reach the goal in more than one way. If you had limited energy, how would you try to reach the goal here?",
     localIntro: "But there is a problem! The robot cannot see the whole maze, it only knows where it is and in which direction it can move. Can you reach the charging station in those conditions? Use the arrows to move",
+
     goalReached: 'The Robot reached the goal',
     outOfBattery: "The Robot has run out of battery",
 
     ok: 'Ok',
 
     training: {
+      training: 'Training',
       oneEpisode: '1 episode',
       twentyEpisodes: '20 episodes',
       unlearn: 'Unlearn',
-      evaluate: 'Evaluate Robot'
+      evaluate: 'Evaluate'
     },
     evaluation: {
       oneStep: 'Do one step',
       greedyStep: 'Do one greedy step',
+    },
+    info: {
+      state: 'State',
+      actions: 'Actions',
+      reinforcement: 'Reinforcement',
+      accumulated: 'Return',
+    },
+    controls: {
+      discountFactor: 'Discount factor',
+      learningRate: 'Learning rate',
+      exploration: 'Exploration',
+      learning: 'Learn from actions',
+      showQvalue: 'How good is each position? (Values)',
+      showGreedy: 'Where should I go? (greedy policy)',
+      fog: 'Robot view'
     }
   },
   "de": {}
