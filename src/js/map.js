@@ -79,6 +79,8 @@ export class MapView {
 
   setEditorMode(editorMode) {
     this.editorMode = editorMode;
+    if (!editorMode)
+      this.updateQValueVisibilities();
     this.updateVisibilities();
   }
 
@@ -339,6 +341,12 @@ export class MapView {
       this.qValues[coord.y][coord.x] = qv;
     });
     this.stage.add(this.qLayer);
+  }
+
+  updateQValueVisibilities() {
+    this.maze.allCoordinates.forEach( coord => {
+      this.qValues[coord.y][coord.x].visible(this.maze.isTransitable(coord));
+    });
   }
 
   createFogLayer() {
