@@ -148,11 +148,15 @@ var app = new Vue({
       this.currentLevel = levelName;
       this.controls = levelData.controls;
 
+      if (levelData.learningParameters)
+        this.slider = levelData.learningParameters;
+      else
+        this.slider = defaultLearningParameters();
+
       this.machine.reset_machine();
       if (levelData.levelMap != null)
         mapView.loadLevel(levelData.levelMap);
-
-      this.slider = defaultLearningParameters();
+    
 
       this.views.fog = levelData.hasFog != undefined && levelData.hasFog;
       this.views.reward = this.infoBox.showReward != undefined && this.infoBox.showReward;

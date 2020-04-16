@@ -74,18 +74,26 @@ export const Levels = {
     components: ["global", "score", "sliders"],
     controls: ["discountFactor", "fog", "qvalue", "greedy"],
     levelMap: [
-      [0, 0, 0, 0, 0],
-      [0, 1, 1, 1, 0],
-      [0, 1, 0, 1, 8],
-      [0, 1, 1, 1, 0],
-      [2, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0],
+      [0, 1, 0, 1, 0, 8],
+      [0, 0, 0, 0, 0, 0],
+      [0, 0, 1, 0, 0, 1],
+      [0, 0, 0, 0, 0, 0],
+      [2, 0, 0, 1, 0, 1]
     ],
+    preTrain: 100,
+    learningParameters: {
+      learningRate: 0.75,
+      discountFactor: 0.8,
+      epsilon: 0.85
+    },
     infoBox: {
       ...Texts.mapStates,
       showState: true,
       showActions: true,
       showReward: true,
-      showAccumulated: true
+      showAccumulated: true,
+      showQValue: true,
     }
   },
   learn: {
@@ -104,13 +112,11 @@ export const Levels = {
       [0, 0, 0, 0, 0, 0],
       [2, 0, 0, 1, 0, 1]
     ],
-    preTrain: 200,
     infoBox: {
       ...Texts.learn,
       showState: true,
       showActions: true,
       showReward: true,
-      showQValue: true
     },
   },
   qLearning: {
@@ -138,7 +144,6 @@ export const Levels = {
       showState: true,
       showActions: true,
       showReward: true,
-      showQValue: true,
       showGreedy: true
     },
   },
