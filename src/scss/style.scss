@@ -64,6 +64,9 @@ $nav-element-height: 22px;
 #level-navigation {
   width: $info-box-width;
   background-color: $info-grey;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 span.big-symbol {
