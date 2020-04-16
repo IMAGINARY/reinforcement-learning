@@ -10,6 +10,7 @@ export const TileStrokeColor = "#DDDDDD";
 const TileFogColor = "#404040";
 const TransitableColor = "#F0F0F0";
 const WallColor = "#101010";
+const NotVisitedColor = "#D0D0D0";
 const MainYellow = "#FFEC02";
 const MainViolet = "#8F1A81";
 const DangerousColor = "#665F25";
@@ -322,7 +323,6 @@ export class MapView {
       opacity: 0.5
     });
     this.qValues = createMatrixFromMaze(this.maze);
-    this.qQuestionMarks = createMatrixFromMaze(this.maze);
     this.maze.allCoordinates.forEach( coord => {
       const tilePos = this.tilePos(coord);
       const tileParams = {
@@ -332,26 +332,13 @@ export class MapView {
         height: HalfTile};
       const qv = new Konva.Rect({
         ...tileParams,
-        fill: WallColor,
         visible: false,
+        fill: NotVisitedColor,
       });
-      const qm = new Konva.Image({
-        ...tileParams,
-        image: null,
-        visible: true,
-      })
       this.qLayer.add(qv);
-      this.qLayer.add(qm);
-      this.qQuestionMarks[coord.y][coord.x] = qm;
       this.qValues[coord.y][coord.x] = qv;
     });
-    asyncLoadImage("img/question_mark.png", image => {
-      this.maze.allCoordinates.forEach( coord => {
-        this.qQuestionMarks[coord.y][coord.x].image(image);
-      } )
-      this.objectsLayer.batchDraw();
-    });
-  this.stage.add(this.qLayer);
+    this.stage.add(this.qLayer);
   }
 
   createFogLayer() {
@@ -378,7 +365,6 @@ export class MapView {
   resetQLayer() {
     this.maze.allCoordinates.forEach( coord => {
       this.qValues[coord.y][coord.x].visible(false);
-      this.qQuestionMarks[coord.y][coord.x].visible(true);
     });
   }
 
@@ -419,7 +405,6 @@ export class MapView {
     const coord = this.environment.state2position(state);
     this.qValues[coord.y][coord.x].visible(true);
     this.qValues[coord.y][coord.x].fill(this.colorForQValue(state));
-    this.qQuestionMarks[coord.y][coord.x].visible(false);
   }
 
   updateMoveButtons(state) {
