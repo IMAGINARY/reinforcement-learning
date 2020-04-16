@@ -48,6 +48,9 @@ span.parameter {
 #level-navigation {
   width: 22vw;
   background-color: #BBBBBB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 span.big-symbol {
