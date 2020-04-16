@@ -20,6 +20,7 @@
         </div>
   
         <navigationbar
+          v-bind:class="{ 'hidden-box': editor.enabled}"
           id="level-navigation"
           :levels="levels"
           :currentLevel="currentLevel"
