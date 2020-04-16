@@ -53,7 +53,7 @@ export const Levels = {
     }
   },
   accumulatedReward: {
-    components: ["global", "score", "sliders"],
+    components: ["global", "score", "sliders", "formula"],
     controls: ["discountFactor", "fog"],
     levelMap: [
       [0, 0, 0, 0, 0],
@@ -70,7 +70,7 @@ export const Levels = {
     }
   },
   valueFunction: {
-    components: ["global", "score", "sliders", "training"],
+    components: ["global", "score", "sliders", "training", "formula"],
     controls: ["discountFactor", "qvalue", "fog"],
     training: {
       [Texts.training.unlearn]: () => machine.reset_machine(),
@@ -93,7 +93,7 @@ export const Levels = {
     },
   },
   qLearning: {
-    components: ["global", "score", "sliders", "training"],
+    components: ["global", "score", "sliders", "training", "formula"],
     controls: ["discountFactor", "qvalue", "greedy", "fog"],
     training: {
       [Texts.training.oneEpisode]: () => machine.train(1),
@@ -117,7 +117,7 @@ export const Levels = {
     },
   },
   playground: {
-    components: ["global", "sliders", "plot", "training","evaluation", "score", "editor"],
+    components: ["global", "sliders", "plot", "training","evaluation", "score", "editor", "formula"],
     controls: ["learningRate", "discountFactor", "epsilon", "qvalue", "greedy", "fog"],
     training: {
       [Texts.training.oneEpisode]: () => machine.train(1),
