@@ -332,8 +332,8 @@ export class MapView {
         height: HalfTile};
       const qv = new Konva.Rect({
         ...tileParams,
-        visible: false,
         fill: NotVisitedColor,
+        visible: this.maze.isTransitable(coord),
       });
       this.qLayer.add(qv);
       this.qValues[coord.y][coord.x] = qv;
