@@ -3,43 +3,67 @@ const AllTexts = {
 
     letsMove: {
       title: "Let's move!",
-      text:`You are a robot and navigate through a maze. You can walk over the floor, but cannot pass through walls. 
-
-      You always know your current position (so called state) given by the coordinates and in which direction you can move in each state (so called actions), shown by the yellow arrows.`
+      text:`I am a robot and navigate through a maze. I can walk over the floor, but cannot pass through walls.<br>
+      <br>
+      I always know my current position, the so called state given by two coordinates, and in which direction I can move in each state, the so called actions shown by the yellow arrows.<br>
+      <br>
+      Can you control me?`
     },
     findPower: {
       title: "Find the power station!",
-      text:`As a robot you do not see the whole maze, but only the position you are in (the state which are the coordinates). This looks like moving in a dark room, with limited sight! 
-
-      The robot has to find a hidden battery station in the maze! Can you find it?`
+      text:`Being a robot I need energy when I move around. The current energy level is displayed. When I run out of energy, I am moved back to the start position and will regain full energy.<br>
+      <br>
+      From my robot’s point of view, I do not see the whole maze. I only know my position and the actions I can take. This looks like moving in a dark room, with limited sight! <br>
+      <br>
+      I have to find a hidden power station in the maze! Can you help me?`
     },
     getRewarded: {
       title: "Get rewarded!",
-      text:`Sometimes it is not clear, which way is the best way to find the power station. How can you know or find out? The robot receives a positive or negative feedback for each taken action when moving from one position (state) to a next position (successor state). 
-
-      This feedback or reward is a number, which is positive or negative for good or bad, the so called reinforcement. Observe the numbers, while you move!`
+      text:`Which is the shortest way to find the power station? How can I find out? As a robot I receive a positive or negative feedback for each taken action when moving from one position (state) to a next position (successor state). This feedback, the so called reward or reinforcement, is a number, which is positive or negative for good or bad.<br>
+      <br>
+      Observe the numbers while moving! How high is the reward, when I reach the power station?`
     },
     accumulatedReward: {
       title:'Rewards, on the long run!',
-      text:`To find a good way to reach the battery station, you have to somehow accumulate the reinforcements, to connect them from one state to the next. Or: to trace them back from the battery station to the start position. To do this, you can just sum up all reinforcements received while moving. This sum is called the return. It shows how well you moved, on a long run. 
-      Can you find the way with the highest return?
-      
-      Note, that we consider near reinforcements as higher than ones far in the future. We use a discount factor for this. The higher it is, the more future rewards are taking into account.`
+      text:`It is not about receiving single high rewards, but to receive as many of them in total! So, I should consider all of them together, the positive and negative reinforcements I receive while moving. To do this, I can sum up all reinforcements received from the start to the end. The end is defined by running out of battery or by finding the power station. This sum of reinforcements is called the return. It shows how well I moved, on a long run.<br>
+      <br>
+      Can you help me find the way to the power station with the highest return?<br>
+      <br>
+      Note, that immediate reinforcements are considered as higher than the ones received far in the future. Thus, I use a so called discount factor when summing up the reinforcements. The higher it is, the more future I take into account future rewards. If it is low, I give much more attention to current rewards.<br>
+      <br>
+      Change the discount factor and observe the return!`
     },
-    valueFunction: {
-      title: 'Value function',
-      text: `Instead of summing up rewards to get the return, we can approximate it on a step by step basis. The concept behind it it simple and powerful: for each step we just take the current reinforcement and add the estimated return of the successor state(s) to it. The obtained values are called V values. We can do this update for each state with the already estimated returns (updating them step by step while moving around). You can say, the higher V the better it is to be in that state (on the long run).
-
-      We update the V values by moving around and learning. Can you observe how the V values change?`
+    mapStates: {
+      title:'Map the good states! And be greedy!',
+      text: `Imagine now, that I know the returns for each state, that is the number of all rewards, which I will receive from that state onwards. What do you think is the best next step to take from each state looking at the returns? Yes, I just move towards the state with the highest return. These returns for each state are called Values or V. They are displayed in a colour map, the more red the higher!<br>
+      <br>
+      The returns or Values are connected to a given path I take, i.e. the path I chose to sum up the rewards. This path is called a policy. It tells me which action to take in each state. If I always take the action to get to the highest return, I call it the greedy policy. It is the one looking for the highest rewards!<br>
+      <br>
+      Turn on the greedy policy switch and you can see the current best path to follow!`
+    },
+    learn: {
+      title: 'Now, learn!',
+      text: `Instead of summing up rewards to get the return and to pre-calculate the values V, I can approximate V on a step by step basis by moving around and observing. The concept behind it is simple and powerful: for each step I just take the current reinforcement and add the estimated return of the successor state(s) to it. I can do this update for each state with the already estimated returns (updating them step by step while moving around).<br>
+      <br>
+      You can imagine that at the beginning the estimation is not so good, so I have to explore a lot, try different actions, observe the reinforcements received and thus update my V values very often. Exploration is very important, i.e. I try new (random) actions in states. But, to improve the approximation of V along the already learned paths and learn faster, it makes sense to follow a greedy policy and enhance its V value estimates. The balance between taking random actions and choosing greedy actions is called “exploration vs. exploitation”. You can choose how much exploration I do in each learning step with the exploration slider.<br>
+      <br>
+      Now try to learn 1 episode by clicking on the respective button and see how the V values are changing? Learn again! Move around! Learn more and observe how the greedy policy changes...`
     },
     qLearning: {
-      title: 'Q-Learning',
-      text: 'How can we now, having V values or an approximation of them, find the best way to move? The instructions on how to move is called a policy. It shows which is the action to take in each state.'
+      title: 'Q-Learning and the editor',
+      text: `It proved to me more practical to update the so called Q values (instead of V). The Q values are showing the expected long-term reward if I am in a state and take a certain action. So, it is not only related to the state. The advantage is: with the Q values I can easily decide which is the best action to take (the one with the highest Q) and I can also in theory learn in environments, which are not deterministic. This means: there can be a probability underlying my movements, such that for example I would not always land in the same successor state from the same state and taking the same action.<br>
+      <br>
+      Q-learning was proven (mathematically) to lead to an optimal strategy (the best way to maximize rewards) for any problem! (given certain conditions and learning for a looooong time). This is fantastic. One method to solve all types of problems, for any maze! Or also for other games (with states, actions and rewards).<br>
+      <br>
+      Try changing the maze with the map editor. You can create your own problems and also add “dangerous fields” as shown here in the pitfall example.`
     },
     playground: {
-      title: 'Learning',
-      text:  `As a human, you keep track of where you are and how you got there without thinking, which helps you think about what actions you should take next to reach your destination. And you can also just look around! How can then the robot 'think' of the maze, to know which action is the best at every moment? And how can it learn that? It must somehow keep track of where it is, and remember how good or bad was each action at each place in the maze, try new things, and update it's "mental image" of what was a good decision and what not.
-      Reinforcement Learning uses the concept of a "Q-function", which keeps track of how "good" it expects it to be to take a specific action 'a' from a specific location 's'. This is written as Q(s, a). It also uses a "policy", which determines the best action to take in a given state, and is written as π(s). The robot must learn those functions while it navigates the maze. With each step, the functions are modified by a little bit, until eventually they give it the best strategy to solve the maze.`
+      title: 'Play with me',
+      text:  `I am a robot equipped with the powerful Q-learning algorithm. With this method, I can learn by just walking around and observing rewards, and by changing my strategy so that I will receive as many rewards as possible on a long run. In this case it will lead me the fastest way to the power station!<br>
+      <br>
+      Walk with me, try to learn through several walking episodes and observe how I build up a V value map to guide myself (all options on the right side). In the tutorial you will find out more details on all options and the learning method. You can open it via the small dots below.<br>
+      <br>
+      In AI this type of learning is called Reinforcement Learning. It is a fundamental method of Machine Learning.`
     },
 
     intro: "Reinforcement learning (RL) is an area of machine learning concerned with how software agents ought to take actions in an environment so as to maximize some notion of cumulative reward. Reinforcement learning is one of three basic machine learning paradigms, alongside supervised learning and unsupervised learning. (wikipedia) This exhibit explains how a robot can learn to navigate through a maze in order to reach its destination, before running out of power. At first the robot knows nothing, and learns from each new action (movement) and state (location reached). Slowly it starts to develop an understanding of the maze that will allow it to reach the charging station before it runs out of power. Eventually, it should learn to avoid any detour and reach the charging station in the optimal number of steps.",
