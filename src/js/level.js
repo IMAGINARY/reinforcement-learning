@@ -19,7 +19,7 @@ export const Levels = {
     },
   },
   findPower: {
-    components: ["global", "sliders"],
+    components: ["global", "sliders", "score"],
     controls: ["fog"],
     hasFog: true,
     levelMap: [
@@ -36,7 +36,7 @@ export const Levels = {
     }
   },
   getRewarded: {
-    components: ["global", "sliders"],
+    components: ["global", "sliders", "score"],
     controls: ["fog"],
     levelMap: [
       [0, 0, 0, 0, 0],
@@ -53,7 +53,7 @@ export const Levels = {
     }
   },
   accumulatedReward: {
-    components: ["global", "score", "sliders", "formula"],
+    components: ["global", "score", "sliders"],
     controls: ["discountFactor", "fog"],
     levelMap: [
       [0, 0, 0, 0, 0],
@@ -66,13 +66,34 @@ export const Levels = {
       ...Texts.accumulatedReward,
       showState: true,
       showActions: true,
+      showReward: true,
       showAccumulated: true
     }
   },
-  valueFunction: {
-    components: ["global", "score", "sliders", "training", "formula"],
-    controls: ["discountFactor", "qvalue", "fog"],
+  mapStates: {
+    components: ["global", "score", "sliders"],
+    controls: ["discountFactor", "fog", "qvalue", "greedy"],
+    levelMap: [
+      [0, 0, 0, 0, 0],
+      [0, 1, 1, 1, 0],
+      [0, 1, 0, 1, 8],
+      [0, 1, 1, 1, 0],
+      [2, 0, 0, 0, 0]
+    ],
+    infoBox: {
+      ...Texts.mapStates,
+      showState: true,
+      showActions: true,
+      showReward: true,
+      showAccumulated: true
+    }
+  },
+  learn: {
+    components: ["global", "score", "sliders", "training"],
+    controls: ["discountFactor", "fog", "qvalue", "greedy", "epsilon", "learningRate"],
     training: {
+      [Texts.training.oneEpisode]: () => machine.train(1),
+      [Texts.training.twentyEpisodes]: () => machine.train(20),
       [Texts.training.unlearn]: () => machine.reset_machine(),
     },
     levelMap: [
@@ -83,9 +104,9 @@ export const Levels = {
       [0, 0, 0, 0, 0, 0],
       [2, 0, 0, 1, 0, 1]
     ],
-    preTrain: 20,
+    preTrain: 200,
     infoBox: {
-      ...Texts.valueFunction,
+      ...Texts.learn,
       showState: true,
       showActions: true,
       showReward: true,
@@ -93,19 +114,24 @@ export const Levels = {
     },
   },
   qLearning: {
-    components: ["global", "score", "sliders", "training", "formula"],
-    controls: ["discountFactor", "qvalue", "greedy", "fog"],
+    components: ["global", "score", "sliders", "formula", "editor", "training"],
+    controls: ["discountFactor", "fog", "qvalue", "greedy", "epsilon", "learningRate"],
     training: {
       [Texts.training.oneEpisode]: () => machine.train(1),
+      [Texts.training.twentyEpisodes]: () => machine.train(20),
       [Texts.training.unlearn]: () => machine.reset_machine(),
     },
     levelMap: [
-      [0, 0, 0, 0, 0, 0],
-      [0, 1, 0, 1, 0, 8],
-      [0, 0, 0, 0, 0, 0],
-      [0, 0, 1, 0, 0, 1],
-      [0, 0, 0, 0, 0, 0],
-      [2, 0, 0, 1, 0, 1]
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0],
+      [0,1,4,4,4,4,4,4,1,0],
+      [0,1,4,4,4,4,4,4,1,0],
+      [2,1,4,4,4,4,4,4,1,8]
     ],
     infoBox: {
       ...Texts.qLearning,
@@ -117,8 +143,8 @@ export const Levels = {
     },
   },
   playground: {
-    components: ["global", "sliders", "plot", "training","evaluation", "score", "editor", "formula"],
-    controls: ["learningRate", "discountFactor", "epsilon", "qvalue", "greedy", "fog"],
+    components: ["global", "score", "sliders", "formula", "editor", "training"],
+    controls: ["discountFactor", "fog", "qvalue", "greedy", "epsilon"],
     training: {
       [Texts.training.oneEpisode]: () => machine.train(1),
       [Texts.training.twentyEpisodes]: () => machine.train(20),
