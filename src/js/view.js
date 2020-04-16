@@ -57,6 +57,7 @@ var app = new Vue({
       learningRate: 0.5,
       discountFactor: 0.5
     },
+    texts: Texts,
     machine: machine,
     views: infoViews,
     infoBox: infoBox,
