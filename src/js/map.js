@@ -166,13 +166,13 @@ export class MapView {
     return this.maze.isEndPosition(coord);
   }
 
-  getTileColor(coord) {
+  getTileColor(coord, ignoreFog = false) {
     switch (this.maze.getTileType(coord)) {
       case tile.start: return MainYellow;
-      case tile.end: return this.infoViews.fog ? TransitableColor : MainViolet;
+      case tile.end: return (this.infoViews.fog && !ignoreFog) ? TransitableColor : MainViolet;
       case tile.regular: return TransitableColor;
       case tile.wall: return WallColor;
-      case tile.dangerous: return DangerousColor;
+      case tile.dangerous: return (this.infoViews.fog && !ignoreFog) ? TransitableColor : DangerousColor;
       default: return Magenta;
     }
   }
@@ -389,6 +389,12 @@ export class MapView {
     if (this.infoViews.reward) {
       this.showReward(this.environment.state2position(newState), this.machine.qTable.lastQUpdate.reward);
     }
+
+    // a bit hacky... this makes dangerous and end tiles visible under fog only if the robot is on them
+    const oldCoord = this.environment.state2position(oldState);
+    this.mapTiles[oldCoord.y][oldCoord.x].fill(this.getTileColor(oldCoord));
+    const coord = this.environment.state2position(newState);
+    this.mapTiles[coord.y][coord.x].fill(this.getTileColor(coord, true));
   }
 
   update(currentState) {
