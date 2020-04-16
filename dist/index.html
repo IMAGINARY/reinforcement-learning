@@ -16,7 +16,7 @@
       <div id="left-column">
         <div class="info-box" id="text-info">
           <p class="info-title">{{ infoBox.title }}</p>
-          <p>{{ infoBox.text }}</p>
+          <p><span v-html="infoBox.text"></span></p>
         </div>
   
         <navigationbar
