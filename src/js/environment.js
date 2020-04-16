@@ -70,7 +70,7 @@ export class Environment {
     try {
       const newMap = JSON.parse(rawMapData);
       this.maze.setLevelMap(newMap);
-      this.setMaze(maze);
+      this.setMaze(this.maze);
     } catch (e) {
       // Ignore on purpose
     }   
