@@ -5,7 +5,7 @@ Vue.component('editor-palette', {
   template: `
   <div class="editor-palette"
     v-bind:class="{ 'active-box': enabled}">
-    <button v-on:click="$emit('switch-editor')">Map Editor</button> <button v-if="enabled" v-on:click="$emit('clear-maze')">Clear All</button>
+    <button v-on:click="$emit('switch-editor')">Leveleditor</button> <button v-if="enabled" v-on:click="$emit('clear-maze')">Alle Elemente entfernen</button>
     <div v-if="enabled" v-for="(desc, type) in tile_types" >
       <div
         class="tile-type-button"

@@ -29,10 +29,10 @@ var infoBox = {
 };
 
 const EditorTypes = {
-  "wall": 'Add or Remove Walls',
-  "start": 'Start Position',
-  "end": 'End Position',
-  "dangerous": "Dangerous spot"
+  "wall": 'Wand hinzufügen oder entfernen',
+  "start": 'Startposition',
+  "end": 'Endposition',
+  "dangerous": "Gefahrenstelle"
 };
 
 var editor = {

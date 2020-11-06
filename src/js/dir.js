@@ -1,9 +1,9 @@
 
 export const dir = {
-  UP: "UP",
-  RIGHT: "RIGHT",
-  DOWN: "DOWN",
-  LEFT: "LEFT",
+  UP: "HOCH",
+  RIGHT: "RECHTS",
+  DOWN: "RUNTER",
+  LEFT: "LINKS",
 };
 
 export function dirToMovement(direction) {
