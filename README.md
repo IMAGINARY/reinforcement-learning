@@ -10,3 +10,7 @@ Build:
 
  Source files in `src`.
  Output folder is `dist`.
+
+## Debug mode
+
+Press the D key to show the maximum Q value from all possible actions in each state (cell).

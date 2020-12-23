@@ -227,7 +227,7 @@ export class RL_machine {
 
   greedy_step() {
     var bestAction = this.qTable.getBestAction(this.state);
-    if (bestAction == undefined) 
+    if (bestAction == undefined)
       bestAction = this.randomAction(this.state);
 
     return this.step(bestAction);
@@ -332,7 +332,7 @@ export function defaultLearningParameters() {
     learningRate: 0.75,
     discountFactor: 0.8,
     epsilon: 0.2
-  };  
+  };
 }
 
 export var maze = new Maze();

@@ -68,8 +68,9 @@ export class MapView {
     this.qLayer.draw();
     this.greedyTilesLayer.draw();
     this.fogLayer.draw();
+    this.debugLayer.draw();
   }
-  
+
   loadLevel(levelMap) {
     this.maze.setLevelMap(levelMap);
     this.setMaze(maze);
@@ -96,10 +97,12 @@ export class MapView {
     this.createGreedyLayer();
     this.createObjectsLayer();
     this.createFogLayer();
+    this.createDebugLayer();
 
     this.updateMoveButtons(this.environment.startState);
     this.updateFog();
     this.updateVisibilities();
+    this.updateDebug();
   }
 
   fadeOutRobot(duration = 1000) {
@@ -111,7 +114,7 @@ export class MapView {
           anim.stop();
           resolve();
         }
-  
+
         this.robot.opacity(1 - (frame.time / duration));
       }, this.objectsLayer);
       anim.start();
@@ -133,6 +136,7 @@ export class MapView {
     this.qLayer.visible(this.infoViews.qvalue && !editing && !running);
     this.greedyTilesLayer.visible(this.infoViews.greedy && !editing && !running);
     this.fogLayer.visible(this.infoViews.fog && !editing);
+    this.debugLayer.visible(this.infoViews.debug && !editing);
 
     this.redrawMap();
   }
@@ -156,7 +160,12 @@ export class MapView {
     this.station.visible(!visible);
     this.updateVisibilities();
   }
-  
+
+  setDebugVisible(visible) {
+    this.infoViews.debug = visible;
+    this.updateVisibilities();
+  }
+
   visibleInFog(coord) {
     const robotPosition = this.environment.state2position(this.machine.state);
     return areAdjacent(robotPosition, coord) || areEqual(robotPosition, coord);
@@ -243,7 +252,7 @@ export class MapView {
 
     if (path.lenght < 2)
       return;
-    
+
     this.maze.allCoordinates.forEach( coord  => {
       const state = this.environment.position2state(coord);
       this.greedyTiles[coord.y][coord.x].stroke(
@@ -364,6 +373,29 @@ export class MapView {
     this.stage.add(this.fogLayer);
   }
 
+  createDebugLayer() {
+    this.debugLayer = new Konva.Layer({
+      listening: false
+    });
+    this.debugTiles = createMatrixFromMaze(maze);
+    this.maze.allCoordinates.forEach( coord => {
+      const label = new Konva.Text({
+        width: TileSize,
+        height: TileSize,
+        x: coord.x * TileSize,
+        y: coord.y * TileSize,
+        fontSize: 14,
+        align: 'center',
+        verticalAlign: 'middle',
+        stroke: '#000000',
+      });
+      this.debugTiles[coord.y][coord.x] = label;
+      this.debugLayer.add(label);
+    });
+    this.debugLayer.visible(false);
+    this.stage.add(this.debugLayer);
+  }
+
   resetGreedy() {
     this.greedyTilesLayer.getChildren().forEach( child => {
       child.visible(false);
@@ -376,14 +408,20 @@ export class MapView {
     });
   }
 
+  resetDebugLayer() {
+    this.updateDebug();
+  }
+
   onReset() {
     this.resetGreedy();
     this.resetQLayer();
+    this.resetDebugLayer();
     this.updateFog();
   }
 
   onStateChange(oldState, newState) {
     this.updateQValue(oldState);
+    this.updateDebugTile(oldState);
     this.updateGreedy(oldState);
     this.update(newState);
     if (this.infoViews.reward) {
@@ -410,11 +448,25 @@ export class MapView {
     });
   }
 
+  updateDebug() {
+    this.maze.allCoordinates.forEach( coord => {
+      const state = this.environment.position2state(coord);
+      var qValue = this.machine.qTable.getMaxValue(state);
+      this.debugTiles[coord.y][coord.x].text(qValue);
+    });
+  }
+
+  updateDebugTile(state) {
+    const coord = this.environment.state2position(state);
+    var qValue = this.machine.qTable.getMaxValue(state);
+    this.debugTiles[coord.y][coord.x].text(qValue.toPrecision(3));
+  }
+
   colorForQValue(state) {
     var qValue = Math.pow(this.machine.qTable.normalizedQValue(state), 1/4);
     return getQColor(qValue);
   }
-  
+
   updateQValue(state) {
     const coord = this.environment.state2position(state);
     this.qValues[coord.y][coord.x].visible(true);

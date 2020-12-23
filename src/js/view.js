@@ -46,7 +46,8 @@ var infoViews = {
   greedy: false,
   fog: false,
   reward: false,
-  accumulated: false
+  accumulated: false,
+  debug: false
 };
 
 var app = new Vue({
@@ -156,7 +157,7 @@ var app = new Vue({
       this.machine.reset_machine();
       if (levelData.levelMap != null)
         mapView.loadLevel(levelData.levelMap);
-    
+
 
       this.views.fog = levelData.hasFog != undefined && levelData.hasFog;
       this.views.reward = this.infoBox.showReward != undefined && this.infoBox.showReward;
@@ -219,6 +220,10 @@ var app = new Vue({
       this.infoBox.currentActions = environment.actions(state).join(', ');
       this.infoBox.currentReward = machine.qTable.lastQUpdate.reward;
       this.infoBox.accumulated = machine.accumulated.toFixed(2);
+    },
+
+    toggleDebug() {
+      this.views.debug = !this.views.debug;
     }
   },
   watch: {
@@ -248,6 +253,10 @@ var app = new Vue({
       mapView.setFogVisible(newValue);
       clearFocus();
     },
+    'views.debug':function(newValue) {
+      mapView.setDebugVisible(newValue);
+      clearFocus();
+    },
     'machine.state':function(newState) {
       this.updateInfoBox(newState);
     }
@@ -271,6 +280,12 @@ function onCellTouch(coord) {
 const mapView = new MapView(MapContainerDivId, machine, maze, environment, infoViews, onCellTouch);
 
 app.gotoLevel('letsMove');
+
+document.addEventListener('keydown', (e) => {
+  if (e.code === 'KeyD') {
+    app.toggleDebug();
+  }
+});
 
 setKeyboardActionCallback( app.onKeyboardAction );
 
